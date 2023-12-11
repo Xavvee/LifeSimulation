@@ -3,56 +3,41 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import static agh.ics.oop.OptionsParser.parse;
-
-
-public class SimulationPresenter implements MapChangeListener {
-
+public class MultipleSimulationPresenter  implements MapChangeListener {
+    private WorldMap map;
     int CELL_WIDTH = 50;
     int CELL_HEIGHT = 50;
-    private WorldMap map;
 
-    @FXML
-    private Label infoLabel;
-    @FXML
-    private TextField movementTextField;
     @FXML
     private Label movementDescriptionLabel;
     @FXML
     private GridPane mapGrid;
-    private SimulationEngine simulationEngine;
-    private ExecutorService threadPool;
 
 
-    public void setThreadPool(ExecutorService threadPool) {
-        this.threadPool = threadPool;
-    }
 
-    public void setSimulationEngine(SimulationEngine simulationEngine) {
-        this.simulationEngine = simulationEngine;
-    }
-
-    public String[] getMoves() {
-        String movesString = movementTextField.getText();
-        return movesString.split("\\s+");
-    }
     public void setWorldMap(WorldMap map){
         this.map = map;
+    }
+
+
+    public void startMultipleSimulation(List<MoveDirection> directions) {
+        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
+        GrassField map = new GrassField(4);
+        this.setWorldMap(map);
+        map.addObserver(this);
+        Simulation simulation = new Simulation(positions, directions, map);
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsyncInThreadPool();
     }
 
     public void drawMap(WorldMap worldMap){
@@ -98,33 +83,6 @@ public class SimulationPresenter implements MapChangeListener {
             this.movementDescriptionLabel.setText(message);
         });
     }
-
-    public void onSimulationStartClicked() {
-        List<MoveDirection> directions = parse(List.of(this.getMoves()));
-        startSimulation(directions);
-    }
-
-    private void startSimulation(List<MoveDirection> directions) {
-        MultipleSimulationPresenter multipleSimulationPresenter = new MultipleSimulationPresenter();
-        Stage simulationStage = new Stage();
-        try {
-            FXMLLoader loaderMulti = new FXMLLoader();
-            loaderMulti.setLocation(getClass().getClassLoader().getResource("multiplesimulation.fxml"));
-            BorderPane viewRoot = loaderMulti.load();
-            threadPool = Executors.newFixedThreadPool(4);
-            this.setThreadPool(threadPool);
-            multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
-            multipleSimulationPresenter.startMultipleSimulation(directions); // Rozpocznij symulację w nowym oknie
-            Scene scene = new Scene(viewRoot);
-            simulationStage.setScene(scene);
-            simulationStage.setTitle("Simulation");
-            simulationStage.show();
-
-            } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines

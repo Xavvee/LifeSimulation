@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.*;
+
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,11 +9,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import static agh.ics.oop.OptionsParser.parse;
 
 public class SimulationApp extends Application {
+
 
     @Override
     public void start(Stage primaryStage) throws IOException {
