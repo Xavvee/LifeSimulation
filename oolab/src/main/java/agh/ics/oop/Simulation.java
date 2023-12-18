@@ -11,12 +11,15 @@ import java.util.List;
 public class Simulation {
 
 
-    private final List<MoveDirection> moveDirections;
+    private List<MoveDirection> moveDirections;
     private final List<Animal> animals;
     private final WorldMap map;
 
     public Simulation(List<Vector2d> startingPositions, List<MoveDirection> moveDirections, WorldMap map){
+        this(startingPositions, map);
         this.moveDirections = moveDirections;
+    }
+    public Simulation(List<Vector2d> startingPositions, WorldMap map){
         this.map = map;
         List<Animal> animals = new ArrayList<>();
         for(Vector2d position : startingPositions){

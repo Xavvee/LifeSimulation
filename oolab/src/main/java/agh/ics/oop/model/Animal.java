@@ -1,14 +1,21 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.Genotype.AbstractGenotype;
+import agh.ics.oop.model.Genotype.Genotype;
+import agh.ics.oop.model.Genotype.RandomGenotype;
+
 import java.util.Objects;
 
 public class Animal implements WorldElement {
 
+    private static final int STARTING_ENERGY = 50;
     private final Vector2d lowerBound = new Vector2d(0,0);
     private final Vector2d upperBound = new Vector2d(4,4);
     private MapDirection direction;
 
     private Vector2d position;
+    private int energy;
+    private Genotype genotype;
     public Animal(){
         this(new Vector2d(2,2));
     }
@@ -16,6 +23,8 @@ public class Animal implements WorldElement {
     public Animal(Vector2d position){
         this.direction = MapDirection.NORTH;
         this.position = position;
+        this.energy = STARTING_ENERGY;
+        this.genotype = new RandomGenotype();
     }
 
     @Override
@@ -24,7 +33,11 @@ public class Animal implements WorldElement {
             case NORTH -> "^";
             case WEST -> "<";
             case SOUTH -> "v";
+            case NORTHEAST -> "-|";
             case EAST -> ">";
+            case SOUTHEAST -> "_|";
+            case SOUTHWEST -> "L";
+            case NORTHWEST -> "|-";
         };
     }
 
@@ -51,8 +64,9 @@ public class Animal implements WorldElement {
         }
     }
 
+
     public MapDirection getDirection() {
-        return this.direction;
+        return direction;
     }
 
     public Vector2d getPosition() {
