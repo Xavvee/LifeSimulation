@@ -1,12 +1,13 @@
 package agh.ics.oop.model.Genotype;
 
 import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.MapDirection;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractGenotype implements Genotype {
-    protected final int NUMBER_OF_GENES = 7;
+    public final int NUMBER_OF_GENES = 7;
     protected int numberOfGenes;
 
     protected List<Integer> genotype;
@@ -34,4 +35,7 @@ public abstract class AbstractGenotype implements Genotype {
     public List<Integer> getGenotype() {
         return genotype;
     }
+
+
+
 }

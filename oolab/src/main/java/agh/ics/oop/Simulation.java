@@ -43,7 +43,7 @@ public class Simulation {
             map.move( animals.get(index), direction);
             iter++;
             try {
-                Thread.sleep(500); // Pauza między ruchami
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
