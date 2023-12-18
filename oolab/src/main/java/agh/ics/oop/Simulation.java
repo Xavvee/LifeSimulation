@@ -14,6 +14,7 @@ public class Simulation {
     private List<MoveDirection> moveDirections;
     private final List<Animal> animals;
     private final WorldMap map;
+    private int daysCount;
 
     public Simulation(List<Vector2d> startingPositions, List<MoveDirection> moveDirections, WorldMap map){
         this(startingPositions, map);
@@ -33,20 +34,27 @@ public class Simulation {
             }
         }
         this.animals = animals;
+        this.daysCount = 0;
     }
 
+
+    /// do zmiany, powinno przeiterować się po zwierzętach i ruszyć każdym po kolei
     public void run(){
         int numberOfAnimals = animals.size();
         int iter = 0;
         for( MoveDirection direction : moveDirections){
             int index = iter%numberOfAnimals;
-            map.move( animals.get(index), direction);
+            map.move( animals.get(index));
             iter++;
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        for(Animal animal : animals){
+            map.move(animal);
         }
     }
 

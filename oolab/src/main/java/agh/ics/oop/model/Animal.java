@@ -43,25 +43,18 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
-    public void move(MoveDirection direction, MoveValidator validator){
-        switch (direction) {
-            case FORWARD -> {
-                Vector2d newPosition = position.add(this.direction.toUnitVector());
-                if(validator.canMoveTo(newPosition)){
-                    this.position = newPosition;
-                }
-            }
-            case BACKWARD -> {
-                Vector2d newPosition = position.subtract(this.direction.toUnitVector());
-                if(validator.canMoveTo(newPosition)){
-                    this.position = newPosition;
-                }
-            }
-            case RIGHT -> this.direction = this.direction.next();
-            case LEFT -> this.direction = this.direction.previous();
+    // raczej do wyjebania w obecnej formie, zawsze musi zrotować zwierzę, a później spróbowac ruszyć je do przodu
+    public void move(MoveValidator validator){
+
+        Vector2d newPosition = position.add(this.direction.toUnitVector());
+        if(validator.canMoveTo(newPosition)){
+            this.position = newPosition;
         }
     }
 
+    private void rotate(){
+        if(this.direction > this.genotype.getGenotype().get())
+    }
 
     public MapDirection getDirection() {
         return direction;
