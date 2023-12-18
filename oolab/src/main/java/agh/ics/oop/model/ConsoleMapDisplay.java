@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.MapChangeListener;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.Map.WorldMap;
 
 public class ConsoleMapDisplay implements MapChangeListener {
     private int totalUpdates;

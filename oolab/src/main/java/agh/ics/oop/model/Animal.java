@@ -1,10 +1,8 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.Genotype.AbstractGenotype;
 import agh.ics.oop.model.Genotype.Genotype;
 import agh.ics.oop.model.Genotype.RandomGenotype;
-
-import java.util.Objects;
+import agh.ics.oop.model.Map.MoveValidator;
 
 public class Animal implements WorldElement {
 

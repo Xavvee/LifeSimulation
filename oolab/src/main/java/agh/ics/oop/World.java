@@ -1,12 +1,11 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Map.GrassField;
+import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Application;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static agh.ics.oop.OptionsParser.parse;
 
 public class World {
     public static void main(String[] args){

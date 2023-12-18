@@ -1,9 +1,9 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Map;
 
 import agh.ics.oop.Comparator;
 import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.PositionAlreadyOccupied;
-import agh.ics.oop.presenter.SimulationPresenter;
+import agh.ics.oop.model.*;
 
 import java.util.*;
 

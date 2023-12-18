@@ -5,37 +5,35 @@ import agh.ics.oop.model.MapDirection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractGenotype implements Genotype {
     public final int NUMBER_OF_GENES = 7;
-    protected int numberOfGenes;
-
-    protected List<Integer> genotype;
+    protected List<MapDirection> childGenotype;
+    protected List<MapDirection> genotype;
     public AbstractGenotype(){
         this.genotype = generateGenotype();
     }
 
-
     @Override
-    public List<Integer> mutate(Animal firstParent, Animal secondParent) {
-        List<Integer> childGenotype = new ArrayList<>();
+    public List<MapDirection> mutate(Animal firstParent, Animal secondParent) {
+        childGenotype = new ArrayList<>();
         return childGenotype;
     }
 
     @Override
-    public List<Integer> generateGenotype() {
-        List<Integer> genotype = new ArrayList<>();
+    public List<MapDirection> generateGenotype() {
+        List<MapDirection> genotype = new ArrayList<>();
         for( int i = 0; i < NUMBER_OF_GENES; i++){
-            genotype.add((int)Math.floor(Math.random() * (8)));
+            int randomNumber = (int)Math.floor(Math.random() * (8));
+            genotype.add(MapDirection.values()[randomNumber]);
         }
         return genotype;
     }
 
     @Override
-    public List<Integer> getGenotype() {
+    public List<MapDirection> getGenotype() {
         return genotype;
     }
-
-
 
 }

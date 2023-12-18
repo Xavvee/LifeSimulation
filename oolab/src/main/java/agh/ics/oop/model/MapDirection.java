@@ -10,7 +10,6 @@ public enum MapDirection {
     WEST,
     NORTHWEST;
 
-
     @Override
     public String toString(){
         return switch (this){

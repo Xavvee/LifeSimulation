@@ -1,5 +1,9 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Map;
 
+
+import agh.ics.oop.model.Boundary;
+import agh.ics.oop.model.Map.AbstractWorldMap;
+import agh.ics.oop.model.Vector2d;
 
 import java.util.HashMap;
 

@@ -1,6 +1,7 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Map;
 
 import agh.ics.oop.PositionAlreadyOccupied;
+import agh.ics.oop.model.*;
 
 import java.util.Map;
 import java.util.UUID;
