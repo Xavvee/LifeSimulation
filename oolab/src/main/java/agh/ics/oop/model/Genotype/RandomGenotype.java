@@ -13,6 +13,6 @@ public class RandomGenotype extends AbstractGenotype{
     @Override
     public List<MapDirection> mutate(Animal firstParent, Animal secondParent) {
         super.mutate(firstParent, secondParent);
-        return null;
+        return childGenotype;
     }
 }

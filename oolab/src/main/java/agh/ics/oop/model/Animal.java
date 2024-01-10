@@ -22,7 +22,7 @@ public class Animal implements WorldElement {
         this.position = position;
         this.energy = STARTING_ENERGY;
         this.genotype = new RandomGenotype();
-        this.direction = convertGenotypeToMapDirection(genotype.getGenotype().get(0));
+        this.direction = genotype.getGenotype().get(0);
     }
 
     @Override
@@ -64,18 +64,13 @@ public class Animal implements WorldElement {
         return position;
     }
 
-    public MapDirection convertGenotypeToMapDirection(int genotype){
-        return switch (genotype){
-            case 0 -> MapDirection.NORTH;
-            case 1 -> MapDirection.NORTHEAST;
-            case 2 -> MapDirection.EAST;
-            case 3 -> MapDirection.SOUTHEAST;
-            case 4 -> MapDirection.SOUTH;
-            case 5 -> MapDirection.SOUTHWEST;
-            case 6 -> MapDirection.WEST;
-            case 7 -> MapDirection.NORTHWEST;
-            default -> throw new IllegalArgumentException("Nieznany genotyp: " + genotype);
-        };
+    public int getEnergy() {
+        return energy;
     }
+
+    public Genotype getGenotype() {
+        return genotype;
+    }
+
 
 }
