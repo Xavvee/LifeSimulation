@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;

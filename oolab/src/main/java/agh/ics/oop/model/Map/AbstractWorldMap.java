@@ -4,10 +4,14 @@ import agh.ics.oop.Comparator;
 import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
+    protected int WIDTH = 20;
+    protected int HEIGHT = 10;
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     protected final MapVisualizer visualizer = new MapVisualizer(this);
 
@@ -33,23 +37,23 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public boolean place(Animal animal) throws PositionAlreadyOccupied {
-        if(canMoveTo(animal.getPosition())){
-            animals.put(animal.getPosition(), animal);
-            addElement(animal.getPosition());
-            mapChanged(animal + " placed at: " + animal.getPosition());
+        if(canMoveTo(animal.position())){
+            animals.put(animal.position(), animal);
+            addElement(animal.position());
+            mapChanged(animal + " placed at: " + animal.position());
             return true;
         } else {
-            throw new PositionAlreadyOccupied(animal.getPosition());
+            throw new PositionAlreadyOccupied(animal.position());
         }
     }
 
     // rusza zwierzęciem po mapie, ogólnie działa git, chyba nie trzeba zmieniać
     @Override
     public void move(Animal animal) {
-        if(animals.containsKey(animal.getPosition())){
-            Vector2d oldPosition = animal.getPosition();
+        if(animals.containsKey(animal.position())){
+            Vector2d oldPosition = animal.position();
             animal.move(this);
-            Vector2d newPosition = animal.getPosition();
+            Vector2d newPosition = animal.position();
             if (canMoveTo(newPosition)) {
                 animals.remove(oldPosition);
                 removeElement(oldPosition);
@@ -80,6 +84,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public WorldElement objectAt(Vector2d position) {
         return animals.get(position);
+    }
+
+    @Override
+    public boolean generateGrass(){
+        return true;
+    }
+
+    @Override
+    public boolean spawnGrass(){
+        return true;
+    }
+
+    @Override
+    public Vector2d getEquatorBounds(){
+        int middleOfY = (int) HEIGHT/2;
+        int tenPercentOfHeight = (int) (HEIGHT*0.1);
+
+        return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight);
     }
 
     @Override

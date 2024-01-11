@@ -2,6 +2,8 @@ package agh.ics.oop.model.Map;
 
 import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.Map;
 import java.util.UUID;
@@ -62,4 +64,22 @@ public interface WorldMap extends MoveValidator {
      * @return Identificator of map
      */
     UUID getId();
+
+    /**
+     * Function that generates starting grass.
+     * @return true if grass was correctly generated
+     */
+    boolean generateGrass();
+
+    /**
+     * Function that spawns grass every day.
+     * @return true if grass was correctly spawned
+     */
+    boolean spawnGrass();
+
+    /**
+     * Function that returns lower and upper bounds of equator.
+     * @return Vector2d object where first coordinate is lower value of y - coordinate, second coordinate is the upper value of y - coordinate.
+     */
+    Vector2d getEquatorBounds();
 }

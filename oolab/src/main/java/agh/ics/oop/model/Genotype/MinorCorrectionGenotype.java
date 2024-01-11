@@ -1,8 +1,7 @@
 package agh.ics.oop.model.Genotype;
 
-import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.MapDirection;
-import agh.ics.oop.model.MoveDirection;
 
 import java.util.ArrayList;
 import java.util.List;

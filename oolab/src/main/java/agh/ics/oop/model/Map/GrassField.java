@@ -1,7 +1,9 @@
 package agh.ics.oop.model.Map;
 
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.Map.AbstractWorldMap;
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
+import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.HashMap;
 import java.util.Map;

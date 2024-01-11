@@ -1,8 +1,10 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Elements;
 
 import agh.ics.oop.model.Genotype.Genotype;
 import agh.ics.oop.model.Genotype.RandomGenotype;
 import agh.ics.oop.model.Map.MoveValidator;
+import agh.ics.oop.model.MapDirection;
+import agh.ics.oop.model.Vector2d;
 
 public class Animal implements WorldElement {
 
@@ -60,7 +62,7 @@ public class Animal implements WorldElement {
         return direction;
     }
 
-    public Vector2d getPosition() {
+    public Vector2d position() {
         return position;
     }
 
