@@ -1,9 +1,9 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Map;
 
 import agh.ics.oop.Comparator;
 import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.PositionAlreadyOccupied;
-import agh.ics.oop.presenter.SimulationPresenter;
+import agh.ics.oop.model.*;
 
 import java.util.*;
 
@@ -43,11 +43,12 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
+    // rusza zwierzęciem po mapie, ogólnie działa git, chyba nie trzeba zmieniać
     @Override
-    public void move(Animal animal, MoveDirection direction) {
+    public void move(Animal animal) {
         if(animals.containsKey(animal.getPosition())){
             Vector2d oldPosition = animal.getPosition();
-            animal.move(direction, this);
+            animal.move(this);
             Vector2d newPosition = animal.getPosition();
             if (canMoveTo(newPosition)) {
                 animals.remove(oldPosition);

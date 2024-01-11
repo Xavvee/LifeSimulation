@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
+import agh.ics.oop.model.Map.RectangularMap;
+import agh.ics.oop.model.Map.WorldMap;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -19,7 +21,7 @@ public class SimulationTest {
         MoveDirection[] moveArray = {FORWARD,LEFT,RIGHT,FORWARD,FORWARD,FORWARD,RIGHT,FORWARD,FORWARD,FORWARD,FORWARD,FORWARD,FORWARD,LEFT,LEFT,LEFT,FORWARD,LEFT};
         List<MoveDirection> result = Arrays.asList(moveArray);
 
-        List<MoveDirection> directions = parse(args);
+        List<MoveDirection> directions = parse(Arrays.stream(args).toList());
         List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4), new Vector2d(0,0));
         WorldMap map = new RectangularMap(4,4);
         Simulation simulation = new Simulation(positions, directions,map);

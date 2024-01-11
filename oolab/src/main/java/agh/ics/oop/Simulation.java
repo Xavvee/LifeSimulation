@@ -3,7 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.Map.WorldMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,16 @@ import java.util.List;
 public class Simulation {
 
 
-    private final List<MoveDirection> moveDirections;
+    private List<MoveDirection> moveDirections;
     private final List<Animal> animals;
     private final WorldMap map;
+    private int daysCount;
 
     public Simulation(List<Vector2d> startingPositions, List<MoveDirection> moveDirections, WorldMap map){
+        this(startingPositions, map);
         this.moveDirections = moveDirections;
+    }
+    public Simulation(List<Vector2d> startingPositions, WorldMap map){
         this.map = map;
         List<Animal> animals = new ArrayList<>();
         for(Vector2d position : startingPositions){
@@ -30,20 +34,27 @@ public class Simulation {
             }
         }
         this.animals = animals;
+        this.daysCount = 0;
     }
 
+
+    /// do zmiany, powinno przeiterować się po zwierzętach i ruszyć każdym po kolei
     public void run(){
         int numberOfAnimals = animals.size();
         int iter = 0;
         for( MoveDirection direction : moveDirections){
             int index = iter%numberOfAnimals;
-            map.move( animals.get(index), direction);
+            map.move( animals.get(index));
             iter++;
             try {
-                Thread.sleep(500); // Pauza między ruchami
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        for(Animal animal : animals){
+            map.move(animal);
         }
     }
 

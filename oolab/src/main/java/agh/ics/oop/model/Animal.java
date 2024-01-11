@@ -1,21 +1,28 @@
 package agh.ics.oop.model;
 
-import java.util.Objects;
+import agh.ics.oop.model.Genotype.Genotype;
+import agh.ics.oop.model.Genotype.RandomGenotype;
+import agh.ics.oop.model.Map.MoveValidator;
 
 public class Animal implements WorldElement {
 
+    private static final int STARTING_ENERGY = 50;
     private final Vector2d lowerBound = new Vector2d(0,0);
     private final Vector2d upperBound = new Vector2d(4,4);
     private MapDirection direction;
 
     private Vector2d position;
+    private int energy;
+    private Genotype genotype;
     public Animal(){
         this(new Vector2d(2,2));
     }
 
     public Animal(Vector2d position){
-        this.direction = MapDirection.NORTH;
         this.position = position;
+        this.energy = STARTING_ENERGY;
+        this.genotype = new RandomGenotype();
+        this.direction = genotype.getGenotype().get(0);
     }
 
     @Override
@@ -24,7 +31,11 @@ public class Animal implements WorldElement {
             case NORTH -> "^";
             case WEST -> "<";
             case SOUTH -> "v";
+            case NORTHEAST -> "-|";
             case EAST -> ">";
+            case SOUTHEAST -> "_|";
+            case SOUTHWEST -> "L";
+            case NORTHWEST -> "|-";
         };
     }
 
@@ -32,31 +43,36 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
-    public void move(MoveDirection direction, MoveValidator validator){
-        switch (direction) {
-            case FORWARD -> {
-                Vector2d newPosition = position.add(this.direction.toUnitVector());
-                if(validator.canMoveTo(newPosition)){
-                    this.position = newPosition;
-                }
-            }
-            case BACKWARD -> {
-                Vector2d newPosition = position.subtract(this.direction.toUnitVector());
-                if(validator.canMoveTo(newPosition)){
-                    this.position = newPosition;
-                }
-            }
-            case RIGHT -> this.direction = this.direction.next();
-            case LEFT -> this.direction = this.direction.previous();
+    // raczej do wyjebania w obecnej formie, zawsze musi zrotować zwierzę, a później spróbowac ruszyć je do przodu
+    public void move(MoveValidator validator){
+
+        Vector2d newPosition = position.add(this.direction.toUnitVector());
+        if(validator.canMoveTo(newPosition)){
+            this.position = newPosition;
         }
     }
 
+    private void rotate(){
+        return;
+    }
+
     public MapDirection getDirection() {
-        return this.direction;
+        return direction;
     }
 
     public Vector2d getPosition() {
         return position;
     }
 
+    public int getEnergy() {
+        return energy;
+    }
+
+    public Genotype getGenotype() {
+        return genotype;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
 }
