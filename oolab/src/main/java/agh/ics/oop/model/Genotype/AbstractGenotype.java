@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class AbstractGenotype implements Genotype {
-    public final int NUMBER_OF_GENES = 7;
+    public final int NUMBER_OF_GENES = 8;
     public final int MINIMAL_NUMBER_OF_MUTATIONS = 1;
-    public final int MAXIMUM_NUMBER_OF_MUTATIONS = 4;
+    public final int MAXIMUM_NUMBER_OF_MUTATIONS = 1;
     protected List<MapDirection> childGenotype;
     protected List<MapDirection> genotype;
     public AbstractGenotype(){
@@ -63,5 +63,6 @@ public abstract class AbstractGenotype implements Genotype {
     public List<MapDirection> getGenotype() {
         return genotype;
     }
+
 
 }

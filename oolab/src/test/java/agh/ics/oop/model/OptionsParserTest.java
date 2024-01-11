@@ -17,7 +17,7 @@ public class OptionsParserTest {
         // given
         String[] directions = {"f", "b", "r", "r", "l", "l","l", "f"};
         // when
-        List<MoveDirection> convDirections =  parse(directions);
+        List<MoveDirection> convDirections =  parse(Arrays.stream(directions).toList());
         // then
         MoveDirection[] moveArray = {FORWARD, BACKWARD, RIGHT, RIGHT, LEFT, LEFT, LEFT, FORWARD};
         List<MoveDirection> result = Arrays.asList(moveArray);
@@ -32,7 +32,7 @@ public class OptionsParserTest {
         // then
         assertThrows(IllegalArgumentException.class, () -> {
             // when
-            List<MoveDirection> convDirections = parse(directions);
+            List<MoveDirection> convDirections = parse(Arrays.stream(directions).toList());
         });
     }
 }

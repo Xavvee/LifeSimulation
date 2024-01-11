@@ -13,6 +13,7 @@ public class MinorCorrectionGenotype extends AbstractGenotype {
     public MinorCorrectionGenotype(){
         super();
     }
+
     @Override
     public List<MapDirection> mutate(Animal firstParent, Animal secondParent) {
         super.mutate(firstParent, secondParent);
@@ -30,9 +31,9 @@ public class MinorCorrectionGenotype extends AbstractGenotype {
             int drawnValue = possibleValues[random.nextInt(2)];
             MapDirection gene = childGenotype.get(index);
             if(drawnValue == -1){
-                gene.previous();
+                gene = gene.previous();
             } else{
-                gene.next();
+                gene = gene.next();
             }
             childGenotype.set(index, gene);
         }

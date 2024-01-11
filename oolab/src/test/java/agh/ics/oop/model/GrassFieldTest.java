@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
+import agh.ics.oop.model.Map.GrassField;
+import agh.ics.oop.model.Map.WorldMap;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

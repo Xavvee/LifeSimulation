@@ -53,7 +53,7 @@ public class Animal implements WorldElement {
     }
 
     private void rotate(){
-        if(this.direction > this.genotype.getGenotype().get())
+        return;
     }
 
     public MapDirection getDirection() {
@@ -72,5 +72,7 @@ public class Animal implements WorldElement {
         return genotype;
     }
 
-
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
 }
