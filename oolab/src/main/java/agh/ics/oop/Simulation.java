@@ -9,6 +9,7 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;
 
 import java.util.*;
+import java.util.Comparator;
 
 public class Simulation {
 
@@ -19,22 +20,17 @@ public class Simulation {
     private final WorldMap map;
     private int daysCount;
     private final int energyPerGrass;
-    private final int minimumNumberOfMutations;
-    private final int maximumNumberOfMutations;
-    private final int genomeLength;
     private final int sufficientEnergyForReproduction;
     private final int energyNeededForReproduction;
 
 
-    public Simulation(WorldMap map, int energyPerGrass, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, int sufficientEnergyForReproduction, int energyNeededForReproduction){
+
+    public Simulation(WorldMap map, int energyPerGrass, int sufficientEnergyForReproduction, int energyNeededForReproduction){
         this.map = map;
         this.animals = map.getListOfAnimals();
         this.grasses = map.getListOfGrasses();
         this.energyPerGrass = energyPerGrass;
         this.daysCount = 0;
-        this.minimumNumberOfMutations = minimumNumberOfMutations;
-        this.maximumNumberOfMutations = maximumNumberOfMutations;
-        this.genomeLength = genomeLength;
         this.sufficientEnergyForReproduction = sufficientEnergyForReproduction;
         this.energyNeededForReproduction = energyNeededForReproduction;
     }
@@ -70,20 +66,23 @@ public class Simulation {
         // 1. Usunięcie martwych zwierząt
         deleteDeadAnimals();
         // 2. Skręt i przemieszczanie zwierząt
-
+        moveAnimals();
         // 3. Konsumpcja roślin, które weszły zwierzaki
         consume();
         // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
         reproduce();
         // 5. Wzrastanie nowych roślin na wybranych polach.
         spawnGrassAndAddToList();
-        subtractEnergy();
+        // 6. Inne rzeczy, które zawsze zachodzą.
+        subtractEnergyAddAge();
+        incrementDayCount();
     }
 
 
-    public void subtractEnergy(){
+    public void subtractEnergyAddAge(){
         for(Animal animal : animals){
             animal.setEnergy(animal.getEnergy()-1);
+            animal.setAge(animal.getAge()+1);
         }
     }
 
@@ -103,7 +102,37 @@ public class Simulation {
     }
 
     public void consume(){
+        Map<Vector2d, List<Animal>> animalsOnGrass = new HashMap<>();
 
+        for (Animal animal : animals) {
+            Vector2d position = animal.getPosition();
+            animalsOnGrass.computeIfAbsent(position, k -> new ArrayList<>()).add(animal);
+        }
+
+        for (Grass grass : grasses) {
+            List<Animal> animalsAtPosition = animalsOnGrass.getOrDefault(grass.position(), Collections.emptyList());
+
+            if (animalsAtPosition.size() > 1) {
+                resolveConflict(animalsAtPosition);
+            } else if (!animalsAtPosition.isEmpty()) {
+                Animal singleAnimal = animalsAtPosition.get(0);
+                singleAnimal.addEnergy(energyPerGrass);
+            }
+        }
+    }
+
+    private void resolveConflict(List<Animal> animalsAtPosition) {
+        animalsAtPosition.sort(Comparator
+                .comparingInt(Animal::getEnergy).reversed()
+                .thenComparingInt(Animal::getAge).reversed()
+                .thenComparingInt(Animal::getChildrenCount).reversed()
+        );
+        Animal winner = animalsAtPosition.get(0);
+        winner.addEnergy(energyPerGrass);
+        for (int i = 1; i < animalsAtPosition.size(); i++) {
+            Animal loser = animalsAtPosition.get(i);
+            animals.remove(loser);
+        }
     }
 
     public void incrementDayCount(){
@@ -136,4 +165,5 @@ public class Simulation {
     public int getDaysCount() {
         return daysCount;
     }
+
 }

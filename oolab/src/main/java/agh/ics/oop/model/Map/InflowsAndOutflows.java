@@ -12,9 +12,13 @@ import java.util.*;
 
 public class InflowsAndOutflows extends AbstractWorldMap{
 
-    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses) {
+    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength) {
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
+        this.startingEnergy = startingEnergy;
+        this.minimumNumberOfMutations = minimumNumberOfMutations;
+        this.maximumNumberOfMutations = maximumNumberOfMutations;
+        this.genomeLength = genomeLength;
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();

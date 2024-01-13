@@ -15,11 +15,11 @@ public class GenotypeTest {
     @Test
     public void testGenotypeGeneration(){
         // given
-        AbstractGenotype randomGenotype = new RandomGenotype();
+        AbstractGenotype randomGenotype = new RandomGenotype(8,1,1);
         // when
         List<MapDirection> genotype = randomGenotype.generateGenotype();
         // then
-        assertEquals(randomGenotype.NUMBER_OF_GENES, genotype.size());
+        assertEquals(randomGenotype.getGenomeLength(), genotype.size());
         for (MapDirection direction : genotype) {
             assertTrue(direction.ordinal() < 8);
         }
@@ -32,7 +32,7 @@ public class GenotypeTest {
         Animal firstParent = new Animal();
         Animal secondParent = new Animal();
         firstParent.setEnergy(150);
-        AbstractGenotype abstractGenotype = new MinorCorrectionGenotype();
+        AbstractGenotype abstractGenotype = new MinorCorrectionGenotype(8,1,1);
         // when
         List<MapDirection> childGenotype = abstractGenotype.mutate(firstParent, secondParent);
         // then
@@ -48,7 +48,7 @@ public class GenotypeTest {
         Animal firstParent = new Animal();
         Animal secondParent = new Animal();
         firstParent.setEnergy(150);
-        AbstractGenotype abstractGenotype = new RandomGenotype();
+        AbstractGenotype abstractGenotype = new RandomGenotype(8,1,1);
         // when
         List<MapDirection> childGenotype = abstractGenotype.mutate(firstParent, secondParent);
         // then

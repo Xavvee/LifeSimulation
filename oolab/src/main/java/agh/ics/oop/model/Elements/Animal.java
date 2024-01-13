@@ -1,5 +1,6 @@
 package agh.ics.oop.model.Elements;
 
+import agh.ics.oop.model.Genotype.AbstractGenotype;
 import agh.ics.oop.model.Genotype.Genotype;
 import agh.ics.oop.model.Genotype.RandomGenotype;
 import agh.ics.oop.model.Map.MoveValidator;
@@ -12,18 +13,31 @@ public class Animal implements WorldElement {
 
     private Vector2d position;
     private int energy;
-    private int dayBorn;
+    private int age;
     private Genotype genotype;
+    private int childrenCount;
+    private AbstractGenotype abstractGenotype;
     public Animal(){
         this(new Vector2d(2,2), 20);
     }
 
+    // randomly spawned starting animal
     public Animal(Vector2d position, int startingEnergy){
         this.position = position;
         this.energy = startingEnergy;
-        this.genotype = new RandomGenotype();
+        this.genotype =
         this.direction = genotype.getGenotype().get(0);
-        this.dayBorn = 0;
+        this.age = 0;
+        this.childrenCount = 0;
+    }
+
+    // newborn child genotype
+    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int dayBorn, int energyNeededForReproduction){
+        this.position = position;
+        this.energy = 2*energyNeededForReproduction;
+        this.genotype = abstractGenotype.mutate(firstParent, secondParent);
+        this.age = 0;
+        this.childrenCount = 0;
     }
 
 
@@ -65,6 +79,17 @@ public class Animal implements WorldElement {
     }
 
 
+    public void addEnergy(int energy){
+        this.energy+=energy;
+    }
+
+    public void addChild(){
+        this.childrenCount+=1;
+    }
+
+    public void subtractEnergy(int subtractedEnergy){
+        this.energy-=subtractedEnergy;
+    }
 
     public MapDirection getDirection() {
         return direction;
@@ -90,8 +115,15 @@ public class Animal implements WorldElement {
         return position;
     }
 
-    public int getDayBorn() {
-        return dayBorn;
+    public int getAge() {
+        return age;
     }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
+    }
 }

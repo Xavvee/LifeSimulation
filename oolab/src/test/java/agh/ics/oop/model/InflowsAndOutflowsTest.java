@@ -15,7 +15,7 @@ public class InflowsAndOutflowsTest {
     @Test
     public void generateWatersTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20, 0, 0, 0);
+        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20, 0, 0, 0,50,1,1,8);
         //when
         Map<Vector2d, Water> waters = abstractWorldMap.getWaters();
         //then

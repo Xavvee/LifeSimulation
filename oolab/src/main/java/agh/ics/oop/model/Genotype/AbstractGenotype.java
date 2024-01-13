@@ -8,13 +8,21 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class AbstractGenotype implements Genotype {
-    public final int NUMBER_OF_GENES = 8;
-    public final int MINIMAL_NUMBER_OF_MUTATIONS = 1;
-    public final int MAXIMUM_NUMBER_OF_MUTATIONS = 1;
+    protected final int genomeLength;
+    protected final int minimumNumberOfMutations;
+    protected final int maximumNumberOfMutations;
     protected List<MapDirection> childGenotype;
     protected List<MapDirection> genotype;
-    public AbstractGenotype(){
+    public AbstractGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations){
+        this.genomeLength = genomeLength;
+        this.minimumNumberOfMutations = minimumNumberOfMutations;
+        this.maximumNumberOfMutations = maximumNumberOfMutations;
         this.genotype = generateGenotype();
+    }
+
+    public AbstractGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, List<MapDirection> genotype){
+        this(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
+        this.genotype = genotype;
     }
 
     @Override
@@ -25,8 +33,8 @@ public abstract class AbstractGenotype implements Genotype {
         int sideOfStrongerParent = random.nextInt(2);
         float firstParentPercentage = (float) firstParent.getEnergy() /(secondParent.getEnergy() + firstParent.getEnergy());
         float secondParentPercentage = (float) secondParent.getEnergy() /(secondParent.getEnergy() + firstParent.getEnergy());
-        int numberOfFirstParentGenes = Math.round(NUMBER_OF_GENES * firstParentPercentage);
-        int numberOfSecondParentGenes = Math.round(NUMBER_OF_GENES * secondParentPercentage);
+        int numberOfFirstParentGenes = Math.round(genomeLength * firstParentPercentage);
+        int numberOfSecondParentGenes = Math.round(genomeLength * secondParentPercentage);
         List<MapDirection> firstParentGenes = firstParent.getGenotype().getGenotype();
         List<MapDirection> secondParentGenes = secondParent.getGenotype().getGenotype();
         boolean isFirstParentStronger = numberOfFirstParentGenes > numberOfSecondParentGenes;
@@ -34,14 +42,14 @@ public abstract class AbstractGenotype implements Genotype {
             for (int i = 0; i < numberOfFirstParentGenes; i++) {
                 childGenotype.add(i, firstParentGenes.get(i));
             }
-            for (int j = numberOfFirstParentGenes; j < NUMBER_OF_GENES; j++) {
+            for (int j = numberOfFirstParentGenes; j < genomeLength; j++) {
                 childGenotype.add(j, secondParentGenes.get(j));
             }
         } else {
             for (int i = 0; i < numberOfSecondParentGenes; i++) {
                 childGenotype.add(i, secondParentGenes.get(i));
             }
-            for (int j = numberOfSecondParentGenes; j < NUMBER_OF_GENES; j++) {
+            for (int j = numberOfSecondParentGenes; j < genomeLength; j++) {
                 childGenotype.add(j, firstParentGenes.get(j));
             }
         }
@@ -52,7 +60,7 @@ public abstract class AbstractGenotype implements Genotype {
     @Override
     public List<MapDirection> generateGenotype() {
         List<MapDirection> genotype = new ArrayList<>();
-        for( int i = 0; i < NUMBER_OF_GENES; i++){
+        for(int i = 0; i < genomeLength; i++){
             int randomNumber = (int)Math.floor(Math.random() * (8));
             genotype.add(MapDirection.values()[randomNumber]);
         }
@@ -67,6 +75,15 @@ public abstract class AbstractGenotype implements Genotype {
     }
 
 
+    public int getGenomeLength() {
+        return genomeLength;
+    }
 
+    public int getMaximumNumberOfMutations() {
+        return maximumNumberOfMutations;
+    }
 
+    public int getMinimumNumberOfMutations() {
+        return minimumNumberOfMutations;
+    }
 }

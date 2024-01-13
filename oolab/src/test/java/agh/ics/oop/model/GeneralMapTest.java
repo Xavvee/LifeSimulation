@@ -16,11 +16,11 @@ public class GeneralMapTest {
     @Test
     public void testGetEquatorBounds(){
         //given
-        AbstractWorldMap abstractWorldMap1 = new Globe(18, 10, 0, 0,0);
-        AbstractWorldMap abstractWorldMap2 = new Globe(19, 10, 0, 0,0);
-        AbstractWorldMap abstractWorldMap3 = new Globe(20, 10, 0, 0,0);
-        AbstractWorldMap abstractWorldMap4 = new Globe(21, 10, 0, 0,0);
-        AbstractWorldMap abstractWorldMap5 = new Globe(22, 10, 0, 0,0);
+        AbstractWorldMap abstractWorldMap1 = new Globe(18, 10, 0, 0,0,50,1,1,8);
+        AbstractWorldMap abstractWorldMap2 = new Globe(19, 10, 0, 0,0,50,1,1,8);
+        AbstractWorldMap abstractWorldMap3 = new Globe(20, 10, 0, 0,0,50,1,1,8);
+        AbstractWorldMap abstractWorldMap4 = new Globe(21, 10, 0, 0,0,50,1,1,8);
+        AbstractWorldMap abstractWorldMap5 = new Globe(22, 10, 0, 0,0,50,1,1,8);
         //when
         Vector2d boundaries1 = abstractWorldMap1.getEquatorBounds();
         Vector2d boundaries2 = abstractWorldMap2.getEquatorBounds();
@@ -38,7 +38,7 @@ public class GeneralMapTest {
     @Test
     public void testGeneratingAnimals(){
         //given
-        AbstractWorldMap abstractWorldMap = new Globe(10,10,0,0,0);
+        AbstractWorldMap abstractWorldMap = new Globe(10,10,0,0,0,50,1,1,8);
         //when
         Map<Vector2d, Animal> animals = abstractWorldMap.getAnimals();
         //then
@@ -49,8 +49,8 @@ public class GeneralMapTest {
     @Test
     public void testGeneratingGrass(){
         //given
-        AbstractWorldMap abstractWorldMap1 = new Globe(10,10,6,0,0);
-        AbstractWorldMap abstractWorldMap2 = new Globe(30,10,10,0,0);
+        AbstractWorldMap abstractWorldMap1 = new Globe(10,10,6,0,0,50,1,1,8);
+        AbstractWorldMap abstractWorldMap2 = new Globe(30,10,10,0,0,50,1,1,8);
         //when
         Map<Vector2d, Grass> grasses1 = abstractWorldMap1.getGrasses();
         Map<Vector2d, Grass> grasses2 = abstractWorldMap2.getGrasses();
@@ -66,7 +66,7 @@ public class GeneralMapTest {
     @Test
     public void testGeneratingGrassesAndAnimals(){
         //given
-        AbstractWorldMap abstractWorldMap = new Globe(10,10,6,6,0);
+        AbstractWorldMap abstractWorldMap = new Globe(10,10,6,6,0,50,1,1,8);
         //when
         Map<Vector2d, Animal> animals = abstractWorldMap.getAnimals();
         Map<Vector2d, Grass> grasses = abstractWorldMap.getGrasses();
@@ -80,8 +80,8 @@ public class GeneralMapTest {
     @Test
     public void testSpawningGrasses(){
         //given
-        AbstractWorldMap abstractWorldMap1 = new Globe(10,10,6,0,2);
-        AbstractWorldMap abstractWorldMap2 = new Globe(30,10,10,0,5);
+        AbstractWorldMap abstractWorldMap1 = new Globe(10,10,6,0,2,50,1,1,8);
+        AbstractWorldMap abstractWorldMap2 = new Globe(30,10,10,0,5,50,1,1,8);
         //when
         abstractWorldMap1.spawnGrass();
         abstractWorldMap1.spawnGrass();
