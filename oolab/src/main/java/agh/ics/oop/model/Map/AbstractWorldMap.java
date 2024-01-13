@@ -27,6 +27,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Grass> grasses;
     protected int numberOfGrasses;
 
+    protected int freeHexes;
     protected int numberOfAnimals;
     protected int dailyNumberOfGrasses;
     protected Map<Vector2d, Water> waters;
@@ -38,6 +39,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();
+        this.freeHexes = (width+1) * (height+1);
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
         this.grasses = new HashMap<>();
@@ -61,6 +63,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected AbstractWorldMap() {
     }
 
+    protected void subtractFreeHex(){
+        freeHexes--;
+    }
     protected void generateAnimals(){
         for ( int i = 0; i < numberOfAnimals; i++){
             while (true){
@@ -74,7 +79,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected void generateGrasses(){
         for ( int i = 0; i < numberOfGrasses; i++){
             while (true){
-                if(generateGrass()){
+                if(generateGrass()!=null){
                     break;
                 }
             }
@@ -82,14 +87,18 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void spawnGrass(){
+    public List<Grass> spawnGrass(){
+        List<Grass> newGrasses = new ArrayList<>();
         for(int i = 0; i < dailyNumberOfGrasses; i++){
             while (true){
-                if(generateGrass()){
+                Grass grass = generateGrass();
+                if(grass != null){
+                    newGrasses.add(grass);
                     break;
                 }
             }
         }
+        return newGrasses;
     }
 
     @Override
@@ -101,11 +110,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
         animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy));
         addElement(randomPosition);
+        subtractFreeHex();
         return true;
     }
 
+
     @Override
-    public boolean generateGrass(){
+    public Grass generateGrass(){
         Random rand = new Random();
         Vector2d randomPosition;
         Vector2d equatorBounds = getEquatorBounds();
@@ -122,11 +133,13 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         if (isOccupied(randomPosition)) {
-            return false;
+            return null;
         }
-        grasses.put(randomPosition, new Grass(randomPosition));
+        Grass grass = new Grass(randomPosition);
+        grasses.put(randomPosition, grass);
         addElement(randomPosition);
-        return true;
+        subtractFreeHex();
+        return grass;
     }
 
     @Override
@@ -163,13 +176,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    protected void addElement(Vector2d element){
+    @Override
+    public void addElement(Vector2d element){
         sortedX.add(element);
         sortedY.add(element);
     }
 
 
-    protected void removeElement(Vector2d element){
+    @Override
+    public void removeElement(Vector2d element){
         sortedY.remove(element);
         sortedX.remove(element);
     }

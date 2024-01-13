@@ -71,7 +71,7 @@ public interface WorldMap extends MoveValidator {
      * Function that generates starting grass.
      * @return true if grass was correctly generated
      */
-    boolean generateGrass();
+    Grass generateGrass();
 
     /**
      * Function that generates starting animals.
@@ -83,7 +83,7 @@ public interface WorldMap extends MoveValidator {
      * Function that spawns grass every day.
      * @return true if grass was correctly spawned
      */
-    void spawnGrass();
+    List<Grass> spawnGrass();
 
     /**
      * Function that returns lower and upper bounds of the equator.
@@ -103,5 +103,9 @@ public interface WorldMap extends MoveValidator {
      * @return List of grasses on map.
      */
     List<Grass> getListOfGrasses();
+
+    void addElement(Vector2d element);
+
+    void removeElement(Vector2d element);
 
 }

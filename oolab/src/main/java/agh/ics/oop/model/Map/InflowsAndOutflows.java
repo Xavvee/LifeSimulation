@@ -51,6 +51,7 @@ public class InflowsAndOutflows extends AbstractWorldMap{
             for(int j = lowerLeftWaterBound.getY(); j < upperRightWaterBound.getY(); j++){
                 Vector2d position = new Vector2d(i,j);
                 waters.put(position, new Water(position));
+                subtractFreeHex();
             }
         }
     }

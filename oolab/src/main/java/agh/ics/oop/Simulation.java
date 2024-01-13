@@ -8,10 +8,7 @@ import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Simulation {
 
@@ -49,7 +46,7 @@ public class Simulation {
         int iter = 0;
         for( MoveDirection direction : moveDirections){
             int index = iter%numberOfAnimals;
-            map.move( animals.get(index));
+            map.move(animals.get(index));
             iter++;
             try {
                 Thread.sleep(500);
@@ -57,31 +54,51 @@ public class Simulation {
                 e.printStackTrace();
             }
         }
-
         for(Animal animal : animals){
             map.move(animal);
         }
     }
 
 
+    public void moveAnimals(){
+        for( Animal animal : animals){
+
+        }
+    }
 
     public void simulateOneDay(){
         // 1. Usunięcie martwych zwierząt
-
+        deleteDeadAnimals();
         // 2. Skręt i przemieszczanie zwierząt
 
         // 3. Konsumpcja roślin, które weszły zwierzaki
-
+        consume();
         // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
-
+        reproduce();
         // 5. Wzrastanie nowych roślin na wybranych polach.
+        spawnGrassAndAddToList();
+        subtractEnergy();
+    }
 
+
+    public void subtractEnergy(){
+        for(Animal animal : animals){
+            animal.setEnergy(animal.getEnergy()-1);
+        }
     }
 
     public void deleteDeadAnimals(){
-
+        Iterator<Animal> iterator = animals.iterator();
+        while (iterator.hasNext()) {
+            Animal animal = iterator.next();
+            if (animal.getEnergy() == 0) {
+                iterator.remove();
+                map.removeElement(animal.getPosition());
+            }
+        }
     }
-    public void reproduce(Animal firstAnimal, Animal secondAnimal){
+
+    public void reproduce(){
 
     }
 
@@ -93,12 +110,19 @@ public class Simulation {
         this.daysCount++;
     }
 
-    public void manageWaters(){
-        if (map instanceof InflowsAndOutflows) {
-            Map<Vector2d, Water> waters = ((InflowsAndOutflows) map).getWaters();
-            Random random = new Random();
 
+    public void spawnGrassAndAddToList() {
+        List<Grass> newGrasses = map.spawnGrass();
+        grasses.addAll(newGrasses);
+        if(map instanceof InflowsAndOutflows){
+            manageWaters();
         }
+    }
+
+    public void manageWaters(){
+        Map<Vector2d, Water> waters = ((InflowsAndOutflows) map).getWaters();
+        Random random = new Random();
+
     }
 
     public List<Animal> getAnimals() {

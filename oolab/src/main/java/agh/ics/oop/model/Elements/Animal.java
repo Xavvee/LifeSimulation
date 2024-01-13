@@ -8,8 +8,6 @@ import agh.ics.oop.model.Vector2d;
 
 public class Animal implements WorldElement {
 
-    private final Vector2d lowerBound = new Vector2d(0,0);
-    private final Vector2d upperBound = new Vector2d(4,4);
     private MapDirection direction;
 
     private Vector2d position;
@@ -87,4 +85,13 @@ public class Animal implements WorldElement {
     public void setEnergy(int energy) {
         this.energy = energy;
     }
+
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    public int getDayBorn() {
+        return dayBorn;
+    }
+
 }
