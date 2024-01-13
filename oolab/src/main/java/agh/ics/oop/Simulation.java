@@ -65,4 +65,8 @@ public class Simulation {
     public List<MoveDirection> getMoveDirections() {
         return this.moveDirections;
     }
+
+    public int getDaysCount() {
+        return daysCount;
+    }
 }

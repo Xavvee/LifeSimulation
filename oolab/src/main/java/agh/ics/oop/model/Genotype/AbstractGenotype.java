@@ -59,10 +59,14 @@ public abstract class AbstractGenotype implements Genotype {
         return genotype;
     }
 
+
+
     @Override
     public List<MapDirection> getGenotype() {
         return genotype;
     }
+
+
 
 
 }

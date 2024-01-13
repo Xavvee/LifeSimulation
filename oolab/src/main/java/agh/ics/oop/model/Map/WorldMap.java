@@ -72,14 +72,22 @@ public interface WorldMap extends MoveValidator {
     boolean generateGrass();
 
     /**
+     * Function that generates starting animals.
+     * @return true if animal was spawned
+     */
+    boolean generateAnimal();
+
+    /**
      * Function that spawns grass every day.
      * @return true if grass was correctly spawned
      */
-    boolean spawnGrass();
+    void spawnGrass();
 
     /**
      * Function that returns lower and upper bounds of equator.
      * @return Vector2d object where first coordinate is lower value of y - coordinate, second coordinate is the upper value of y - coordinate.
      */
     Vector2d getEquatorBounds();
+
+
 }

@@ -5,13 +5,14 @@ import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
-    protected int WIDTH = 20;
-    protected int HEIGHT = 10;
+    protected int width;
+    protected int height;
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     protected final MapVisualizer visualizer = new MapVisualizer(this);
 
@@ -21,17 +22,112 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected TreeSet<Vector2d> sortedX = new TreeSet<>(XComparator);
     protected TreeSet<Vector2d> sortedY = new TreeSet<>(YComparator);
     protected List<MapChangeListener> observers;
+    protected Map<Vector2d, Grass> grasses;
+    protected int numberOfGrasses;
 
+    protected int numberOfAnimals;
+    protected int dailyNumberOfGrasses;
     protected UUID id;
-    public AbstractWorldMap(){
+    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses){
+        this.numberOfAnimals = numberOfAnimals;
+        this.numberOfGrasses = numberOfGrasses;
+        this.height = height;
+        this.width = width;
         this.observers = new ArrayList<>();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
+        this.grasses = new HashMap<>();
+        generateGrasses();
+        this.animals = new HashMap<>();
+        generateAnimals();
+        this.dailyNumberOfGrasses = dailyNumberOfGrasses;
+    }
+
+    // for test purposes
+    public AbstractWorldMap(int height, int width, int numberOfGrasses){
+        this.numberOfGrasses = numberOfGrasses;
+        this.numberOfAnimals = 4;
+        this.height = height;
+        this.width = width;
+        this.grasses = new HashMap<>();
+        generateGrasses();
+        this.animals = new HashMap<>();
+    }
+
+    protected AbstractWorldMap() {
+    }
+
+    protected void generateAnimals(){
+        for ( int i = 0; i < numberOfAnimals; i++){
+            while (true){
+                if(generateAnimal()){
+                    break;
+                }
+            }
+        }
+    }
+
+    protected void generateGrasses(){
+        for ( int i = 0; i < numberOfGrasses; i++){
+            while (true){
+                if(generateGrass()){
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void spawnGrass(){
+        for(int i = 0; i < dailyNumberOfGrasses; i++){
+            while (true){
+                if(generateGrass()){
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean generateAnimal(){
+        Random rand = new Random();
+        Vector2d randomPosition = new Vector2d(rand.nextInt(width), rand.nextInt(height));
+        if(this.isOccupied(randomPosition)){
+            return false;
+        }
+        animals.put(randomPosition, new Animal(randomPosition));
+        addElement(randomPosition);
+        return true;
+    }
+
+    @Override
+    public boolean generateGrass(){
+        Random rand = new Random();
+        Vector2d randomPosition;
+        Vector2d equatorBounds = getEquatorBounds();
+        if (rand.nextDouble() < 0.8) {
+            randomPosition = new Vector2d(
+                    rand.nextInt(width), rand.nextInt(equatorBounds.getX(), equatorBounds.getY()+1));
+        } else {
+            if(rand.nextDouble() < 0.5){
+                randomPosition = new Vector2d(
+                        rand.nextInt(width), rand.nextInt(equatorBounds.getX()));
+            } else {
+                randomPosition = new Vector2d(
+                        rand.nextInt(width), rand.nextInt(equatorBounds.getY(), height - 1));
+            }
+        }
+        if (isOccupied(randomPosition)) {
+            return false;
+        }
+        grasses.put(randomPosition, new Grass(randomPosition));
+        addElement(randomPosition);
+        return true;
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.precedes(this.getUpperRight()) && (this.getLowerLeft().precedes(position));
+        return position.getY() < this.height && position.getY() > 0;
     }
 
 
@@ -47,7 +143,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    // rusza zwierzęciem po mapie, ogólnie działa git, chyba nie trzeba zmieniać
     @Override
     public void move(Animal animal) {
         if(animals.containsKey(animal.position())){
@@ -83,25 +178,26 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
-        return animals.get(position);
+        WorldElement animalElement = animals.get(position);
+        if (animalElement != null) {
+            return animalElement;
+        }
+        return grasses.get(position);
     }
 
-    @Override
-    public boolean generateGrass(){
-        return true;
-    }
-
-    @Override
-    public boolean spawnGrass(){
-        return true;
-    }
 
     @Override
     public Vector2d getEquatorBounds(){
-        int middleOfY = (int) HEIGHT/2;
-        int tenPercentOfHeight = (int) (HEIGHT*0.1);
+        int middleOfY = height/2;
+        double tenPercent = height * 0.1;
+        int tenPercentOfHeight;
+        if (tenPercent - Math.floor(tenPercent) >= 0.5) {
+            tenPercentOfHeight = (int) Math.ceil(tenPercent);
+        } else {
+            tenPercentOfHeight = (int) Math.floor(tenPercent);
+        }
 
-        return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight);
+        return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight - 1);
     }
 
     @Override
@@ -111,7 +207,10 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public Map<Vector2d, WorldElement> getElements() {
-        return new HashMap<>(animals);
+        Map<Vector2d, WorldElement> allElements = new HashMap<>();
+        allElements.putAll(this.animals);
+        allElements.putAll(this.grasses);
+        return allElements;
     }
 
     @Override
@@ -133,9 +232,23 @@ public abstract class AbstractWorldMap implements WorldMap {
             observer.mapChanged(this, message);
         }
     }
-    public abstract Boundary getCurrentBounds();
+    public Boundary getCurrentBounds(){
+        return new Boundary(getLowerLeft(), getUpperRight());
+    };
 
-    protected abstract Vector2d getUpperRight();
-    protected abstract Vector2d getLowerLeft();
+    protected  Vector2d getUpperRight(){
+        return new Vector2d(width, height);
+    };
+    protected Vector2d getLowerLeft(){
+        return new Vector2d(0, 0);
+    }
+
+    public Map<Vector2d, Animal> getAnimals() {
+        return animals;
+    }
+
+    public Map<Vector2d, Grass> getGrasses() {
+        return grasses;
+    }
 
 }

@@ -15,6 +15,7 @@ public class Animal implements WorldElement {
 
     private Vector2d position;
     private int energy;
+    private int dayBorn;
     private Genotype genotype;
     public Animal(){
         this(new Vector2d(2,2));
@@ -24,6 +25,18 @@ public class Animal implements WorldElement {
         this.position = position;
         this.energy = STARTING_ENERGY;
         this.genotype = new RandomGenotype();
+        this.direction = genotype.getGenotype().get(0);
+        this.dayBorn = 0;
+    }
+
+    public Animal(Vector2d position, int number){
+        this.position = position;
+        this.direction = MapDirection.NORTH;
+    }
+
+    public Animal(Vector2d position, Genotype genotype){
+        this.position = position;
+        this.genotype = genotype;
         this.direction = genotype.getGenotype().get(0);
     }
 
@@ -45,18 +58,20 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
-    // raczej do wyjebania w obecnej formie, zawsze musi zrotować zwierzę, a później spróbowac ruszyć je do przodu
     public void move(MoveValidator validator){
-
+        this.rotate();
         Vector2d newPosition = position.add(this.direction.toUnitVector());
         if(validator.canMoveTo(newPosition)){
             this.position = newPosition;
         }
     }
 
-    private void rotate(){
-        return;
+    public void rotate() {
+        MapDirection activeGene = this.direction;
+        direction = direction.rotateBy(activeGene);
     }
+
+
 
     public MapDirection getDirection() {
         return direction;

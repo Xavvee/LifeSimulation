@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import java.util.Arrays;
+
 public enum MapDirection {
     NORTH,
     NORTHEAST,
@@ -32,6 +34,15 @@ public enum MapDirection {
     public MapDirection previous(){
         int previous = (this.ordinal() + MapDirection.values().length - 1) % MapDirection.values().length;
         return MapDirection.values()[previous];
+    }
+
+
+    public MapDirection rotateBy(MapDirection gene) {
+        int numberOfDirections = MapDirection.values().length;
+        int currentDirectionIndex = Arrays.asList(MapDirection.values()).indexOf(this);
+        int geneIndex = Arrays.asList(MapDirection.values()).indexOf(gene);
+        int newDirectionIndex = (currentDirectionIndex + geneIndex) % numberOfDirections;
+        return MapDirection.values()[newDirectionIndex];
     }
 
     public Vector2d toUnitVector(){

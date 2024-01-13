@@ -1,14 +1,11 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
-import agh.ics.oop.model.Map.GrassField;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -33,13 +30,13 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
 
 
     public void startMultipleSimulation(List<MoveDirection> directions) {
-        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-        GrassField map = new GrassField(4);
-        this.setWorldMap(map);
-        map.addObserver(this);
-        Simulation simulation = new Simulation(positions, directions, map);
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-        simulationEngine.runAsyncInThreadPool();
+//        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
+//        GrassField map = new GrassField(4);
+//        this.setWorldMap(map);
+//        map.addObserver(this);
+//        Simulation simulation = new Simulation(positions, directions, map);
+//        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+//        simulationEngine.runAsyncInThreadPool();
     }
 
     public void drawMap(WorldMap worldMap){
