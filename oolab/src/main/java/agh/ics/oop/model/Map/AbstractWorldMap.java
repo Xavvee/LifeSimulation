@@ -6,12 +6,14 @@ import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
+import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap {
     protected int width;
+    protected int startingEnergy;
     protected int height;
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     protected final MapVisualizer visualizer = new MapVisualizer(this);
@@ -27,10 +29,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     protected int numberOfAnimals;
     protected int dailyNumberOfGrasses;
+    protected Map<Vector2d, Water> waters;
     protected UUID id;
-    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses){
+    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy){
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
+        this.startingEnergy = startingEnergy;
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();
@@ -95,7 +99,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(this.isOccupied(randomPosition)){
             return false;
         }
-        animals.put(randomPosition, new Animal(randomPosition));
+        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy));
         addElement(randomPosition);
         return true;
     }
@@ -247,8 +251,19 @@ public abstract class AbstractWorldMap implements WorldMap {
         return animals;
     }
 
+    public List<Animal> getListOfAnimals(){
+        return new ArrayList<>(animals.values());
+    }
+
+    public List<Grass> getListOfGrasses(){
+        return new ArrayList<>(grasses.values());
+    }
+
     public Map<Vector2d, Grass> getGrasses() {
         return grasses;
     }
+
+    public abstract Map<Vector2d, Water> getWaters();
+
 
 }

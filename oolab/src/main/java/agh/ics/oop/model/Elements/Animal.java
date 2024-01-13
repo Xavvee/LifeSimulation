@@ -8,7 +8,6 @@ import agh.ics.oop.model.Vector2d;
 
 public class Animal implements WorldElement {
 
-    private static final int STARTING_ENERGY = 50;
     private final Vector2d lowerBound = new Vector2d(0,0);
     private final Vector2d upperBound = new Vector2d(4,4);
     private MapDirection direction;
@@ -18,21 +17,17 @@ public class Animal implements WorldElement {
     private int dayBorn;
     private Genotype genotype;
     public Animal(){
-        this(new Vector2d(2,2));
+        this(new Vector2d(2,2), 20);
     }
 
-    public Animal(Vector2d position){
+    public Animal(Vector2d position, int startingEnergy){
         this.position = position;
-        this.energy = STARTING_ENERGY;
+        this.energy = startingEnergy;
         this.genotype = new RandomGenotype();
         this.direction = genotype.getGenotype().get(0);
         this.dayBorn = 0;
     }
 
-    public Animal(Vector2d position, int number){
-        this.position = position;
-        this.direction = MapDirection.NORTH;
-    }
 
     public Animal(Vector2d position, Genotype genotype){
         this.position = position;

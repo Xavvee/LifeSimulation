@@ -11,11 +11,6 @@ import agh.ics.oop.model.Elements.WorldElement;
 import java.util.*;
 
 public class InflowsAndOutflows extends AbstractWorldMap{
-    private Vector2d leftLowerWaterBound;
-
-    private Vector2d rightUpperWaterBound;
-
-    private Map<Vector2d, Water> waters;
 
     public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses) {
         this.numberOfAnimals = numberOfAnimals;
@@ -36,24 +31,30 @@ public class InflowsAndOutflows extends AbstractWorldMap{
 
 
     // function that generates the water hexes at the beginning
-    private boolean generateWaters(){
+    private void generateWaters(){
         int waterHeight = (int) (height * 0.2);
         int waterWidth = (int) (width * 0.2);
 
-        int lowerLeftWaterBound;
-        int upperRightWaterBound;
+        Vector2d lowerLeftWaterBound;
+        Vector2d upperRightWaterBound;
         Random random = new Random();
+        Vector2d transition = new Vector2d(waterWidth, waterHeight);
 
-        while(true){
+        do {
+            int xValue = random.nextInt(width);
+            int yValue = random.nextInt(height);
+            lowerLeftWaterBound = new Vector2d(xValue, yValue);
+        } while (!lowerLeftWaterBound.add(transition).precedes(this.getUpperRight()));
+        upperRightWaterBound = lowerLeftWaterBound.add(transition);
 
+        for( int i = lowerLeftWaterBound.getX(); i < upperRightWaterBound.getX(); i++){
+            for(int j = lowerLeftWaterBound.getY(); j < upperRightWaterBound.getY(); j++){
+                Vector2d position = new Vector2d(i,j);
+                waters.put(position, new Water(position));
+            }
         }
     }
 
-
-    // function that manipulates the water hexes through the simulation
-    private void manageWater(){
-
-    }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
@@ -75,4 +76,10 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     public UUID getId() {
         return null;
     }
+
+    @Override
+    public Map<Vector2d, Water> getWaters() {
+        return waters;
+    }
+
 }

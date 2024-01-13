@@ -1,40 +1,45 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
+import agh.ics.oop.model.Elements.Water;
+import agh.ics.oop.model.Map.InflowsAndOutflows;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class Simulation {
 
 
     private List<MoveDirection> moveDirections;
-    private final List<Animal> animals;
+    private List<Animal> animals;
+    private List<Grass> grasses;
     private final WorldMap map;
     private int daysCount;
+    private final int energyPerGrass;
+    private final int minimumNumberOfMutations;
+    private final int maximumNumberOfMutations;
+    private final int genomeLength;
+    private final int sufficientEnergyForReproduction;
+    private final int energyNeededForReproduction;
 
-    public Simulation(List<Vector2d> startingPositions, List<MoveDirection> moveDirections, WorldMap map){
-        this(startingPositions, map);
-        this.moveDirections = moveDirections;
-    }
-    public Simulation(List<Vector2d> startingPositions, WorldMap map){
+
+    public Simulation(WorldMap map, int energyPerGrass, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, int sufficientEnergyForReproduction, int energyNeededForReproduction){
         this.map = map;
-        List<Animal> animals = new ArrayList<>();
-        for(Vector2d position : startingPositions){
-            Animal animal = new Animal(position);
-            try {
-                if(map.place(animal)) {
-                    animals.add(animal);
-                }
-            } catch (PositionAlreadyOccupied e) {
-                System.out.println("Position at " + position.toString() + " is already occupied. Animal placement skipped.");
-            }
-        }
-        this.animals = animals;
+        this.animals = map.getListOfAnimals();
+        this.grasses = map.getListOfGrasses();
+        this.energyPerGrass = energyPerGrass;
         this.daysCount = 0;
+        this.minimumNumberOfMutations = minimumNumberOfMutations;
+        this.maximumNumberOfMutations = maximumNumberOfMutations;
+        this.genomeLength = genomeLength;
+        this.sufficientEnergyForReproduction = sufficientEnergyForReproduction;
+        this.energyNeededForReproduction = energyNeededForReproduction;
     }
 
 
@@ -55,6 +60,44 @@ public class Simulation {
 
         for(Animal animal : animals){
             map.move(animal);
+        }
+    }
+
+
+
+    public void simulateOneDay(){
+        // 1. Usunięcie martwych zwierząt
+
+        // 2. Skręt i przemieszczanie zwierząt
+
+        // 3. Konsumpcja roślin, które weszły zwierzaki
+
+        // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
+
+        // 5. Wzrastanie nowych roślin na wybranych polach.
+
+    }
+
+    public void deleteDeadAnimals(){
+
+    }
+    public void reproduce(Animal firstAnimal, Animal secondAnimal){
+
+    }
+
+    public void consume(){
+
+    }
+
+    public void incrementDayCount(){
+        this.daysCount++;
+    }
+
+    public void manageWaters(){
+        if (map instanceof InflowsAndOutflows) {
+            Map<Vector2d, Water> waters = ((InflowsAndOutflows) map).getWaters();
+            Random random = new Random();
+
         }
     }
 

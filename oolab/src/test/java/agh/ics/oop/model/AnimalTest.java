@@ -8,7 +8,7 @@ public class AnimalTest {
     @Test
     public void rotateTest(){
         //given
-        Animal animal = new Animal(new Vector2d(2,2));
+        Animal animal = new Animal(new Vector2d(2,2), 20);
         System.out.println(animal.getDirection());
         //when
         animal.rotate();

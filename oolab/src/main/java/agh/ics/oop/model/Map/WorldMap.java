@@ -3,8 +3,10 @@ package agh.ics.oop.model.Map;
 import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.WorldElement;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -84,10 +86,22 @@ public interface WorldMap extends MoveValidator {
     void spawnGrass();
 
     /**
-     * Function that returns lower and upper bounds of equator.
+     * Function that returns lower and upper bounds of the equator.
      * @return Vector2d object where first coordinate is lower value of y - coordinate, second coordinate is the upper value of y - coordinate.
      */
     Vector2d getEquatorBounds();
 
+    /**
+     * Function that helps control the animals.
+     * @return List of animals on map.
+     */
+    List<Animal> getListOfAnimals();
+
+
+    /**
+     * Function that helps control the grasses.
+     * @return List of grasses on map.
+     */
+    List<Grass> getListOfGrasses();
 
 }
