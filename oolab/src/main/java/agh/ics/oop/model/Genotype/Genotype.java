@@ -23,4 +23,5 @@ public interface Genotype {
      * @return genotype of given animal
      */
     List<MapDirection> getGenotype();
+
 }

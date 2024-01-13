@@ -2,6 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Genotype.AbstractGenotype;
+import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Genotype.MinorCorrectionGenotype;
 import agh.ics.oop.model.Genotype.RandomGenotype;
 import org.junit.jupiter.api.Test;
@@ -29,8 +30,8 @@ public class GenotypeTest {
     @Test
     public void testMinorCorrectionGenotype(){
         // given
-        Animal firstParent = new Animal();
-        Animal secondParent = new Animal();
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.MINOR_CORRECTION);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.MINOR_CORRECTION);
         firstParent.setEnergy(150);
         AbstractGenotype abstractGenotype = new MinorCorrectionGenotype(8,1,1);
         // when
@@ -45,8 +46,8 @@ public class GenotypeTest {
     @Test
     public void testRandomGenotype(){
         // given
-        Animal firstParent = new Animal();
-        Animal secondParent = new Animal();
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.RANDOM);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.RANDOM);
         firstParent.setEnergy(150);
         AbstractGenotype abstractGenotype = new RandomGenotype(8,1,1);
         // when

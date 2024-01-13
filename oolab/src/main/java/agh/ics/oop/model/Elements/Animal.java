@@ -1,11 +1,12 @@
 package agh.ics.oop.model.Elements;
 
-import agh.ics.oop.model.Genotype.AbstractGenotype;
-import agh.ics.oop.model.Genotype.Genotype;
-import agh.ics.oop.model.Genotype.RandomGenotype;
+import agh.ics.oop.model.Genotype.*;
 import agh.ics.oop.model.Map.MoveValidator;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Animal implements WorldElement {
 
@@ -16,36 +17,36 @@ public class Animal implements WorldElement {
     private int age;
     private Genotype genotype;
     private int childrenCount;
-    private AbstractGenotype abstractGenotype;
-    public Animal(){
-        this(new Vector2d(2,2), 20);
-    }
+
 
     // randomly spawned starting animal
-    public Animal(Vector2d position, int startingEnergy){
+    public Animal(Vector2d position, int startingEnergy, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType){
         this.position = position;
         this.energy = startingEnergy;
-        this.genotype =
+        if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
+            this.genotype = new MinorCorrectionGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
+        } else if (genotypeType.equals(GenotypeType.RANDOM)) {
+            this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
+        }
         this.direction = genotype.getGenotype().get(0);
         this.age = 0;
         this.childrenCount = 0;
     }
 
     // newborn child genotype
-    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int dayBorn, int energyNeededForReproduction){
+    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType){
         this.position = position;
         this.energy = 2*energyNeededForReproduction;
-        this.genotype = abstractGenotype.mutate(firstParent, secondParent);
+        if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
+            this.genotype = new MinorCorrectionGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
+        } else if (genotypeType.equals(GenotypeType.RANDOM)) {
+            this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
+        }
+        this.direction = genotype.getGenotype().get(0);
         this.age = 0;
         this.childrenCount = 0;
     }
 
-
-    public Animal(Vector2d position, Genotype genotype){
-        this.position = position;
-        this.genotype = genotype;
-        this.direction = genotype.getGenotype().get(0);
-    }
 
     @Override
     public String toString(){
@@ -126,4 +127,5 @@ public class Animal implements WorldElement {
     public int getChildrenCount() {
         return childrenCount;
     }
+
 }

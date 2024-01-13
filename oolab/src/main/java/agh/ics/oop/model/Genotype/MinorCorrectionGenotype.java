@@ -13,8 +13,8 @@ public class MinorCorrectionGenotype extends AbstractGenotype {
         super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
     }
 
-    public MinorCorrectionGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, List<MapDirection> genotype){
-        super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, genotype);
+    public MinorCorrectionGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, Animal firstParent, Animal secondParent){
+        super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
     }
 
     @Override

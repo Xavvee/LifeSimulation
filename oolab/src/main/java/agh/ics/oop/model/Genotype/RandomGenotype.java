@@ -13,8 +13,8 @@ public class RandomGenotype extends AbstractGenotype{
         super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
     }
 
-    public RandomGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations,List<MapDirection> genotype){
-        super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations,genotype);
+    public RandomGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, Animal firstParent, Animal secondParent){
+        super(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
     }
 
     @Override

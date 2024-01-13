@@ -22,9 +22,7 @@ public class Simulation {
     private final int energyPerGrass;
     private final int sufficientEnergyForReproduction;
     private final int energyNeededForReproduction;
-
-
-
+    
     public Simulation(WorldMap map, int energyPerGrass, int sufficientEnergyForReproduction, int energyNeededForReproduction){
         this.map = map;
         this.animals = map.getListOfAnimals();

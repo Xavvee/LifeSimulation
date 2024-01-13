@@ -20,9 +20,9 @@ public abstract class AbstractGenotype implements Genotype {
         this.genotype = generateGenotype();
     }
 
-    public AbstractGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, List<MapDirection> genotype){
+    public AbstractGenotype(int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, Animal firstParent, Animal secondParent){
         this(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
-        this.genotype = genotype;
+        this.genotype = mutate(firstParent, secondParent);
     }
 
     @Override

@@ -5,6 +5,7 @@ import agh.ics.oop.model.ConsoleMapDisplay;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Boundary;
 import agh.ics.oop.model.Elements.Water;
+import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Elements.WorldElement;
 
@@ -12,7 +13,8 @@ import java.util.*;
 
 public class InflowsAndOutflows extends AbstractWorldMap{
 
-    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength) {
+    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType) {
+        this.genotypeType = genotypeType;
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
         this.startingEnergy = startingEnergy;

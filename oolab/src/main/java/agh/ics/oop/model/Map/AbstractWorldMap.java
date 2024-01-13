@@ -8,6 +8,7 @@ import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
+import agh.ics.oop.model.Genotype.GenotypeType;
 
 import java.util.*;
 
@@ -17,7 +18,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int height;
     protected Map<Vector2d, Animal> animals = new HashMap<>();
     protected final MapVisualizer visualizer = new MapVisualizer(this);
-
     protected Comparator XComparator = new Comparator(true);
 
     protected Comparator YComparator = new Comparator(false);
@@ -31,13 +31,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int numberOfAnimals;
     protected int dailyNumberOfGrasses;
     protected Map<Vector2d, Water> waters;
+    protected GenotypeType genotypeType;
     protected UUID id;
 
     protected int minimumNumberOfMutations;
     protected int maximumNumberOfMutations;
     protected int genomeLength;
 
-    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength){
+    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType){
+        this.genotypeType = genotypeType;
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
         this.startingEnergy = startingEnergy;
@@ -106,7 +108,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(this.isOccupied(randomPosition)){
             return false;
         }
-        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy));
+        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION));
         addElement(randomPosition);
         subtractFreeHex();
         return true;
