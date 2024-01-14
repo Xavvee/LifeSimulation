@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Map.AbstractWorldMap;
@@ -8,6 +10,7 @@ import agh.ics.oop.model.Map.InflowsAndOutflows;
 import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,11 +34,32 @@ public class InflowsAndOutflowsTest {
     @Test
     public void generalMapTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(15,25,30,8,4,30,2,4,10, GenotypeType.MINOR_CORRECTION, MapType.INFLOWS_AND_OUTFLOWS);
-        //when
+        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20,25,7,5,25,1,5,16, GenotypeType.RANDOM, MapType.INFLOWS_AND_OUTFLOWS);
+        // when
+        List<Animal> animals = abstractWorldMap.getListOfAnimals();
+        List<Grass> grasses = abstractWorldMap.getListOfGrasses();
+        int genomeLength = abstractWorldMap.getGenomeLength();
+        int maximumNumberOfMutations = abstractWorldMap.getMaximumNumberOfMutations();
+        int minimumNumberOfMutations = abstractWorldMap.getMinimumNumberOfMutations();
+        int width = abstractWorldMap.getWidth();
+        int height = abstractWorldMap.getHeight();
+        MapType mapType = abstractWorldMap.getMapType();
+        GenotypeType genotypeType = abstractWorldMap.getGenotypeType();
+        int watersNumber = abstractWorldMap.getWaters().size();
         //then
         System.out.println(abstractWorldMap);
-        System.out.println(abstractWorldMap.getGrasses().size());
-        System.out.println(abstractWorldMap.getEquatorBounds());
+        assertEquals(animals.size(), 7);
+        assertEquals(grasses.size(), 25);
+        assertEquals(genomeLength, 16);
+        assertEquals(animals.get(0).getGenotype().getGenomeLength(), 16);
+        assertEquals(maximumNumberOfMutations, 5);
+        assertEquals(animals.get(0).getGenotype().getMaximumNumberOfMutations(), 5);
+        assertEquals(minimumNumberOfMutations, 1);
+        assertEquals(animals.get(0).getGenotype().getMinimumNumberOfMutations(), 1);
+        assertEquals(width, 20);
+        assertEquals(height, 10);
+        assertEquals(mapType, MapType.INFLOWS_AND_OUTFLOWS);
+        assertEquals(genotypeType, GenotypeType.RANDOM);
+        assertEquals(watersNumber, ((int) width * 0.4 ) * ((int) height * 0.4) );
     }
 }

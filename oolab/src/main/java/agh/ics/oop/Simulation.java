@@ -78,6 +78,14 @@ public class Simulation {
         incrementDayCount();
     }
 
+    public void simulateXDays(int daysCount){
+        for( int i = 0; i < daysCount; i++){
+            simulateOneDay();
+            for(Animal animal : animals){
+                System.out.println(animal.getEnergy());
+            }
+        }
+    }
 
     public void subtractEnergyAddAge(){
         for(Animal animal : animals){
@@ -93,16 +101,19 @@ public class Simulation {
             if (animal.getEnergy() == 0) {
                 iterator.remove();
                 map.removeElement(animal.getPosition());
+                map.removeAnimal(animal.getPosition());
             } else if (map instanceof InflowsAndOutflows) {
                 Map<Vector2d, Water> waterMap = ((InflowsAndOutflows) map).getWaters();
                 Set<Vector2d> waterHexes = waterMap.keySet();
                 if (waterHexes.contains(animal.getPosition())) {
                     iterator.remove();
                     map.removeElement(animal.getPosition());
+                    map.removeAnimal(animal.getPosition());
                 }
             }
         }
     }
+
 
     public void reproduce(){
         List<Animal> filteredAnimals = new ArrayList<>();
@@ -290,4 +301,7 @@ public class Simulation {
         return daysCount;
     }
 
+    public WorldMap getMap() {
+        return map;
+    }
 }

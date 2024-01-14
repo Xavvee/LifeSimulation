@@ -26,4 +26,8 @@ public interface Genotype {
 
 
     int getGenomeLength();
+
+
+    int getMaximumNumberOfMutations();
+    int getMinimumNumberOfMutations();
 }

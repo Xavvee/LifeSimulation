@@ -121,4 +121,7 @@ public interface WorldMap extends MoveValidator {
 
     int getHeight();
 
+    void removeAnimal(Vector2d position);
+    void removeGrass(Vector2d position);
+
 }

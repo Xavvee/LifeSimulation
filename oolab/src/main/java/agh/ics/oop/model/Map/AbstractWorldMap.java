@@ -216,6 +216,16 @@ public abstract class AbstractWorldMap implements WorldMap {
         sortedX.remove(element);
     }
 
+    @Override
+    public void removeAnimal(Vector2d position){
+        animals.remove(position);
+    }
+
+    @Override
+    public void removeGrass(Vector2d position){
+        animals.remove(position);
+    }
+
 
     @Override
     public boolean isOccupied(Vector2d position) {
