@@ -329,6 +329,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         return width;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public MapType getMapType() {
         return mapType;
     }

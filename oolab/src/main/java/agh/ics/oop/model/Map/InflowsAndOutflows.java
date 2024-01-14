@@ -92,4 +92,19 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     public Vector2d getWaterUpperRightCorner() {
         return waterUpperRightCorner;
     }
+
+    public void addWater(Vector2d position){
+        this.waters.put(position, new Water(position));
+        this.removeElement(position);
+        if(!isOccupied(position)){
+            subtractFreeHex(position);
+        }
+    }
+
+    public void removeWater(Vector2d position){
+        this.waters.remove(position);
+        this.addElement(position);
+        addFreeHex(position);
+    }
+
 }

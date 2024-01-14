@@ -119,4 +119,6 @@ public interface WorldMap extends MoveValidator {
 
     MapType getMapType();
 
+    int getHeight();
+
 }

@@ -138,7 +138,6 @@ public class Simulation {
 
     public void consume(){
         Map<Vector2d, List<Animal>> animalsOnGrass = new HashMap<>();
-
         for (Animal animal : animals) {
             Vector2d position = animal.getPosition();
             animalsOnGrass.computeIfAbsent(position, k -> new ArrayList<>()).add(animal);
@@ -188,30 +187,93 @@ public class Simulation {
         int drawnNumber = random.nextInt(4);
         Vector2d lowerLeftWaterCorner = ((InflowsAndOutflows) map).getWaterLowerLeftCorner();
         Vector2d upperRightWaterCorner = ((InflowsAndOutflows) map).getWaterUpperRightCorner();
-        if(shrinkOrEnlarge == 0 ){
-            switch (drawnNumber){
-                case 0:
-                    
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
-        } else{
-            switch (drawnNumber){
-                case 0:
-
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
+        Vector2d upperLeftWaterCorner = new Vector2d(lowerLeftWaterCorner.getX(), upperRightWaterCorner.getY());
+        Vector2d lowerRightWaterCorner = new Vector2d(upperRightWaterCorner.getX(), lowerLeftWaterCorner.getY());
+        switch (drawnNumber){
+            case 0:
+                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getY() + 1 <= map.getHeight()) {
+                    for( int i = upperLeftWaterCorner.getX(); i < upperRightWaterCorner.getX() + 1; i++){
+                        for( int j = upperLeftWaterCorner.getY(); j < upperLeftWaterCorner.getY()+1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).addWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() + 1));
+                    // setowanie upperRightCornera
+                } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getY() - 1 > 0) {
+                    for( int i = upperLeftWaterCorner.getX(); i < upperRightWaterCorner.getX() + 1; i++){
+                        for( int j = upperLeftWaterCorner.getY() - 1; j < upperLeftWaterCorner.getY(); j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).removeWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() - 1));
+                    // setowanie upperRightCornera
+                }
+                break;
+            case 1:
+                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getX() + 1 <= map.getWidth()){
+                    for( int i = lowerRightWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
+                        for( int j = lowerRightWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).addWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() + 1, upperRightWaterCorner.getY()));
+                    // setowanie upperRightCornera
+                } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getX() - 1 > 0) {
+                    for( int i = lowerRightWaterCorner.getX() -1; i < lowerRightWaterCorner.getX(); i++){
+                        for( int j = lowerRightWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).removeWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() - 1, upperRightWaterCorner.getY()));
+                    // setowanie upperRightCornera
+                }
+                break;
+            case 2:
+                if(shrinkOrEnlarge == 0 && lowerLeftWaterCorner.getY() - 1 > 0){
+                    for( int i = lowerLeftWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
+                        for( int j = lowerLeftWaterCorner.getY() - 1; j < lowerLeftWaterCorner.getY(); j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).addWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() - 1));
+                    // setowanie lowerLeftCornera
+                } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getY() + 1 < upperLeftWaterCorner.getY()){
+                    for( int i = lowerLeftWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
+                        for( int j = lowerLeftWaterCorner.getY(); j < lowerLeftWaterCorner.getY() + 1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).removeWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() + 1));
+                    // setowanie lowerLeftCornera
+                }
+                break;
+            case 3:
+                if(shrinkOrEnlarge == 0 && lowerLeftWaterCorner.getX() - 1 > 0){
+                    for( int i = lowerLeftWaterCorner.getX() - 1; i < lowerLeftWaterCorner.getX(); i++){
+                        for( int j = lowerLeftWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).addWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() - 1, lowerLeftWaterCorner.getY()));
+                    // setowanie lowerLeftCornera
+                } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getX() + 1 < lowerRightWaterCorner.getX()) {
+                    for( int i = lowerLeftWaterCorner.getX(); i < lowerLeftWaterCorner.getX() + 1; i++){
+                        for( int j = lowerLeftWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
+                            Vector2d position = new Vector2d(i, j);
+                            ((InflowsAndOutflows) map).removeWater(position);
+                        }
+                    }
+                    ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() + 1, lowerLeftWaterCorner.getY()));
+                    // setowanie lowerLeftCornera
+                }
+                break;
         }
 
     }
