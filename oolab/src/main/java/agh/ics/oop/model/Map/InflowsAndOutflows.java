@@ -2,6 +2,7 @@ package agh.ics.oop.model.Map;
 
 import agh.ics.oop.model.ConsoleMapDisplay;
 import agh.ics.oop.model.Elements.Water;
+import agh.ics.oop.model.Elements.WorldElement;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Vector2d;
 
@@ -29,8 +30,8 @@ public class InflowsAndOutflows extends AbstractWorldMap{
         generateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
-        this.waterWidth = (int) (width * 0.2);
-        this.waterHeight = (int) (height * 0.2);
+        this.waterWidth = (int) (width * 0.4);
+        this.waterHeight = (int) (height * 0.4);
         this.waters = new HashMap<>();
         generateWaters();
         this.grasses = new HashMap<>();
@@ -71,6 +72,13 @@ public class InflowsAndOutflows extends AbstractWorldMap{
         return position.precedes(this.getUpperRight()) && (this.getLowerLeft().precedes(position)) && !(objectAt(position) instanceof Water) ;
     }
 
+    @Override
+    public WorldElement objectAt(Vector2d position) {
+        if(super.objectAt(position) != null){
+            return  super.objectAt(position);
+        }
+        return waters.get(position);
+    }
 
     @Override
     public Map<Vector2d, Water> getWaters() {

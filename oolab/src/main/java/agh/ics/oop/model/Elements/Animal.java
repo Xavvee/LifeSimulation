@@ -64,11 +64,11 @@ public class Animal implements WorldElement {
             case NORTH -> "^";
             case WEST -> "<";
             case SOUTH -> "v";
-            case NORTHEAST -> "-|";
+            case NORTHEAST -> "NE";
             case EAST -> ">";
-            case SOUTHEAST -> "_|";
-            case SOUTHWEST -> "L";
-            case NORTHWEST -> "|-";
+            case SOUTHEAST -> "SE";
+            case SOUTHWEST -> "SW";
+            case NORTHWEST -> "NW";
         };
     }
 
