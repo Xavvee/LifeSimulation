@@ -22,6 +22,8 @@ public class Simulation {
     private final int energyPerGrass;
     private final int sufficientEnergyForReproduction;
     private final int energyNeededForReproduction;
+
+
     
     public Simulation(WorldMap map, int energyPerGrass, int sufficientEnergyForReproduction, int energyNeededForReproduction){
         this.map = map;
@@ -96,7 +98,35 @@ public class Simulation {
     }
 
     public void reproduce(){
-
+        List<Animal> filteredAnimals = new ArrayList<>();
+        for( Animal animal : animals){
+            if(animal.getEnergy() >= sufficientEnergyForReproduction){
+                filteredAnimals.add(animal);
+            }
+        }
+        Map<Vector2d, List<Animal>> animalsAtPosition = new HashMap<>();
+        for (Animal animal : filteredAnimals) {
+            Vector2d position = animal.getPosition();
+            animalsAtPosition.computeIfAbsent(position, k -> new ArrayList<>()).add(animal);
+        }
+        for (List<Animal> animalsOnSamePosition : animalsAtPosition.values()) {
+             if (animalsOnSamePosition.size() >= 2) {
+                animalsOnSamePosition.sort(Comparator
+                        .comparingInt(Animal::getEnergy).reversed()
+                        .thenComparingInt(Animal::getAge).reversed()
+                        .thenComparingInt(Animal::getChildrenCount).reversed()
+                );
+                Animal firstParent = animalsOnSamePosition.get(0);
+                Animal secondParent = animalsOnSamePosition.get(1);
+                Animal child = new Animal(firstParent.getPosition(), firstParent, secondParent, energyNeededForReproduction, map.getGenomeLength(), map.getMinimumNumberOfMutations(), map.getMaximumNumberOfMutations(), map.getGenotypeType());
+                firstParent.setEnergy(firstParent.getEnergy()-energyNeededForReproduction);
+                secondParent.setEnergy(secondParent.getEnergy()-energyNeededForReproduction);
+                firstParent.addChild();
+                secondParent.addChild();
+                animals.add(child);
+                map.addElement(child.getPosition());
+            }
+        }
     }
 
     public void consume(){
@@ -111,7 +141,8 @@ public class Simulation {
             List<Animal> animalsAtPosition = animalsOnGrass.getOrDefault(grass.position(), Collections.emptyList());
 
             if (animalsAtPosition.size() > 1) {
-                resolveConflict(animalsAtPosition);
+                Animal winner = resolveConflictForPlants(animalsAtPosition);
+                winner.addEnergy(energyPerGrass);
             } else if (!animalsAtPosition.isEmpty()) {
                 Animal singleAnimal = animalsAtPosition.get(0);
                 singleAnimal.addEnergy(energyPerGrass);
@@ -119,18 +150,13 @@ public class Simulation {
         }
     }
 
-    private void resolveConflict(List<Animal> animalsAtPosition) {
+    private Animal resolveConflictForPlants(List<Animal> animalsAtPosition) {
         animalsAtPosition.sort(Comparator
                 .comparingInt(Animal::getEnergy).reversed()
                 .thenComparingInt(Animal::getAge).reversed()
                 .thenComparingInt(Animal::getChildrenCount).reversed()
         );
-        Animal winner = animalsAtPosition.get(0);
-        winner.addEnergy(energyPerGrass);
-        for (int i = 1; i < animalsAtPosition.size(); i++) {
-            Animal loser = animalsAtPosition.get(i);
-            animals.remove(loser);
-        }
+        return animals.get(0);
     }
 
     public void incrementDayCount(){

@@ -132,7 +132,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                         rand.nextInt(width), rand.nextInt(equatorBounds.getY(), height - 1));
             }
         }
-        if (isOccupied(randomPosition)) {
+        if (objectAt(randomPosition) instanceof Grass || objectAt(randomPosition) instanceof Water) {
             return null;
         }
         Grass grass = new Grass(randomPosition);
@@ -281,4 +281,19 @@ public abstract class AbstractWorldMap implements WorldMap {
     public abstract Map<Vector2d, Water> getWaters();
 
 
+    public int getGenomeLength() {
+        return genomeLength;
+    }
+
+    public int getMaximumNumberOfMutations() {
+        return maximumNumberOfMutations;
+    }
+
+    public int getMinimumNumberOfMutations() {
+        return minimumNumberOfMutations;
+    }
+
+    public GenotypeType getGenotypeType() {
+        return genotypeType;
+    }
 }

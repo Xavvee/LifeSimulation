@@ -5,6 +5,7 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.WorldElement;
+import agh.ics.oop.model.Genotype.GenotypeType;
 
 import java.util.List;
 import java.util.Map;
@@ -107,5 +108,13 @@ public interface WorldMap extends MoveValidator {
     void addElement(Vector2d element);
 
     void removeElement(Vector2d element);
+
+    int getGenomeLength();
+
+    int getMaximumNumberOfMutations();
+
+    int getMinimumNumberOfMutations();
+
+    GenotypeType getGenotypeType();
 
 }
