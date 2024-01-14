@@ -58,7 +58,7 @@ public class Simulation {
 
     public void moveAnimals(){
         for( Animal animal : animals){
-
+            map.move(animal);
         }
     }
 
@@ -93,6 +93,13 @@ public class Simulation {
             if (animal.getEnergy() == 0) {
                 iterator.remove();
                 map.removeElement(animal.getPosition());
+            } else if (map instanceof InflowsAndOutflows) {
+                Map<Vector2d, Water> waterMap = ((InflowsAndOutflows) map).getWaters();
+                Set<Vector2d> waterHexes = waterMap.keySet();
+                if (waterHexes.contains(animal.getPosition())) {
+                    iterator.remove();
+                    map.removeElement(animal.getPosition());
+                }
             }
         }
     }
@@ -118,7 +125,7 @@ public class Simulation {
                 );
                 Animal firstParent = animalsOnSamePosition.get(0);
                 Animal secondParent = animalsOnSamePosition.get(1);
-                Animal child = new Animal(firstParent.getPosition(), firstParent, secondParent, energyNeededForReproduction, map.getGenomeLength(), map.getMinimumNumberOfMutations(), map.getMaximumNumberOfMutations(), map.getGenotypeType());
+                Animal child = new Animal(firstParent.getPosition(), firstParent, secondParent, energyNeededForReproduction, map.getGenomeLength(), map.getMinimumNumberOfMutations(), map.getMaximumNumberOfMutations(), map.getGenotypeType(), map.getMapType());
                 firstParent.setEnergy(firstParent.getEnergy()-energyNeededForReproduction);
                 secondParent.setEnergy(secondParent.getEnergy()-energyNeededForReproduction);
                 firstParent.addChild();
@@ -175,6 +182,37 @@ public class Simulation {
     public void manageWaters(){
         Map<Vector2d, Water> waters = ((InflowsAndOutflows) map).getWaters();
         Random random = new Random();
+        // if 0 -> enlarge, if 1 shrink
+        int shrinkOrEnlarge = random.nextInt(2);
+        // 0 -> north, 1 -> east, 2 -> south, 3 -> west
+        int drawnNumber = random.nextInt(4);
+        Vector2d lowerLeftWaterCorner = ((InflowsAndOutflows) map).getWaterLowerLeftCorner();
+        Vector2d upperRightWaterCorner = ((InflowsAndOutflows) map).getWaterUpperRightCorner();
+        if(shrinkOrEnlarge == 0 ){
+            switch (drawnNumber){
+                case 0:
+                    
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+        } else{
+            switch (drawnNumber){
+                case 0:
+
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+        }
 
     }
 

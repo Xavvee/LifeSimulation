@@ -117,4 +117,6 @@ public interface WorldMap extends MoveValidator {
 
     GenotypeType getGenotypeType();
 
+    MapType getMapType();
+
 }

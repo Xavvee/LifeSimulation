@@ -1,12 +1,12 @@
 package agh.ics.oop.model.Elements;
 
 import agh.ics.oop.model.Genotype.*;
+import agh.ics.oop.model.Map.MapType;
 import agh.ics.oop.model.Map.MoveValidator;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class Animal implements WorldElement {
 
@@ -17,10 +17,13 @@ public class Animal implements WorldElement {
     private int age;
     private Genotype genotype;
     private int childrenCount;
+    private int startingIndex;
+    private MapDirection activeGene;
+    private MapType mapType;
 
 
     // randomly spawned starting animal
-    public Animal(Vector2d position, int startingEnergy, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType){
+    public Animal(Vector2d position, int startingEnergy, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType, MapType mapType){
         this.position = position;
         this.energy = startingEnergy;
         if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
@@ -28,13 +31,17 @@ public class Animal implements WorldElement {
         } else if (genotypeType.equals(GenotypeType.RANDOM)) {
             this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
         }
-        this.direction = genotype.getGenotype().get(0);
+        Random random = new Random();
+        this.startingIndex = random.nextInt(genomeLength);
+        this.direction = genotype.getGenotype().get(startingIndex);
+        this.activeGene = genotype.getGenotype().get(startingIndex);
         this.age = 0;
         this.childrenCount = 0;
+        this.mapType = mapType;
     }
 
     // newborn child genotype
-    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType){
+    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType, MapType mapType){
         this.position = position;
         this.energy = 2*energyNeededForReproduction;
         if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
@@ -42,11 +49,14 @@ public class Animal implements WorldElement {
         } else if (genotypeType.equals(GenotypeType.RANDOM)) {
             this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
         }
-        this.direction = genotype.getGenotype().get(0);
+        Random random = new Random();
+        this.startingIndex = random.nextInt(genomeLength);
+        this.direction = genotype.getGenotype().get(startingIndex);
+        this.activeGene = genotype.getGenotype().get(startingIndex);
         this.age = 0;
         this.childrenCount = 0;
+        this.mapType = mapType;
     }
-
 
     @Override
     public String toString(){
@@ -66,19 +76,34 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
+
     public void move(MoveValidator validator){
-        this.rotate();
         Vector2d newPosition = position.add(this.direction.toUnitVector());
         if(validator.canMoveTo(newPosition)){
-            this.position = newPosition;
+            if(newPosition.getX() > validator.getWidth()){
+                this.position = new Vector2d(0, newPosition.getY());
+            } else if (newPosition.getX() < 0) {
+                this.position = new Vector2d(validator.getWidth() - 1, newPosition.getY());
+            } else {
+                this.position = newPosition;
+            }
+        } else if (mapType.equals(MapType.GLOBE)) {
+            this.direction = this.direction.opposite();
         }
     }
 
+
     public void rotate() {
-        MapDirection activeGene = this.direction;
-        direction = direction.rotateBy(activeGene);
+        MapDirection previousDirection = this.direction;
+        changeGene();
+        direction = previousDirection.rotateBy(this.activeGene);
     }
 
+
+    public void changeGene(){
+        int genomeIndex = (this.age + this.startingIndex) % this.genotype.getGenomeLength();
+        this.activeGene = this.genotype.getGenotype().get(genomeIndex);
+    }
 
     public void addEnergy(int energy){
         this.energy+=energy;

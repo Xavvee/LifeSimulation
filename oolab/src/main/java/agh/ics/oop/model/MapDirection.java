@@ -36,6 +36,18 @@ public enum MapDirection {
         return MapDirection.values()[previous];
     }
 
+    public MapDirection opposite() {
+        return switch (this) {
+            case NORTH -> SOUTH;
+            case NORTHEAST -> SOUTHWEST;
+            case EAST -> WEST;
+            case SOUTHEAST -> NORTHWEST;
+            case SOUTH -> NORTH;
+            case SOUTHWEST -> NORTHEAST;
+            case WEST -> EAST;
+            case NORTHWEST -> SOUTHEAST;
+        };
+    }
 
     public MapDirection rotateBy(MapDirection gene) {
         int numberOfDirections = MapDirection.values().length;
@@ -44,6 +56,7 @@ public enum MapDirection {
         int newDirectionIndex = (currentDirectionIndex + geneIndex) % numberOfDirections;
         return MapDirection.values()[newDirectionIndex];
     }
+
 
     public Vector2d toUnitVector(){
         switch (this){

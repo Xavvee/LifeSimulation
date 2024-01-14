@@ -11,8 +11,8 @@ import java.util.Map;
 public class Globe extends AbstractWorldMap{
 
 
-    public Globe(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType){
-        super(height, width, numberOfGrasses, numberOfAnimals, dailyNumberOfGrasses, startingEnergy, minimumNumberOfMutations, maximumNumberOfMutations, genomeLength, genotypeType);
+    public Globe(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType){
+        super(height, width, numberOfGrasses, numberOfAnimals, dailyNumberOfGrasses, startingEnergy, minimumNumberOfMutations, maximumNumberOfMutations, genomeLength, genotypeType, mapType);
     }
 
     @Override

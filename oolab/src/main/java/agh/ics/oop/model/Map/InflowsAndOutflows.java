@@ -1,20 +1,21 @@
 package agh.ics.oop.model.Map;
 
-import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.ConsoleMapDisplay;
-import agh.ics.oop.model.Elements.Animal;
-import agh.ics.oop.model.Boundary;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.Elements.WorldElement;
 
 import java.util.*;
 
 public class InflowsAndOutflows extends AbstractWorldMap{
+    private int waterWidth;
+    private int waterHeight;
+    private Vector2d waterLowerLeftCorner;
+    private Vector2d waterUpperRightCorner;
 
-    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType) {
+    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType) {
         this.genotypeType = genotypeType;
+        this.mapType = mapType;
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
         this.startingEnergy = startingEnergy;
@@ -24,8 +25,12 @@ public class InflowsAndOutflows extends AbstractWorldMap{
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();
+        this.freeHexes = new ArrayList<>();
+        generateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
+        this.waterWidth = (int) (width * 0.2);
+        this.waterHeight = (int) (height * 0.2);
         this.waters = new HashMap<>();
         generateWaters();
         this.grasses = new HashMap<>();
@@ -38,9 +43,6 @@ public class InflowsAndOutflows extends AbstractWorldMap{
 
     // function that generates the water hexes at the beginning
     private void generateWaters(){
-        int waterHeight = (int) (height * 0.2);
-        int waterWidth = (int) (width * 0.2);
-
         Vector2d lowerLeftWaterBound;
         Vector2d upperRightWaterBound;
         Random random = new Random();
@@ -52,12 +54,13 @@ public class InflowsAndOutflows extends AbstractWorldMap{
             lowerLeftWaterBound = new Vector2d(xValue, yValue);
         } while (!lowerLeftWaterBound.add(transition).precedes(this.getUpperRight()));
         upperRightWaterBound = lowerLeftWaterBound.add(transition);
-
+        this.waterLowerLeftCorner = lowerLeftWaterBound;
+        this.waterUpperRightCorner = new Vector2d(upperRightWaterBound.getX() -1, upperRightWaterBound.getY() - 1);
         for( int i = lowerLeftWaterBound.getX(); i < upperRightWaterBound.getX(); i++){
             for(int j = lowerLeftWaterBound.getY(); j < upperRightWaterBound.getY(); j++){
                 Vector2d position = new Vector2d(i,j);
                 waters.put(position, new Water(position));
-                subtractFreeHex();
+                subtractFreeHex(position);
             }
         }
     }
@@ -70,23 +73,23 @@ public class InflowsAndOutflows extends AbstractWorldMap{
 
 
     @Override
-    public WorldElement objectAt(Vector2d position) {
-        return null;
-    }
-
-    @Override
-    public Map<Vector2d, WorldElement> getElements() {
-        return null;
-    }
-
-    @Override
-    public UUID getId() {
-        return null;
-    }
-
-    @Override
     public Map<Vector2d, Water> getWaters() {
         return waters;
     }
 
+    public void setWaterLowerLeftCorner(Vector2d waterLowerLeftCorner) {
+        this.waterLowerLeftCorner = waterLowerLeftCorner;
+    }
+
+    public void setWaterUpperRightCorner(Vector2d waterUpperRightCorner) {
+        this.waterUpperRightCorner = waterUpperRightCorner;
+    }
+
+    public Vector2d getWaterLowerLeftCorner() {
+        return waterLowerLeftCorner;
+    }
+
+    public Vector2d getWaterUpperRightCorner() {
+        return waterUpperRightCorner;
+    }
 }

@@ -24,4 +24,6 @@ public interface Genotype {
      */
     List<MapDirection> getGenotype();
 
+
+    int getGenomeLength();
 }

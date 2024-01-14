@@ -27,7 +27,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Map<Vector2d, Grass> grasses;
     protected int numberOfGrasses;
 
-    protected int freeHexes;
+    protected ArrayList<Vector2d> freeHexes;
     protected int numberOfAnimals;
     protected int dailyNumberOfGrasses;
     protected Map<Vector2d, Water> waters;
@@ -37,9 +37,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int minimumNumberOfMutations;
     protected int maximumNumberOfMutations;
     protected int genomeLength;
+    protected MapType mapType;
 
-    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType){
+    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType){
         this.genotypeType = genotypeType;
+        this.mapType = mapType;
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
         this.startingEnergy = startingEnergy;
@@ -49,7 +51,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();
-        this.freeHexes = (width+1) * (height+1);
+        this.freeHexes = new ArrayList<>();
+        generateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
         this.grasses = new HashMap<>();
@@ -63,9 +66,20 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected AbstractWorldMap() {
     }
 
-    protected void subtractFreeHex(){
-        freeHexes--;
+    protected void generateFreeHexes(){
+        for(int i = 0; i < width ; i++){
+            for(int j = 0; j < height; j++){
+                freeHexes.add(new Vector2d(i,j));
+            }
+        }
     }
+    public void subtractFreeHex(Vector2d position){
+        this.freeHexes.remove(position);
+    }
+    public void addFreeHex(Vector2d position){
+        this.freeHexes.add(position);
+    }
+
     protected void generateAnimals(){
         for ( int i = 0; i < numberOfAnimals; i++){
             while (true){
@@ -90,13 +104,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     public List<Grass> spawnGrass(){
         List<Grass> newGrasses = new ArrayList<>();
         for(int i = 0; i < dailyNumberOfGrasses; i++){
-            while (true){
-                Grass grass = generateGrass();
-                if(grass != null){
-                    newGrasses.add(grass);
-                    break;
+            if(!freeHexes.isEmpty()){
+                while (true){
+                    Grass grass = generateGrass();
+                    if(grass != null){
+                        newGrasses.add(grass);
+                        break;
+                    }
                 }
-            }
+            } else break;
         }
         return newGrasses;
     }
@@ -108,9 +124,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(this.isOccupied(randomPosition)){
             return false;
         }
-        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION));
+        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION, MapType.GLOBE));
         addElement(randomPosition);
-        subtractFreeHex();
+        if(!isOccupied(randomPosition)){
+            subtractFreeHex(randomPosition);
+        }
         return true;
     }
 
@@ -138,13 +156,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         Grass grass = new Grass(randomPosition);
         grasses.put(randomPosition, grass);
         addElement(randomPosition);
-        subtractFreeHex();
+        if(!(objectAt(randomPosition) instanceof Animal)){
+            subtractFreeHex(randomPosition);
+        }
         return grass;
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.getY() < this.height && position.getY() > 0;
+        return position.getY() <= height && position.getY() >= 0;
     }
 
 
@@ -164,11 +184,18 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void move(Animal animal) {
         if(animals.containsKey(animal.position())){
             Vector2d oldPosition = animal.position();
+            animal.rotate();
             animal.move(this);
             Vector2d newPosition = animal.position();
             if (canMoveTo(newPosition)) {
                 animals.remove(oldPosition);
                 removeElement(oldPosition);
+                if(!isOccupied(oldPosition)){
+                    addFreeHex(oldPosition);
+                }
+                if(!isOccupied(newPosition)){
+                    subtractFreeHex(newPosition);
+                }
                 animals.put(newPosition, animal);
                 addElement(newPosition);
             }
@@ -295,5 +322,14 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public GenotypeType getGenotypeType() {
         return genotypeType;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    public MapType getMapType() {
+        return mapType;
     }
 }
