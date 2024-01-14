@@ -70,10 +70,25 @@ public class SimulationTest {
     }
 
     @Test
+    public void grassGrowingTest(){
+        //given
+        AbstractWorldMap map = new Globe(15,25,10,0,25,20,2,4,10, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
+        Simulation simulation = new Simulation(map, 0, 25, 20);
+        //when
+        System.out.println(map.getGrasses().size());
+        simulation.simulateXDays(15);
+        System.out.println(map.getGrasses().size());
+        //then
+    }
+    @Test
     public void consumptionTest(){
         //given
-
+        AbstractWorldMap map = new Globe(5,5,25,1,1,20,2,4,10, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
+        Simulation simulation = new Simulation(map, 10, 25, 20);
         //when
+        System.out.println(map.getListOfAnimals().get(0).getEnergy());
+        simulation.simulateXDays(10);
+        System.out.println(map.getListOfAnimals().get(0).getEnergy());
 
         //then
     }

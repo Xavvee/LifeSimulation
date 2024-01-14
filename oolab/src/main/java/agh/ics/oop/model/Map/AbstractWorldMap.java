@@ -38,6 +38,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int maximumNumberOfMutations;
     protected int genomeLength;
     protected MapType mapType;
+    protected ArrayList<Vector2d> freeHexesInEquator;
+    protected ArrayList<Vector2d> freeHexesAboveEquator;
+    protected ArrayList<Vector2d> freeHexesBelowEquator;
 
     public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType){
         this.genotypeType = genotypeType;
@@ -53,6 +56,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.observers = new ArrayList<>();
         this.freeHexes = new ArrayList<>();
         generateFreeHexes();
+        this.freeHexesAboveEquator = new ArrayList<>();
+        this.freeHexesBelowEquator = new ArrayList<>();
+        this.freeHexesInEquator = new ArrayList<>();
+        calculateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
         this.grasses = new HashMap<>();
@@ -120,7 +127,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public boolean generateAnimal(){
         Random rand = new Random();
-        Vector2d randomPosition = new Vector2d(rand.nextInt(width), rand.nextInt(height));
+        int randomFreeHex = rand.nextInt(freeHexes.size());
+        Vector2d randomPosition = freeHexes.get(randomFreeHex);
         if(this.isOccupied(randomPosition)){
             return false;
         }
@@ -160,6 +168,18 @@ public abstract class AbstractWorldMap implements WorldMap {
             subtractFreeHex(randomPosition);
         }
         return grass;
+    }
+
+    protected void calculateFreeHexes(){
+        for( Vector2d hex : freeHexes){
+            if( hex.getY() >= this.getEquatorBounds().getX() && hex.getY() <= this.getEquatorBounds().getY()){
+                freeHexesInEquator.add(hex);
+            } else if (hex.getY() < this.height && hex.getY() > this.getEquatorBounds().getY()) {
+                freeHexesAboveEquator.add(hex);
+            } else if (hex.getY() >= 0 && hex.getY() < this.getEquatorBounds().getX()) {
+                freeHexesBelowEquator.add(hex);
+            }
+        }
     }
 
     @Override

@@ -28,6 +28,10 @@ public class InflowsAndOutflows extends AbstractWorldMap{
         this.observers = new ArrayList<>();
         this.freeHexes = new ArrayList<>();
         generateFreeHexes();
+        this.freeHexesAboveEquator = new ArrayList<>();
+        this.freeHexesBelowEquator = new ArrayList<>();
+        this.freeHexesInEquator = new ArrayList<>();
+        calculateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
         this.waterWidth = (int) (width * 0.4);
