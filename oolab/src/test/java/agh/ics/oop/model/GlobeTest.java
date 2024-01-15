@@ -20,7 +20,7 @@ public class GlobeTest {
     @Test
     public void generalMapTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new Globe(15,25,30,8,4,30,2,4,10, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
+        AbstractWorldMap abstractWorldMap = new Globe(15,25,30,8,4,30,2,4,10, GenotypeType.MINOR_CORRECTION);
         //when
         List<Animal> animals = abstractWorldMap.getListOfAnimals();
         List<Grass> grasses = abstractWorldMap.getListOfGrasses();
