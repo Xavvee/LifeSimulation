@@ -125,4 +125,6 @@ public interface WorldMap extends MoveCalculator {
     void removeAnimal(Vector2d position);
     void removeGrass(Vector2d position);
 
+    int getNumberOfFreeHexes();
+
 }
