@@ -1,11 +1,15 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
+import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Map.AbstractWorldMap;
 import agh.ics.oop.model.Map.Globe;
+import agh.ics.oop.model.Map.InflowsAndOutflows;
 import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -54,9 +58,17 @@ public class SimulationTest {
     @Test
     public void manageWatersTest(){
         //given
-
+        AbstractWorldMap map = new InflowsAndOutflows(15,25,10,0,10,40,2,4,10, GenotypeType.MINOR_CORRECTION);
+        Simulation simulation = new Simulation(map, 0, 25, 20);
         //when
-
+        assertEquals(map.getWaters().size(),60);
+        System.out.println(map);
+        for( int i = 1 ; i < 10 ; i++){
+            simulation.simulateOneDay();
+            System.out.println(map);
+            System.out.println(map.getAnimals().size());
+            System.out.println(map.getWaters().size());
+        }
         //then
     }
 
