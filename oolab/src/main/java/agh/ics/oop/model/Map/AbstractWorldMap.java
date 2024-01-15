@@ -334,7 +334,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     };
 
     protected  Vector2d getUpperRight(){
-        return new Vector2d(width, height);
+        return new Vector2d(width - 1, height - 1);
     };
     protected Vector2d getLowerLeft(){
         return new Vector2d(0, 0);

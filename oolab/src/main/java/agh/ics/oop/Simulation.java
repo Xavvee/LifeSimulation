@@ -37,26 +37,6 @@ public class Simulation {
     }
 
 
-    /// do zmiany, powinno przeiterować się po zwierzętach i ruszyć każdym po kolei
-    public void run(){
-        int numberOfAnimals = animals.size();
-        int iter = 0;
-        for( MoveDirection direction : moveDirections){
-            int index = iter%numberOfAnimals;
-            map.move(animals.get(index));
-            iter++;
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        for(Animal animal : animals){
-            map.move(animal);
-        }
-    }
-
-
     public void moveAnimals(){
         for( Animal animal : animals){
             map.move(animal);
@@ -82,9 +62,7 @@ public class Simulation {
     public void simulateXDays(int daysCount){
         for( int i = 0; i < daysCount; i++){
             simulateOneDay();
-            for(Animal animal : animals){
-                System.out.println(animal.getEnergy());
-            }
+            System.out.println("Number of animals: " + this.animals.size());
         }
     }
 
