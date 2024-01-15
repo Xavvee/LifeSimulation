@@ -47,9 +47,9 @@ public class SimulationEngine {
         }
     }
 
-    public  void runAsyncInThreadPool(){
+    public  void runAsyncInThreadPool(int days){
         for (Simulation simulation : simulations) {
-            threadPool.submit(simulation::run);
+            threadPool.submit(() ->simulation.simulateXDays(days));
         }
     }
 

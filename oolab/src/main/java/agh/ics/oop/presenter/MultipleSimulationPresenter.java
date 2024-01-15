@@ -1,6 +1,8 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
@@ -30,14 +32,14 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     }
 
 
-    public void startMultipleSimulation(List<MoveDirection> directions) {
+    public void startMultipleSimulation() {
         List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-//        Globe map = new Globe(4);
-//        this.setWorldMap(map);
-//        map.addObserver(this);
-//        Simulation simulation = new Simulation(positions, directions, map);
-//        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-//        simulationEngine.runAsyncInThreadPool();
+        Globe map = new Globe(4,4,3,2,2,5,5,10,5, GenotypeType.MINOR_CORRECTION);
+        this.setWorldMap(map);
+        map.addObserver(this);
+        Simulation simulation = new Simulation(map, 5, 3, 4);
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsyncInThreadPool(10);
     }
 
     public void drawMap(WorldMap worldMap){

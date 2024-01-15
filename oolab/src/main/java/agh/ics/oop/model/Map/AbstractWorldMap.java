@@ -149,7 +149,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             randomPosition = new Vector2d(
                     rand.nextInt(width), rand.nextInt(equatorBounds.getX(), equatorBounds.getY()+1));
         } else {
-            if(rand.nextDouble() < 0.9){
+            if(rand.nextDouble() < 0.5){
                 randomPosition = new Vector2d(
                         rand.nextInt(width), rand.nextInt(equatorBounds.getX()));
             } else {
@@ -264,8 +264,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         int middleOfY = height/2;
         double tenPercent = height * 0.1;
         int tenPercentOfHeight = (int) Math.round(tenPercent);
-
-        return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight - 1);
+        return new Vector2d(middleOfY - tenPercentOfHeight, Math.max(middleOfY + tenPercentOfHeight - 1, middleOfY));
     }
 
     @Override

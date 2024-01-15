@@ -3,13 +3,11 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -17,8 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static agh.ics.oop.OptionsParser.parse;
 
 
 public class SimulationPresenter implements MapChangeListener {
@@ -29,8 +25,6 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     private Label infoLabel;
-    @FXML
-    private TextField movementTextField;
     @FXML
     private Label movementDescriptionLabel;
     @FXML
@@ -47,10 +41,6 @@ public class SimulationPresenter implements MapChangeListener {
         this.simulationEngine = simulationEngine;
     }
 
-    public String[] getMoves() {
-        String movesString = movementTextField.getText();
-        return movesString.split("\\s+");
-    }
     public void setWorldMap(WorldMap map){
         this.map = map;
     }
@@ -100,11 +90,6 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void onSimulationStartClicked() {
-        List<MoveDirection> directions = parse(List.of(this.getMoves()));
-        startSimulation(directions);
-    }
-
-    private void startSimulation(List<MoveDirection> directions) {
         MultipleSimulationPresenter multipleSimulationPresenter = new MultipleSimulationPresenter();
         Stage simulationStage = new Stage();
         try {
@@ -114,7 +99,7 @@ public class SimulationPresenter implements MapChangeListener {
             threadPool = Executors.newFixedThreadPool(4);
             this.setThreadPool(threadPool);
             multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
-            multipleSimulationPresenter.startMultipleSimulation(directions); // Rozpocznij symulację w nowym oknie
+            multipleSimulationPresenter.startMultipleSimulation(); // Rozpocznij symulację w nowym oknie
             Scene scene = new Scene(viewRoot);
             simulationStage.setScene(scene);
             simulationStage.setTitle("Simulation");
