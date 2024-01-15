@@ -63,27 +63,32 @@ public class Simulation {
     }
 
     public void simulateOneDay(){
-        // 1. Usunięcie martwych zwierząt
-        deleteDeadAnimals();
-        // 2. Skręt i przemieszczanie zwierząt
-        moveAnimals();
-        // 3. Konsumpcja roślin, które weszły zwierzaki
-        consume();
-        // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
-        reproduce();
-        // 5. Wzrastanie nowych roślin na wybranych polach.
-        spawnGrassAndAddToList();
-        // 6. Inne rzeczy, które zawsze zachodzą.
-        subtractEnergyAddAge();
-        incrementDayCount();
+        synchronized (map) {
+            // 1. Usunięcie martwych zwierząt
+            deleteDeadAnimals();
+            System.out.println("dodano zwierzaka");
+            // 2. Skręt i przemieszczanie zwierząt
+            moveAnimals();
+            System.out.println("ruch zwierzaka");
+            // 3. Konsumpcja roślin, które weszły zwierzaki
+            consume();
+            System.out.println("konsumpcja");
+            // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
+            reproduce();
+            System.out.println("rozmna");
+            // 5. Wzrastanie nowych roślin na wybranych polach.
+            spawnGrassAndAddToList();
+            System.out.println("wzr");
+            // 6. Inne rzeczy, które zawsze zachodzą.
+            subtractEnergyAddAge();
+            System.out.println("inne");
+            incrementDayCount();
+        }
     }
 
     public void simulateXDays(int daysCount){
         for( int i = 0; i < daysCount; i++){
             simulateOneDay();
-            for(Animal animal : animals){
-                System.out.println(animal.getEnergy());
-            }
         }
     }
 

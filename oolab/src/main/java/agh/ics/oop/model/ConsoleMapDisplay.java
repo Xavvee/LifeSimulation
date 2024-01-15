@@ -9,11 +9,13 @@ public class ConsoleMapDisplay implements MapChangeListener {
         this.totalUpdates = 0;
     }
     @Override
-    public synchronized void mapChanged(WorldMap worldMap, String message) {
-        totalUpdates += 1;
-        System.out.println("Total number of changes: " + totalUpdates + ". Operation: " + message);
-        System.out.println("Map id: " + worldMap.getId());
-        System.out.println(worldMap);
+    public void mapChanged(WorldMap worldMap, String message) {
+        synchronized (worldMap) {
+            totalUpdates += 1;
+            System.out.println("Total number of changes: " + totalUpdates + ". Operation: " + message);
+            System.out.println("Map id: " + worldMap.getId());
+            System.out.println(worldMap);
+        }
     }
 
 }
