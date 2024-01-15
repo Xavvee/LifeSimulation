@@ -1,14 +1,16 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Genotype.GenotypeType;
+import agh.ics.oop.model.Map.AbstractWorldMap;
+import agh.ics.oop.model.Map.Globe;
+import agh.ics.oop.model.Map.InflowsAndOutflows;
 
 public class World {
     public static void main(String[] args){
-//        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2), new Vector2d(3,6), new Vector2d(1,0));
-//        WorldMap map = new GrassField(4);
-//        Simulation simulation = new Simulation(positions, map);
-//        simulation.run();
-//        System.out.println("System zakończył działanie.");
+        AbstractWorldMap map = new InflowsAndOutflows(20, 10,30,15,2,20,2,4,16, GenotypeType.MINOR_CORRECTION);
+        Simulation simulation = new Simulation(map, 5, 10, 7);
+        simulation.simulateXDays(10);
     }
 
 
