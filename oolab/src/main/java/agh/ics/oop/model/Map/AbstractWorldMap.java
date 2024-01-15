@@ -270,7 +270,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void removeGrass(Vector2d position){
-        animals.remove(position);
+        grasses.remove(position);
     }
 
 
