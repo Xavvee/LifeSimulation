@@ -294,8 +294,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         int middleOfY = height/2;
         double tenPercent = height * 0.1;
         int tenPercentOfHeight = (int) Math.round(tenPercent);
-
-        return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight - 1);
+        return new Vector2d(middleOfY - tenPercentOfHeight, Math.max(middleOfY + tenPercentOfHeight - 1, middleOfY));
     }
 
     @Override

@@ -15,8 +15,6 @@
     </center>
     <bottom>
         <VBox alignment="CENTER" spacing="10">
-            <TextField fx:id="movementTextField" promptText="Enter movement list"/>
-            <Label fx:id="movementDescriptionLabel" text="Movement description will appear here" textAlignment="CENTER"/>
             <Button text="Start" onAction="#onSimulationStartClicked" />
         </VBox>
     </bottom>
