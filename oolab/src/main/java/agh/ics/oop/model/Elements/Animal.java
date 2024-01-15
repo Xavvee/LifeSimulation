@@ -1,8 +1,9 @@
 package agh.ics.oop.model.Elements;
 
+import agh.ics.oop.model.DirectedPosition;
 import agh.ics.oop.model.Genotype.*;
 import agh.ics.oop.model.Map.MapType;
-import agh.ics.oop.model.Map.MoveValidator;
+import agh.ics.oop.model.Map.MoveCalculator;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
 
@@ -77,21 +78,11 @@ public class Animal implements WorldElement {
     }
 
 
-    public void move(MoveValidator validator){
-        Vector2d newPosition = position.add(this.direction.toUnitVector());
-        if(validator.canMoveTo(newPosition)){
-            if(newPosition.getX() > validator.getWidth()){
-                this.position = new Vector2d(0, newPosition.getY());
-            } else if (newPosition.getX() < 0) {
-                this.position = new Vector2d(validator.getWidth() - 1, newPosition.getY());
-            } else {
-                this.position = newPosition;
-            }
-        } else if (mapType.equals(MapType.GLOBE)) {
-            this.direction = this.direction.opposite();
-        }
+    public void move(MoveCalculator validator){
+        DirectedPosition dirPos = validator.computeMove(new DirectedPosition(this.position, this.direction));
+        this.position = dirPos.getPosition();
+        this.direction = dirPos.getDirection();
     }
-
 
     public void rotate() {
         MapDirection previousDirection = this.direction;

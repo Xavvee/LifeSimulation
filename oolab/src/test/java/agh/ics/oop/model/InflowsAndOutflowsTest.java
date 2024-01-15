@@ -21,20 +21,22 @@ public class InflowsAndOutflowsTest {
     @Test
     public void generateWatersTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20, 0, 0, 0,50,1,1,8, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
+        InflowsAndOutflows map = new InflowsAndOutflows(10,20, 0, 0,
+                0,50,1,1,
+                8, GenotypeType.MINOR_CORRECTION);
         //when
-        Map<Vector2d, Water> waters = abstractWorldMap.getWaters();
+        Map<Vector2d, Water> waters = map.getWaters();
         //then
-        assertEquals(8, waters.size());
+        assertEquals(32, waters.size());
         System.out.println(waters);
-        System.out.println(((InflowsAndOutflows) abstractWorldMap).getWaterLowerLeftCorner());
-        System.out.println(((InflowsAndOutflows) abstractWorldMap).getWaterUpperRightCorner());
+        System.out.println(map.getWaterLowerLeftCorner());
+        System.out.println(map.getWaterUpperRightCorner());
     }
 
     @Test
     public void generalMapTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20,25,7,5,25,1,5,16, GenotypeType.RANDOM, MapType.INFLOWS_AND_OUTFLOWS);
+        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20,25,7,5,25,1,5,16, GenotypeType.RANDOM);
         // when
         List<Animal> animals = abstractWorldMap.getListOfAnimals();
         List<Grass> grasses = abstractWorldMap.getListOfGrasses();

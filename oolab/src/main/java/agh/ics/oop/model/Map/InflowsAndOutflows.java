@@ -1,6 +1,7 @@
 package agh.ics.oop.model.Map;
 
 import agh.ics.oop.model.ConsoleMapDisplay;
+import agh.ics.oop.model.DirectedPosition;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
 import agh.ics.oop.model.Genotype.GenotypeType;
@@ -14,35 +15,17 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     private Vector2d waterLowerLeftCorner;
     private Vector2d waterUpperRightCorner;
 
-    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType) {
-        this.genotypeType = genotypeType;
-        this.mapType = mapType;
-        this.numberOfAnimals = numberOfAnimals;
-        this.numberOfGrasses = numberOfGrasses;
-        this.startingEnergy = startingEnergy;
-        this.minimumNumberOfMutations = minimumNumberOfMutations;
-        this.maximumNumberOfMutations = maximumNumberOfMutations;
-        this.genomeLength = genomeLength;
-        this.height = height;
-        this.width = width;
-        this.observers = new ArrayList<>();
-        this.freeHexes = new ArrayList<>();
-        generateFreeHexes();
-        this.freeHexesAboveEquator = new ArrayList<>();
-        this.freeHexesBelowEquator = new ArrayList<>();
-        this.freeHexesInEquator = new ArrayList<>();
-        calculateFreeHexes();
-        this.addObserver(new ConsoleMapDisplay());
-        this.id = UUID.randomUUID();
+    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType) {
+        super(height, width, numberOfGrasses, numberOfAnimals, dailyNumberOfGrasses, startingEnergy,
+                minimumNumberOfMutations, maximumNumberOfMutations, genomeLength, genotypeType, MapType.INFLOWS_AND_OUTFLOWS);
+    }
+
+    protected void generateMapObjects(){
         this.waterWidth = (int) (width * 0.4);
         this.waterHeight = (int) (height * 0.4);
         this.waters = new HashMap<>();
         generateWaters();
-        this.grasses = new HashMap<>();
-        generateGrasses();
-        this.animals = new HashMap<>();
-        generateAnimals();
-        this.dailyNumberOfGrasses = dailyNumberOfGrasses;
+        super.generateMapObjects();
     }
 
 
@@ -72,9 +55,19 @@ public class InflowsAndOutflows extends AbstractWorldMap{
 
 
     @Override
-    public boolean canMoveTo(Vector2d position) {
-        return position.precedes(this.getUpperRight()) && (this.getLowerLeft().precedes(position)) && !(objectAt(position) instanceof Water) ;
+    protected boolean canMoveTo(Vector2d position) {
+        return super.canMoveTo(position) && !(objectAt(position) instanceof Water) ;
     }
+    @Override
+    public DirectedPosition computeMove(DirectedPosition directedPosition) {
+        Vector2d step = directedPosition.getDirection().toUnitVector();
+        Vector2d newPosition = directedPosition.getPosition().add(step);
+        if (!canMoveTo(newPosition)) {
+            newPosition = directedPosition.getPosition();
+        }
+        return new DirectedPosition(newPosition, directedPosition.getDirection());
+    }
+
 
     @Override
     public WorldElement objectAt(Vector2d position) {

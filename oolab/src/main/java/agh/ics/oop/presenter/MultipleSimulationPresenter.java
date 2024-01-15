@@ -1,6 +1,7 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -30,8 +31,8 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
 
 
     public void startMultipleSimulation(List<MoveDirection> directions) {
-//        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-//        GrassField map = new GrassField(4);
+        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
+//        Globe map = new Globe(4);
 //        this.setWorldMap(map);
 //        map.addObserver(this);
 //        Simulation simulation = new Simulation(positions, directions, map);

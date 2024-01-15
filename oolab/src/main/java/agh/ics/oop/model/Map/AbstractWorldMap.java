@@ -62,15 +62,14 @@ public abstract class AbstractWorldMap implements WorldMap {
         calculateFreeHexes();
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
+        this.dailyNumberOfGrasses = dailyNumberOfGrasses;
+        generateMapObjects();
+    }
+    protected void generateMapObjects(){
         this.grasses = new HashMap<>();
         generateGrasses();
         this.animals = new HashMap<>();
         generateAnimals();
-        this.dailyNumberOfGrasses = dailyNumberOfGrasses;
-    }
-
-
-    protected AbstractWorldMap() {
     }
 
     protected void generateFreeHexes(){
@@ -150,12 +149,12 @@ public abstract class AbstractWorldMap implements WorldMap {
             randomPosition = new Vector2d(
                     rand.nextInt(width), rand.nextInt(equatorBounds.getX(), equatorBounds.getY()+1));
         } else {
-            if(rand.nextDouble() < 0.5){
+            if(rand.nextDouble() < 0.9){
                 randomPosition = new Vector2d(
                         rand.nextInt(width), rand.nextInt(equatorBounds.getX()));
             } else {
                 randomPosition = new Vector2d(
-                        rand.nextInt(width), rand.nextInt(equatorBounds.getY(), height - 1));
+                        rand.nextInt(width), rand.nextInt(equatorBounds.getY() + 1, height));
             }
         }
         if (objectAt(randomPosition) instanceof Grass || objectAt(randomPosition) instanceof Water) {
@@ -182,11 +181,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    @Override
-    public boolean canMoveTo(Vector2d position) {
-        return position.getY() <= height && position.getY() >= 0;
+    protected boolean canMoveTo(Vector2d position) {
+        return position.precedes(this.getUpperRight()) && (this.getLowerLeft().precedes(position));
     }
-
 
     @Override
     public boolean place(Animal animal) throws PositionAlreadyOccupied {
@@ -266,12 +263,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public Vector2d getEquatorBounds(){
         int middleOfY = height/2;
         double tenPercent = height * 0.1;
-        int tenPercentOfHeight;
-        if (tenPercent - Math.floor(tenPercent) >= 0.5) {
-            tenPercentOfHeight = (int) Math.ceil(tenPercent);
-        } else {
-            tenPercentOfHeight = (int) Math.floor(tenPercent);
-        }
+        int tenPercentOfHeight = (int) Math.round(tenPercent);
 
         return new Vector2d(middleOfY - tenPercentOfHeight, middleOfY + tenPercentOfHeight - 1);
     }
