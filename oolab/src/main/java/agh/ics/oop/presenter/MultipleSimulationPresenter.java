@@ -34,7 +34,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
 
     public void startMultipleSimulation() {
         List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-        Globe map = new Globe(4,4,3,2,2,5,5,10,5, GenotypeType.MINOR_CORRECTION);
+        Globe map = new Globe(4,4,3,2,2,5,5,10,12, GenotypeType.RANDOM);
         this.setWorldMap(map);
         map.addObserver(this);
         Simulation simulation = new Simulation(map, 5, 3, 4);
