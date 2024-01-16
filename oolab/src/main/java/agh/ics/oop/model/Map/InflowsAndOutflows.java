@@ -3,7 +3,7 @@ package agh.ics.oop.model.Map;
 import agh.ics.oop.model.DirectedPosition;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
-import agh.ics.oop.model.Genotype.GenotypeType;
+import agh.ics.oop.model.Genotype.GenotypeFactory;
 import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
@@ -14,9 +14,9 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     private Vector2d waterLowerLeftCorner;
     private Vector2d waterUpperRightCorner;
 
-    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType) {
+    public InflowsAndOutflows(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeFactory genotypeFactory) {
         super(height, width, numberOfGrasses, numberOfAnimals, dailyNumberOfGrasses, startingEnergy,
-                minimumNumberOfMutations, maximumNumberOfMutations, genomeLength, genotypeType, MapType.INFLOWS_AND_OUTFLOWS);
+                minimumNumberOfMutations, maximumNumberOfMutations, genomeLength, MapType.INFLOWS_AND_OUTFLOWS, genotypeFactory);
     }
 
     protected void generateMapObjects(){

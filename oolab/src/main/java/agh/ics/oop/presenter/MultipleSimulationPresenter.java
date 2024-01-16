@@ -3,8 +3,8 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.WorldElement;
-import agh.ics.oop.model.Genotype.GenotypeType;
-import agh.ics.oop.model.Map.MapFactory;
+import agh.ics.oop.model.Genotype.Genotype;
+import agh.ics.oop.model.Genotype.GenotypeFactory;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,7 +18,8 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
-import static agh.ics.oop.model.Map.MapFactory.factoryByName;
+import static agh.ics.oop.model.Genotype.GenotypeFactory.factoryByNameGenotype;
+import static agh.ics.oop.model.Map.MapFactory.factoryByNameMap;
 
 public class MultipleSimulationPresenter  implements MapChangeListener {
     private WorldMap map;
@@ -38,11 +39,11 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
 
 
     public void startMultipleSimulation( StartConfigurations startConfigurations) {
-        List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-        WorldMap map = factoryByName.get(startConfigurations.get("nameOfMapType")).makeMap(startConfigurations);
+        GenotypeFactory genotypeFactory = factoryByNameGenotype.get(startConfigurations.get("nameOfGenotypeType"));
+        WorldMap map = factoryByNameMap.get(startConfigurations.get("nameOfMapType")).makeMap(startConfigurations, genotypeFactory);
         this.setWorldMap(map);
         map.addObserver(this);
-        this.simulation = new Simulation(map, 5, 3, 4);
+        this.simulation = new Simulation(map, 5, 3, 4, genotypeFactory);
         drawMap(map);
     }
     public synchronized void continueSimulation() {
@@ -116,8 +117,10 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(()->{
-            drawMap(worldMap);
-            this.movementDescriptionLabel.setText(message);
+            synchronized (worldMap) {
+                drawMap(worldMap);
+                this.movementDescriptionLabel.setText(message);
+            }
         });
     }
 

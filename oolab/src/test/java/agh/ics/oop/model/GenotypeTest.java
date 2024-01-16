@@ -2,7 +2,6 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Genotype.AbstractGenotype;
-import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Genotype.MinorCorrectionGenotype;
 import agh.ics.oop.model.Genotype.RandomGenotype;
 import agh.ics.oop.model.Map.MapType;
@@ -31,8 +30,8 @@ public class GenotypeTest {
     @Test
     public void testMinorCorrectionGenotype(){
         // given
-        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
-        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.MINOR_CORRECTION, MapType.GLOBE);
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new MinorCorrectionGenotypeFactory(), MapType.GLOBE);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new MinorCorrectionGenotypeFactory(), MapType.GLOBE);
         firstParent.setEnergy(150);
         AbstractGenotype abstractGenotype = new MinorCorrectionGenotype(8,1,1);
         // when
@@ -47,8 +46,8 @@ public class GenotypeTest {
     @Test
     public void testRandomGenotype(){
         // given
-        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.RANDOM, MapType.GLOBE);
-        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, GenotypeType.RANDOM, MapType.GLOBE);
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new RandomGenotypeFactory(), MapType.GLOBE);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new RandomGenotypeFactory(), MapType.GLOBE);
         firstParent.setEnergy(150);
         AbstractGenotype abstractGenotype = new RandomGenotype(8,1,1);
         // when

@@ -3,6 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
+import agh.ics.oop.model.Genotype.GenotypeFactory;
 import agh.ics.oop.model.Map.InflowsAndOutflows;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;
@@ -20,11 +21,13 @@ public class Simulation {
     private final int energyPerGrass;
     private final int sufficientEnergyForReproduction;
     private final int energyNeededForReproduction;
+    private GenotypeFactory genotypeFactory;
 
 
     
-    public Simulation(WorldMap map, int energyPerGrass, int sufficientEnergyForReproduction, int energyNeededForReproduction){
+    public Simulation(WorldMap map, int energyPerGrass, int sufficientEnergyForReproduction, int energyNeededForReproduction, GenotypeFactory genotypeFactory){
         this.map = map;
+        this.genotypeFactory = genotypeFactory;
         this.animals = map.getListOfAnimals();
         this.grasses = map.getListOfGrasses();
         this.energyPerGrass = energyPerGrass;
@@ -41,19 +44,21 @@ public class Simulation {
     }
 
     public void simulateOneDay(){
-        // 1. Usunięcie martwych zwierząt
-        deleteDeadAnimals();
-        // 2. Skręt i przemieszczanie zwierząt
-        moveAnimals();
-        // 3. Konsumpcja roślin, które weszły zwierzaki
-        consume();
-        // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
-        reproduce();
-        // 5. Wzrastanie nowych roślin na wybranych polach.
-        spawnGrassAndAddToList();
-        // 6. Inne rzeczy, które zawsze zachodzą.
-        subtractEnergyAddAge();
-        incrementDayCount();
+        synchronized (map) {
+            // 1. Usunięcie martwych zwierząt
+            deleteDeadAnimals();
+            // 2. Skręt i przemieszczanie zwierząt
+            moveAnimals();
+            // 3. Konsumpcja roślin, które weszły zwierzaki
+            consume();
+            // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
+            reproduce();
+            // 5. Wzrastanie nowych roślin na wybranych polach.
+            spawnGrassAndAddToList();
+            // 6. Inne rzeczy, które zawsze zachodzą.
+            subtractEnergyAddAge();
+            incrementDayCount();
+        }
     }
 
     public void simulateXDays(int daysCount){
@@ -138,7 +143,7 @@ public class Simulation {
                 );
                 Animal firstParent = animalsOnSamePosition.get(0);
                 Animal secondParent = animalsOnSamePosition.get(1);
-                Animal child = new Animal(firstParent.getPosition(), firstParent, secondParent, energyNeededForReproduction, map.getGenomeLength(), map.getMinimumNumberOfMutations(), map.getMaximumNumberOfMutations(), map.getGenotypeType(), map.getMapType());
+                Animal child = new Animal(firstParent.getPosition(), firstParent, secondParent, energyNeededForReproduction, map.getGenomeLength(), map.getMinimumNumberOfMutations(), map.getMaximumNumberOfMutations(), genotypeFactory, map.getMapType());
                 firstParent.setEnergy(firstParent.getEnergy()-energyNeededForReproduction);
                 secondParent.setEnergy(secondParent.getEnergy()-energyNeededForReproduction);
                 firstParent.addChild();

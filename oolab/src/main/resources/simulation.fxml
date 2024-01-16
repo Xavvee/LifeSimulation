@@ -62,7 +62,10 @@
                 <ComboBox fx:id="nameOfMapType" GridPane.rowIndex="9" GridPane.columnIndex="1"
                           prefWidth="Infinity"/>
                 <Label text="Rodzaj mapy" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
-                <Button text="Wczytaj konfigurację" GridPane.rowIndex="10" GridPane.columnIndex="0"
+                <ComboBox fx:id="nameOfGenotypeType" GridPane.rowIndex="10" GridPane.columnIndex="1"
+                          prefWidth="Infinity"/>
+                <Label text="Rodzaj mutacji" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                <Button text="Wczytaj konfigurację" GridPane.rowIndex="11" GridPane.columnIndex="0"
                         GridPane.columnSpan="2" prefWidth="Infinity" onAction="#loadConfiguration"/>
             </children>
             <columnConstraints>

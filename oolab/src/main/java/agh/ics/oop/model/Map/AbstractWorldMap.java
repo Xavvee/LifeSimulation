@@ -8,7 +8,7 @@ import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
-import agh.ics.oop.model.Genotype.GenotypeType;
+import agh.ics.oop.model.Genotype.GenotypeFactory;
 
 import java.util.*;
 
@@ -31,19 +31,18 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int numberOfAnimals;
     protected int dailyNumberOfGrasses;
     protected Map<Vector2d, Water> waters;
-    protected GenotypeType genotypeType;
     protected UUID id;
 
     protected int minimumNumberOfMutations;
     protected int maximumNumberOfMutations;
     protected int genomeLength;
+    protected GenotypeFactory genotypeFactory;
     protected MapType mapType;
     protected ArrayList<Vector2d> freeHexesInEquator;
     protected ArrayList<Vector2d> freeHexesAboveEquator;
     protected ArrayList<Vector2d> freeHexesBelowEquator;
 
-    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, GenotypeType genotypeType, MapType mapType){
-        this.genotypeType = genotypeType;
+    public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, MapType mapType, GenotypeFactory genotypeFactory){
         this.mapType = mapType;
         this.numberOfAnimals = numberOfAnimals;
         this.numberOfGrasses = numberOfGrasses;
@@ -51,6 +50,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.minimumNumberOfMutations = minimumNumberOfMutations;
         this.maximumNumberOfMutations = maximumNumberOfMutations;
         this.genomeLength = genomeLength;
+        this.genotypeFactory = genotypeFactory;
         this.height = height;
         this.width = width;
         this.observers = new ArrayList<>();
@@ -149,7 +149,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(!isOccupied(randomPosition)){
             subtractFreeHex(randomPosition);
         }
-        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION, MapType.GLOBE));
+        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, genotypeFactory, MapType.GLOBE));
         addElement(randomPosition);
         return true;
     }
@@ -374,10 +374,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public int getMinimumNumberOfMutations() {
         return minimumNumberOfMutations;
-    }
-
-    public GenotypeType getGenotypeType() {
-        return genotypeType;
     }
 
     @Override

@@ -1,16 +1,11 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.*;
+import agh.ics.oop.model.Genotype.GenotypeFactory;
 import agh.ics.oop.model.Map.MapFactory;
-import agh.ics.oop.model.Map.WorldMap;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.*;
@@ -18,11 +13,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import static agh.ics.oop.model.Map.MapFactory.listFactory;
+import static agh.ics.oop.model.Genotype.GenotypeFactory.listFactoryGenotype;
+import static agh.ics.oop.model.Map.MapFactory.listFactoryMap;
 import static agh.ics.oop.presenter.StartConfigurations.newListOfSampleConfigurations;
 
 
@@ -50,8 +44,8 @@ public class SimulationPresenter {
     private TextField maximumNumberOfMutations;
     @FXML
     private ComboBox<String> nameOfMapType;
-//    @FXML
-//    private ComboBox<GenomeFactory> nameOfGenomeType;
+    @FXML
+    private ComboBox<String> nameOfGenotypeType;
 
 
     @FXML
@@ -74,9 +68,12 @@ public class SimulationPresenter {
         minimumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
         maximumNumberOfMutations.setText("8");
         maximumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
-        nameOfMapType.getItems().addAll(listFactory.stream().map(MapFactory::getType)
+        nameOfMapType.getItems().addAll(listFactoryMap.stream().map(MapFactory::getType)
                 .collect((Collectors.toList())));
         nameOfMapType.getSelectionModel().selectFirst();
+        nameOfGenotypeType.getItems().addAll(listFactoryGenotype.stream().map(GenotypeFactory::getType)
+                .collect((Collectors.toList())));
+        nameOfGenotypeType.getSelectionModel().selectFirst();
     }
     private TextFormatter nonNegativeNumberFormatter() {
         return new TextFormatter<>(c -> {
@@ -97,7 +94,7 @@ public class SimulationPresenter {
         for(TextField textField : listOfTextFields()) {
             configurations.put(textField.getId(), textField.getText());
         }
-        for (ComboBox<String> comboBox : List.of(nameOfMapType)) {
+        for (ComboBox<String> comboBox : List.of(nameOfMapType, nameOfGenotypeType)) {
             configurations.put(comboBox.getId(), comboBox.getValue());
         }
         return configurations;
@@ -106,7 +103,7 @@ public class SimulationPresenter {
         for(TextField textField : listOfTextFields())  {
             textField.setText(startConfigurations.get(textField.getId()));
         }
-        for(ComboBox<String> comboBox:List.of(nameOfMapType/*, nameOfGenotypeType*/)){
+        for(ComboBox<String> comboBox:List.of(nameOfMapType, nameOfGenotypeType)){
             comboBox.getSelectionModel().select(startConfigurations.get(comboBox.getId()));
         }
     }

@@ -5,7 +5,6 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.WorldElement;
-import agh.ics.oop.model.Genotype.GenotypeType;
 
 import java.util.List;
 import java.util.Map;
@@ -114,8 +113,6 @@ public interface WorldMap extends MoveCalculator {
     int getMaximumNumberOfMutations();
 
     int getMinimumNumberOfMutations();
-
-    GenotypeType getGenotypeType();
 
     MapType getMapType();
 

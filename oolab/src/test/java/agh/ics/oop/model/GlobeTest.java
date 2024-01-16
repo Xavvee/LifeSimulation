@@ -2,7 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
-import agh.ics.oop.model.Genotype.GenotypeType;
+import agh.ics.oop.model.Genotype.MinorCorrectionGenotypeFactory;
 import agh.ics.oop.model.Map.AbstractWorldMap;
 import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.MapType;
@@ -20,7 +20,7 @@ public class GlobeTest {
     @Test
     public void generalMapTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new Globe(15,25,30,8,4,30,2,4,10, GenotypeType.MINOR_CORRECTION);
+        AbstractWorldMap abstractWorldMap = new Globe(15,25,30,8,4,30,2,4,10, new MinorCorrectionGenotypeFactory());
         //when
         List<Animal> animals = abstractWorldMap.getListOfAnimals();
         List<Grass> grasses = abstractWorldMap.getListOfGrasses();
@@ -30,7 +30,6 @@ public class GlobeTest {
         int width = abstractWorldMap.getWidth();
         int height = abstractWorldMap.getHeight();
         MapType mapType = abstractWorldMap.getMapType();
-        GenotypeType genotypeType = abstractWorldMap.getGenotypeType();
         //then
         System.out.println(abstractWorldMap);
         assertEquals(animals.size(), 8);
@@ -44,6 +43,5 @@ public class GlobeTest {
         assertEquals(width, 25);
         assertEquals(height, 15);
         assertEquals(mapType, MapType.GLOBE);
-        assertEquals(genotypeType, GenotypeType.MINOR_CORRECTION);
     }
 }

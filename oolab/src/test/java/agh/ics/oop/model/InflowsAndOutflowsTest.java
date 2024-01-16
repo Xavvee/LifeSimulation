@@ -3,9 +3,9 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
-import agh.ics.oop.model.Genotype.GenotypeType;
+import agh.ics.oop.model.Genotype.MinorCorrectionGenotypeFactory;
+import agh.ics.oop.model.Genotype.RandomGenotypeFactory;
 import agh.ics.oop.model.Map.AbstractWorldMap;
-import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.InflowsAndOutflows;
 import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ public class InflowsAndOutflowsTest {
         //given
         InflowsAndOutflows map = new InflowsAndOutflows(10,20, 0, 0,
                 0,50,1,1,
-                8, GenotypeType.MINOR_CORRECTION);
+                8, new MinorCorrectionGenotypeFactory());
         //when
         Map<Vector2d, Water> waters = map.getWaters();
         //then
@@ -36,7 +36,7 @@ public class InflowsAndOutflowsTest {
     @Test
     public void generalMapTest(){
         //given
-        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20,25,7,5,25,1,5,16, GenotypeType.RANDOM);
+        AbstractWorldMap abstractWorldMap = new InflowsAndOutflows(10,20,25,7,5,25,1,5,16, new RandomGenotypeFactory());
         // when
         List<Animal> animals = abstractWorldMap.getListOfAnimals();
         List<Grass> grasses = abstractWorldMap.getListOfGrasses();
@@ -46,7 +46,6 @@ public class InflowsAndOutflowsTest {
         int width = abstractWorldMap.getWidth();
         int height = abstractWorldMap.getHeight();
         MapType mapType = abstractWorldMap.getMapType();
-        GenotypeType genotypeType = abstractWorldMap.getGenotypeType();
         int watersNumber = abstractWorldMap.getWaters().size();
         //then
         System.out.println(abstractWorldMap);
@@ -61,7 +60,6 @@ public class InflowsAndOutflowsTest {
         assertEquals(width, 20);
         assertEquals(height, 10);
         assertEquals(mapType, MapType.INFLOWS_AND_OUTFLOWS);
-        assertEquals(genotypeType, GenotypeType.RANDOM);
         assertEquals(watersNumber, ((int) width * 0.4 ) * ((int) height * 0.4) );
     }
 }

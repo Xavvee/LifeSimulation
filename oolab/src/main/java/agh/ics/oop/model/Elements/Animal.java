@@ -24,14 +24,10 @@ public class Animal implements WorldElement {
 
 
     // randomly spawned starting animal
-    public Animal(Vector2d position, int startingEnergy, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType, MapType mapType){
+    public Animal(Vector2d position, int startingEnergy, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeFactory genotypeFactory, MapType mapType){
         this.position = position;
         this.energy = startingEnergy;
-        if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
-            this.genotype = new MinorCorrectionGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
-        } else if (genotypeType.equals(GenotypeType.RANDOM)) {
-            this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
-        }
+        this.genotype = genotypeFactory.makeGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
         Random random = new Random();
         this.startingIndex = random.nextInt(genomeLength);
         this.direction = genotype.getGenotype().get(startingIndex);
@@ -42,14 +38,10 @@ public class Animal implements WorldElement {
     }
 
     // newborn child genotype
-    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeType genotypeType, MapType mapType){
+    public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeFactory genotypeFactory, MapType mapType){
         this.position = position;
         this.energy = 2*energyNeededForReproduction;
-        if(genotypeType.equals(GenotypeType.MINOR_CORRECTION)){
-            this.genotype = new MinorCorrectionGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
-        } else if (genotypeType.equals(GenotypeType.RANDOM)) {
-            this.genotype = new RandomGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
-        }
+        this.genotype = genotypeFactory.makeGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
         Random random = new Random();
         this.startingIndex = random.nextInt(genomeLength);
         this.direction = genotype.getGenotype().get(startingIndex);
