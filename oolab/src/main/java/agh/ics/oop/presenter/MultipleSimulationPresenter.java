@@ -39,7 +39,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         map.addObserver(this);
         Simulation simulation = new Simulation(map, 5, 3, 4);
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-        simulationEngine.runAsyncInThreadPool(10);
+        simulationEngine.runAsync(10);
     }
 
     public void drawMap(WorldMap worldMap){
@@ -47,14 +47,14 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         Label yx = new Label("y/x");
         mapGrid.add(yx, 0, 0);
         GridPane.setHalignment(yx, HPos.CENTER);
-        for (int k = 0; k < worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); k++) {
+        for (int k = 0; k <= worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); k++) {
             Label label = new Label("" + (worldMap.getCurrentBounds().lowerLeft().getX() + k));
             mapGrid.add(label, k + 1, 0);
             GridPane.setHalignment(label, HPos.CENTER);
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         }
 
-        for (int k = 0; k < worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); k++) {
+        for (int k = 0; k <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); k++) {
             Label label = new Label("" + (worldMap.getCurrentBounds().upperRight().getY() - k - 1));
             mapGrid.add(label, 0, k + 1);
             GridPane.setHalignment(label, HPos.CENTER);
@@ -64,9 +64,9 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
 
-        for (int i = 0; i < worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); i++) {
-            for (int j = 0; j < worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); j++) {
-                Vector2d curMapPos = new Vector2d(worldMap.getCurrentBounds().lowerLeft().getX() + i, worldMap.getCurrentBounds().upperRight().getY() - j - 1);
+        for (int i = 0; i <= worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); i++) {
+            for (int j = 0; j <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); j++) {
+                Vector2d curMapPos = new Vector2d(worldMap.getCurrentBounds().lowerLeft().getX() + i, worldMap.getCurrentBounds().upperRight().getY() - j );
                 if (worldMap.objectAt(curMapPos) != null) {
                     String object = worldMap.objectAt(curMapPos).toString();
                     mapGrid.add(new Label(object), i + 1, j + 1);

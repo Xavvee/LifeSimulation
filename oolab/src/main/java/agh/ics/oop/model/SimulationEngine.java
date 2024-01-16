@@ -18,40 +18,23 @@ public class SimulationEngine {
         this.threadPool = Executors.newFixedThreadPool(4);
     }
 
-    public void runSync(){
+    public void runSync(int days){
         for( Simulation simulation : simulations){
-            simulation.run();
+            simulation.simulateXDays(days);
         }
     }
 
-    public void runAsync() {
+    public void runAsync(int days) {
         for (Simulation simulation : simulations) {
-            Thread thread = new Thread(simulation::run);
+            Thread thread = new Thread(() ->simulation.simulateXDays(days));
             simulationThreads.add(thread);
             thread.start();
         }
     }
 
     public void awaitSimulationsEnd() throws InterruptedException {
-        threadPool.shutdown();
-        try {
-            if (threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-                threadPool.shutdownNow();
-                if (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-                    System.err.println("ThreadPool did not terminate");
-                }
-            }
-        } catch (InterruptedException ex){
-            threadPool.shutdownNow();
-            Thread.currentThread().interrupt();
+        for (Thread thread:simulationThreads) {
+            thread.join();
         }
     }
-
-    public  void runAsyncInThreadPool(int days){
-        for (Simulation simulation : simulations) {
-            threadPool.submit(() ->simulation.simulateXDays(days));
-        }
-    }
-
-
 }
