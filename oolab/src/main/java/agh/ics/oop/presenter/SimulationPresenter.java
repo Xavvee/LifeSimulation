@@ -141,7 +141,7 @@ public class SimulationPresenter {
             loaderMulti.setLocation(getClass().getClassLoader().getResource("chooseConfiguration.fxml"));
             GridPane viewRoot = loaderMulti.load();
             sampleConfigurationChoicePresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
-            sampleConfigurationChoicePresenter.drawConfiguration(newListOfSampleConfigurations(), this);
+            sampleConfigurationChoicePresenter.drawConfiguration(newListOfSampleConfigurations(), configurationStage,this);
             Scene scene = new Scene(viewRoot);
             configurationStage.setScene(scene);
             configurationStage.setTitle("Configuration choice");

@@ -16,6 +16,7 @@ public class StartConfigurations extends HashMap<String, String> {
 
     private static StartConfigurations sampleConfig1() {
         StartConfigurations configurations = new StartConfigurations();
+        configurations.put("name", "Przykład 1");
         configurations.put("initialAnimal","2");
         configurations.put("animalEnergy","5");
         configurations.put("initialGrass","4");
@@ -29,6 +30,7 @@ public class StartConfigurations extends HashMap<String, String> {
     }
     private static StartConfigurations sampleConfig2() {
         StartConfigurations configurations = new StartConfigurations();
+        configurations.put("name", "Przykład 2");
         configurations.put("initialAnimal","3");
         configurations.put("animalEnergy","5");
         configurations.put("initialGrass","20");
@@ -39,6 +41,9 @@ public class StartConfigurations extends HashMap<String, String> {
         configurations.put("minimumNumberOfMutations","4");
         configurations.put("maximumNumberOfMutations","8");
         return configurations;
+    }
+    public String toString() {
+        return this.get("name");
     }
     public static List<StartConfigurations> newListOfSampleConfigurations(){
         List<StartConfigurations> listOfSampleConfiguration = new ArrayList<>();

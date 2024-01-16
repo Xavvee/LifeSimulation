@@ -11,8 +11,9 @@
             fx:controller="agh.ics.oop.presenter.SampleConfigurationChoicePresenter"
             prefHeight="400.0" prefWidth="600.0">
     <children>
-        <Button text="Załaduj" prefWidth="Infinity" onAction="#onLoadClick" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <Button text="Anuluj" prefWidth="Infinity" onAction="#onCancelClick" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <ComboBox fx:id="choice" prefWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0" promptText="Wybieraj" GridPane.columnSpan="2"/>
+        <Button text="Załaduj" prefWidth="Infinity" onAction="#onLoadClick" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button text="Anuluj" prefWidth="Infinity" onAction="#onCancelClick" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
     </children>
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
