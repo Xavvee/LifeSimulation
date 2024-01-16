@@ -161,29 +161,19 @@ public class Simulation {
             if (animalsAtPosition.size() > 1) {
                 Animal winner = resolveConflictForPlants(animalsAtPosition);
                 winner.addEnergy(energyPerGrass);
-                removeGrassWhileEaten(winner.getPosition());
+                removeGrassWhileEaten(winner.getPosition(), grass);
             } else if (!animalsAtPosition.isEmpty()) {
                 Animal singleAnimal = animalsAtPosition.get(0);
                 singleAnimal.addEnergy(energyPerGrass);
-                removeGrassWhileEaten(singleAnimal.getPosition());
+                removeGrassWhileEaten(singleAnimal.getPosition(), grass);
             }
         }
     }
 
-    private void removeGrassWhileEaten(Vector2d position) {
+    private void removeGrassWhileEaten(Vector2d position, Grass grassToRemove) {
         this.map.removeGrass(position);
         this.map.removeElement(position);
-
-        Grass grassToRemove = null;
-        for (Grass grass : this.grasses) {
-            if (grass.position().equals(position)) {
-                grassToRemove = grass;
-                break;
-            }
-        }
-        if (grassToRemove != null) {
-            this.grasses.remove(grassToRemove);
-        }
+        this.grasses.remove(grassToRemove);
     }
 
     private Animal resolveConflictForPlants(List<Animal> animalsAtPosition) {
