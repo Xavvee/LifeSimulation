@@ -150,6 +150,7 @@ public class Simulation {
 
     public void consume(){
         Map<Vector2d, List<Animal>> animalsOnGrass = new HashMap<>();
+        List<Grass> grassForRemoval = new ArrayList<>();
         for (Animal animal : animals) {
             Vector2d position = animal.getPosition();
             animalsOnGrass.computeIfAbsent(position, k -> new ArrayList<>()).add(animal);
@@ -161,19 +162,22 @@ public class Simulation {
             if (animalsAtPosition.size() > 1) {
                 Animal winner = resolveConflictForPlants(animalsAtPosition);
                 winner.addEnergy(energyPerGrass);
-                removeGrassWhileEaten(winner.getPosition(), grass);
+                grassForRemoval.add(grass);
             } else if (!animalsAtPosition.isEmpty()) {
                 Animal singleAnimal = animalsAtPosition.get(0);
                 singleAnimal.addEnergy(energyPerGrass);
-                removeGrassWhileEaten(singleAnimal.getPosition(), grass);
+                grassForRemoval.add(grass);
             }
         }
+        removeConsumedGrass(grassForRemoval);
     }
 
-    private void removeGrassWhileEaten(Vector2d position, Grass grassToRemove) {
-        this.map.removeGrass(position);
-        this.map.removeElement(position);
-        this.grasses.remove(grassToRemove);
+    private void removeConsumedGrass(List<Grass> grassesToBeRemoved) {
+        for( Grass grass : grassesToBeRemoved){
+            this.map.removeGrass(grass.position());
+            this.map.removeElement(grass.position());
+            this.grasses.remove(grass);
+        }
     }
 
     private Animal resolveConflictForPlants(List<Animal> animalsAtPosition) {
