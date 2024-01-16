@@ -3,6 +3,7 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static agh.ics.oop.presenter.StartConfigurations.newListOfSampleConfigurations;
 
 
 public class SimulationPresenter {
@@ -103,15 +106,21 @@ public class SimulationPresenter {
         }
         return configurations;
     }
+    public void setTextField(StartConfigurations startConfigurations){
+        for(TextField textField : List.of(
+                initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
+                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations))  {
+            textField.setText(startConfigurations.get(textField.getId()));
+        }
+    }
+
     public void onSimulationStartClicked() {
-        MultipleSimulationPresenter multipleSimulationPresenter = new MultipleSimulationPresenter();
+        MultipleSimulationPresenter multipleSimulationPresenter;
         Stage simulationStage = new Stage();
         try {
             FXMLLoader loaderMulti = new FXMLLoader();
             loaderMulti.setLocation(getClass().getClassLoader().getResource("multiplesimulation.fxml"));
             BorderPane viewRoot = loaderMulti.load();
-            threadPool = Executors.newFixedThreadPool(4);
-            this.setThreadPool(threadPool);
             multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
             multipleSimulationPresenter.startMultipleSimulation(setConfigurations()); // Rozpocznij symulację w nowym oknie
             Scene scene = new Scene(viewRoot);
@@ -120,6 +129,25 @@ public class SimulationPresenter {
             simulationStage.show();
 
             } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public void loadConfiguration() {
+        SampleConfigurationChoicePresenter sampleConfigurationChoicePresenter;
+        Stage configurationStage = new Stage();
+        try {
+            FXMLLoader loaderMulti = new FXMLLoader();
+            loaderMulti.setLocation(getClass().getClassLoader().getResource("chooseConfiguration.fxml"));
+            GridPane viewRoot = loaderMulti.load();
+            sampleConfigurationChoicePresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
+            sampleConfigurationChoicePresenter.drawConfiguration(newListOfSampleConfigurations(), this);
+            Scene scene = new Scene(viewRoot);
+            configurationStage.setScene(scene);
+            configurationStage.setTitle("Configuration choice");
+            configurationStage.show();
+
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

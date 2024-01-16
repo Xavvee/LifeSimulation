@@ -58,6 +58,9 @@
                     Maksymalna liczba mutacji
                 </Label>
                 <TextField fx:id="maximumNumberOfMutations" GridPane.columnIndex="1" GridPane.rowIndex="8"></TextField>
+
+                <Button text="Wczytaj konfigurację" GridPane.rowIndex="9" GridPane.columnIndex="0"
+                        GridPane.columnSpan="2" prefWidth="Infinity" onAction="#loadConfiguration"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
