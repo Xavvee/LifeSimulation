@@ -27,8 +27,8 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     private Label movementDescriptionLabel;
     @FXML
     private GridPane mapGrid;
-
-
+    private Simulation simulation;
+    private long running = 0;
 
     public void setWorldMap(WorldMap map){
         this.map = map;
@@ -50,9 +50,35 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
                 GenotypeType.RANDOM);
         this.setWorldMap(map);
         map.addObserver(this);
-        Simulation simulation = new Simulation(map, 5, 3, 4);
-        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-        simulationEngine.runAsync(10);
+        this.simulation = new Simulation(map, 5, 3, 4);
+        //SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        //simulationEngine.runAsync(10);
+        drawMap(map);
+    }
+    public synchronized void continueSimulation() {
+        running++;
+        long equalRunning = running;
+        Thread thread = new Thread(() ->{
+            while(true) {
+                synchronized (this) {
+                    boolean ifEqualRunning = running == equalRunning;
+                    if(!ifEqualRunning) {
+                        break;
+                    }
+                    System.out.println("symulujemy dzien");
+                    simulation.simulateOneDay();
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        thread.start();
+    }
+    public synchronized void stopSimulation() {
+        running ++;
     }
 
     public void drawMap(WorldMap worldMap){

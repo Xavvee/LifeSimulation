@@ -4,17 +4,22 @@
 <?import javafx.scene.control.Label?>
 
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
             fx:controller="agh.ics.oop.presenter.MultipleSimulationPresenter">
     <center>
-        <GridPane fx:id="mapGrid" GridPane.columnIndex="0" GridPane.rowIndex="0" gridLinesVisible="true" alignment="CENTER"/>
+        <GridPane fx:id="mapGrid" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                  gridLinesVisible="true" alignment="CENTER"/>
     </center>
     <bottom>
-        <VBox alignment="CENTER" spacing="10">
-            <Label fx:id="movementDescriptionLabel" text="Movement description will appear here" textAlignment="CENTER"/>
-        </VBox>
+        <GridPane alignment="CENTER">
+            <Label fx:id="movementDescriptionLabel" text="Movement description will appear here"
+                   textAlignment="CENTER" GridPane.rowIndex="0"/>
+            <Button text="Dalej!" GridPane.columnIndex="0" GridPane.rowIndex="1" onAction="#continueSimulation"/>
+            <Button text="Stop!" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#stopSimulation"/>
+        </GridPane>
     </bottom>
 
 </BorderPane>
