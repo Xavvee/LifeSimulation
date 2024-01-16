@@ -3,9 +3,7 @@ package agh.ics.oop;
 import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Elements.Water;
-import agh.ics.oop.model.Elements.WorldElement;
 import agh.ics.oop.model.Map.InflowsAndOutflows;
-import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.Map.WorldMap;
 
@@ -15,7 +13,6 @@ import java.util.Comparator;
 public class Simulation {
 
 
-    private List<MoveDirection> moveDirections;
     private List<Animal> animals;
     private List<Grass> grasses;
     private final WorldMap map;
@@ -164,10 +161,28 @@ public class Simulation {
             if (animalsAtPosition.size() > 1) {
                 Animal winner = resolveConflictForPlants(animalsAtPosition);
                 winner.addEnergy(energyPerGrass);
+                removeGrassWhileEaten(winner.getPosition());
             } else if (!animalsAtPosition.isEmpty()) {
                 Animal singleAnimal = animalsAtPosition.get(0);
                 singleAnimal.addEnergy(energyPerGrass);
+                removeGrassWhileEaten(singleAnimal.getPosition());
             }
+        }
+    }
+
+    private void removeGrassWhileEaten(Vector2d position) {
+        this.map.removeGrass(position);
+        this.map.removeElement(position);
+
+        Grass grassToRemove = null;
+        for (Grass grass : this.grasses) {
+            if (grass.position().equals(position)) {
+                grassToRemove = grass;
+                break;
+            }
+        }
+        if (grassToRemove != null) {
+            this.grasses.remove(grassToRemove);
         }
     }
 
@@ -213,8 +228,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() + 1));
-                    // setowanie upperRightCornera
-                    // -- działa --
                 } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getY() - 1 > 0) {
                     for( int i = upperLeftWaterCorner.getX(); i < upperRightWaterCorner.getX() + 1; i++){
                         for( int j = upperLeftWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
@@ -223,8 +236,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() - 1));
-                    // setowanie upperRightCornera
-                    // -- działa --
                 }
                 deleteEntitiesOnWater();
                 break;
@@ -237,8 +248,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() + 1, upperRightWaterCorner.getY()));
-                    // setowanie upperRightCornera
-                    // -- działa --
                 } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getX() - 1 > 0) {
                     for( int i = lowerRightWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
                         for( int j = lowerRightWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
@@ -247,8 +256,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() - 1, upperRightWaterCorner.getY()));
-                    // setowanie upperRightCornera
-                    // -- działa --
                 }
                 deleteEntitiesOnWater();
                 break;
@@ -261,8 +268,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() - 1));
-                    // setowanie lowerLeftCornera
-                    // -- działa --
                 } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getY() + 1 < upperLeftWaterCorner.getY()){
                     for( int i = lowerLeftWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
                         for( int j = lowerLeftWaterCorner.getY(); j < lowerLeftWaterCorner.getY() + 1; j++){
@@ -271,8 +276,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() + 1));
-                    // setowanie lowerLeftCornera
-                    // -- działa --
                 }
                 deleteEntitiesOnWater();
                 break;
@@ -285,8 +288,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() - 1, lowerLeftWaterCorner.getY()));
-                    // setowanie lowerLeftCornera
-                    // -- działa --
                 } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getX() + 1 < lowerRightWaterCorner.getX()) {
                     for( int i = lowerLeftWaterCorner.getX(); i < lowerLeftWaterCorner.getX() + 1; i++){
                         for( int j = lowerLeftWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
@@ -295,8 +296,6 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() + 1, lowerLeftWaterCorner.getY()));
-                    // setowanie lowerLeftCornera
-                    // -- działa --
                 }
                 deleteEntitiesOnWater();
                 break;
@@ -305,24 +304,11 @@ public class Simulation {
     }
 
 
-    private void removeObjectAt(Vector2d position){
-        if(this.map.objectAt(position) instanceof Animal animalToRemove){
-            this.map.removeAnimal(position);
-            this.map.removeElement(position);
-            this.animals.remove(animalToRemove);
-        } else if(this.map.objectAt(position) instanceof Grass grassToRemove){
-            this.map.removeGrass(position);
-            this.map.removeElement(position);
-            this.grasses.remove(grassToRemove);
-        }
-    }
+
     public List<Animal> getAnimals() {
         return this.animals;
     }
 
-    public List<MoveDirection> getMoveDirections() {
-        return this.moveDirections;
-    }
 
     public int getDaysCount() {
         return daysCount;
