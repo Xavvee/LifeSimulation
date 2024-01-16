@@ -60,6 +60,7 @@ public class Simulation {
         for( int i = 0; i < daysCount; i++){
             simulateOneDay();
             System.out.println("Number of animals: " + this.animals.size());
+            System.out.println("Number of grasses: " + this.grasses.size());
         }
     }
 

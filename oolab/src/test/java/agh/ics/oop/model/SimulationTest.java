@@ -1,15 +1,12 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.Elements.Grass;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Map.AbstractWorldMap;
 import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.InflowsAndOutflows;
-import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,13 +91,14 @@ public class SimulationTest {
         simulation.simulateXDays(20);
         assertEquals(15*25, map.getGrasses().size());
     }
+
     @Test
     public void consumptionTest(){
         //given
-        AbstractWorldMap map = new Globe(5,5,24,1,1,20,2,4,10, GenotypeType.MINOR_CORRECTION);
+        AbstractWorldMap map = new Globe(5,5,24,1,5,20,2,4,10, GenotypeType.MINOR_CORRECTION);
         Simulation simulation = new Simulation(map, 10, 25, 20);
         //when
-        simulation.simulateXDays(10);
+        simulation.simulateXDays(500);
         //then
         assertTrue( map.getListOfAnimals().get(0).getEnergy() > 20);
     }

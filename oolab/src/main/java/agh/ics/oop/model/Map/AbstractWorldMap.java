@@ -124,6 +124,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public List<Grass> spawnGrass(){
         List<Grass> newGrasses = new ArrayList<>();
         for(int i = 0; i < dailyNumberOfGrasses; i++){
+            ///// freeHexes nie są empty - powinny być
             if(!freeHexes.isEmpty()){
                 while (true){
                     Grass grass = generateGrass();
@@ -145,11 +146,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(this.isOccupied(randomPosition)){
             return false;
         }
-        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION, MapType.GLOBE));
-        addElement(randomPosition);
         if(!isOccupied(randomPosition)){
             subtractFreeHex(randomPosition);
         }
+        animals.put(randomPosition, new Animal(randomPosition, this.startingEnergy, this.genomeLength, this.minimumNumberOfMutations, this.maximumNumberOfMutations, GenotypeType.MINOR_CORRECTION, MapType.GLOBE));
+        addElement(randomPosition);
         return true;
     }
 
@@ -235,11 +236,11 @@ public abstract class AbstractWorldMap implements WorldMap {
             animal.move(this);
             Vector2d newPosition = animal.position();
             if (canMoveTo(newPosition)) {
-                animals.remove(oldPosition);
-                removeElement(oldPosition);
-                if(!isOccupied(oldPosition)){
+                if(objectAtPositionGrassOrWater(oldPosition) == null){
                     addFreeHex(oldPosition);
                 }
+                animals.remove(oldPosition);
+                removeElement(oldPosition);
                 if(!isOccupied(newPosition)){
                     subtractFreeHex(newPosition);
                 }
@@ -248,6 +249,10 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
             mapChanged(animal + " " + oldPosition + " -> " + newPosition);
         }
+    }
+
+    public WorldElement objectAtPositionGrassOrWater(Vector2d position){
+        return grasses.get(position);
     }
 
     @Override
@@ -331,11 +336,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
     public Boundary getCurrentBounds(){
         return new Boundary(getLowerLeft(), getUpperRight());
-    };
+    }
 
     protected  Vector2d getUpperRight(){
         return new Vector2d(width - 1, height - 1);
-    };
+    }
     protected Vector2d getLowerLeft(){
         return new Vector2d(0, 0);
     }
@@ -390,7 +395,18 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public int getNumberOfFreeHexes(){
-        return this.freeHexesAboveEquator.size() + this.freeHexesInEquator.size() + this.freeHexesBelowEquator.size();
+        return freeHexes.size();
     }
 
+    public int getFreeHexesAboveEquator() {
+        return freeHexesAboveEquator.size();
+    }
+
+    public int getFreeHexesBelowEquator() {
+        return freeHexesBelowEquator.size();
+    }
+
+    public int getFreeHexesInEquator() {
+        return freeHexesInEquator.size();
+    }
 }

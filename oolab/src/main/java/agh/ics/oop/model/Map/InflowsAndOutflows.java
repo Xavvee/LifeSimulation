@@ -1,6 +1,5 @@
 package agh.ics.oop.model.Map;
 
-import agh.ics.oop.model.ConsoleMapDisplay;
 import agh.ics.oop.model.DirectedPosition;
 import agh.ics.oop.model.Elements.Water;
 import agh.ics.oop.model.Elements.WorldElement;
@@ -110,6 +109,14 @@ public class InflowsAndOutflows extends AbstractWorldMap{
         this.waters.remove(position);
         this.addElement(position);
         addFreeHex(position);
+    }
+
+
+    public WorldElement objectAtPositionGrassOrWater(Vector2d position){
+        if(super.objectAtPositionGrassOrWater(position) == null){
+            return waters.get(position);
+        }
+        return null;
     }
 
 }

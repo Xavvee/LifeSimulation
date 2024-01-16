@@ -70,7 +70,7 @@ public interface WorldMap extends MoveCalculator {
 
     /**
      * Function that generates starting grass.
-     * @return true if grass was correctly generated
+     * @return grass if it was correctly generated
      */
     Grass generateGrass();
 
@@ -82,7 +82,7 @@ public interface WorldMap extends MoveCalculator {
 
     /**
      * Function that spawns grass every day.
-     * @return true if grass was correctly spawned
+     * @return List of grass correctly spawned
      */
     List<Grass> spawnGrass();
 
@@ -129,5 +129,11 @@ public interface WorldMap extends MoveCalculator {
     void addObserver(MapChangeListener listener);
 
     void removeObserver(MapChangeListener listener);
+
+    int getFreeHexesAboveEquator();
+    int getFreeHexesBelowEquator();
+    int getFreeHexesInEquator();
+
+    WorldElement objectAtPositionGrassOrWater(Vector2d position);
 
 }
