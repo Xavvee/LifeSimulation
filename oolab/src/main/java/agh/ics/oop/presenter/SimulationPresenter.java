@@ -76,6 +76,7 @@ public class SimulationPresenter {
         maximumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
         nameOfMapType.getItems().addAll(listFactory.stream().map(MapFactory::getType)
                 .collect((Collectors.toList())));
+        nameOfMapType.getSelectionModel().selectFirst();
     }
     private TextFormatter nonNegativeNumberFormatter() {
         return new TextFormatter<>(c -> {
@@ -86,12 +87,14 @@ public class SimulationPresenter {
         }
         );
     }
-
+    private List<TextField> listOfTextFields(){
+        return List.of(
+                initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
+                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations);
+    }
     private StartConfigurations setConfigurations(){
         StartConfigurations configurations = new StartConfigurations();
-        for(TextField textField : List.of(
-                initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
-                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations)) {
+        for(TextField textField : listOfTextFields()) {
             configurations.put(textField.getId(), textField.getText());
         }
         for (ComboBox<String> comboBox : List.of(nameOfMapType)) {
@@ -100,10 +103,11 @@ public class SimulationPresenter {
         return configurations;
     }
     public void setTextField(StartConfigurations startConfigurations){
-        for(TextField textField : List.of(
-                initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
-                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations))  {
+        for(TextField textField : listOfTextFields())  {
             textField.setText(startConfigurations.get(textField.getId()));
+        }
+        for(ComboBox<String> comboBox:List.of(nameOfMapType/*, nameOfGenotypeType*/)){
+            comboBox.getSelectionModel().select(startConfigurations.get(comboBox.getId()));
         }
     }
 
