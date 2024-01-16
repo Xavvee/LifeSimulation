@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -17,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class SimulationPresenter implements MapChangeListener {
+public class SimulationPresenter {
 
     int CELL_WIDTH = 50;
     int CELL_HEIGHT = 50;
@@ -28,10 +30,57 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label movementDescriptionLabel;
     @FXML
-    private GridPane mapGrid;
+    private TextField initialAnimal;
+    @FXML
+    private TextField initialGrass;
+    @FXML
+    private TextField animalEnergy;
+    @FXML
+    private TextField genomeLength;
+    @FXML
+    private TextField height;
+    @FXML
+    private TextField width;
+    @FXML
+    private TextField dailyNumberOfGrasses;
+    @FXML
+    private TextField minimumNumberOfMutations;
+    @FXML
+    private TextField maximumNumberOfMutations;
     private SimulationEngine simulationEngine;
     private ExecutorService threadPool;
 
+    @FXML
+    public void initialize() {
+        initialAnimal.setText("2");
+        initialAnimal.setTextFormatter(nonNegativeNumberFormatter());
+        animalEnergy.setText("5");
+        animalEnergy.setTextFormatter(nonNegativeNumberFormatter());
+        initialGrass.setText("4");
+        initialGrass.setTextFormatter(nonNegativeNumberFormatter());
+        dailyNumberOfGrasses.setText("2");
+        dailyNumberOfGrasses.setTextFormatter(nonNegativeNumberFormatter());
+        height.setText("5");
+        height.setTextFormatter(nonNegativeNumberFormatter());
+        width.setText("5");
+        width.setTextFormatter(nonNegativeNumberFormatter());
+        genomeLength.setText("10");
+        genomeLength.setTextFormatter(nonNegativeNumberFormatter());
+        minimumNumberOfMutations.setText("2");
+        minimumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
+        maximumNumberOfMutations.setText("8");
+        maximumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
+
+    }
+    private TextFormatter nonNegativeNumberFormatter() {
+        return new TextFormatter<>(c -> {
+            if (!c.getControlNewText().matches("\\d+"))
+                return null;
+            else
+                return c;
+        }
+        );
+    }
 
     public void setThreadPool(ExecutorService threadPool) {
         this.threadPool = threadPool;
@@ -45,50 +94,15 @@ public class SimulationPresenter implements MapChangeListener {
         this.map = map;
     }
 
-    public void drawMap(WorldMap worldMap){
-        clearGrid();
-        Label yx = new Label("y/x");
-        mapGrid.add(yx, 0, 0);
-        GridPane.setHalignment(yx, HPos.CENTER);
-        for (int k = 0; k <= worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); k++) {
-            Label label = new Label("" + (worldMap.getCurrentBounds().lowerLeft().getX() + k));
-            mapGrid.add(label, k + 1, 0);
-            GridPane.setHalignment(label, HPos.CENTER);
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
+    private StartConfigurations setConfigurations(){
+        StartConfigurations configurations = new StartConfigurations();
+        for(TextField textField : List.of(
+                initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
+                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations)) {
+            configurations.put(textField.getId(), textField.getText());
         }
-
-        for (int k = 0; k <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); k++) {
-            Label label = new Label("" + (worldMap.getCurrentBounds().upperRight().getY() - k));
-            mapGrid.add(label, 0, k + 1);
-            GridPane.setHalignment(label, HPos.CENTER);
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
-        }
-
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
-        mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
-
-        for (int i = 0; i <= worldMap.getCurrentBounds().upperRight().getX() - worldMap.getCurrentBounds().lowerLeft().getX(); i++) {
-            for (int j = 0; j <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); j++) {
-                Vector2d curMapPos = new Vector2d(worldMap.getCurrentBounds().lowerLeft().getX() + i, worldMap.getCurrentBounds().upperRight().getY() - j);
-                if (worldMap.objectAt(curMapPos) != null) {
-                    String object = worldMap.objectAt(curMapPos).toString();
-                    mapGrid.add(new Label(object), i + 1, j + 1);
-                    GridPane.setHalignment(mapGrid.getChildren().get(mapGrid.getChildren().size() - 1), HPos.CENTER);
-                }
-            }
-        }
-
+        return configurations;
     }
-
-
-    @Override
-    public void mapChanged(WorldMap worldMap, String message) {
-        Platform.runLater(()->{
-            drawMap(worldMap);
-            this.movementDescriptionLabel.setText(message);
-        });
-    }
-
     public void onSimulationStartClicked() {
         MultipleSimulationPresenter multipleSimulationPresenter = new MultipleSimulationPresenter();
         Stage simulationStage = new Stage();
@@ -99,7 +113,7 @@ public class SimulationPresenter implements MapChangeListener {
             threadPool = Executors.newFixedThreadPool(4);
             this.setThreadPool(threadPool);
             multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
-            multipleSimulationPresenter.startMultipleSimulation(); // Rozpocznij symulację w nowym oknie
+            multipleSimulationPresenter.startMultipleSimulation(setConfigurations()); // Rozpocznij symulację w nowym oknie
             Scene scene = new Scene(viewRoot);
             simulationStage.setScene(scene);
             simulationStage.setTitle("Simulation");
@@ -109,12 +123,4 @@ public class SimulationPresenter implements MapChangeListener {
             throw new RuntimeException(ex);
         }
     }
-
-
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
 }

@@ -32,9 +32,19 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     }
 
 
-    public void startMultipleSimulation() {
+    public void startMultipleSimulation( StartConfigurations startConfigurations) {
         List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-        Globe map = new Globe(4,4,3,2,2,5,5,10,12, GenotypeType.RANDOM);
+        Globe map = new Globe(
+                startConfigurations.getNumber("height"),
+                startConfigurations.getNumber("width"),
+                startConfigurations.getNumber("initialGrass"),
+                startConfigurations.getNumber("initialAnimal"),
+                startConfigurations.getNumber("dailyNumberOfGrasses"),
+                startConfigurations.getNumber("animalEnergy"),
+                startConfigurations.getNumber("minimumNumberOfMutations"),
+                startConfigurations.getNumber("maximumNumberOfMutations"),
+                startConfigurations.getNumber("genomeLength"),
+                GenotypeType.RANDOM);
         this.setWorldMap(map);
         map.addObserver(this);
         Simulation simulation = new Simulation(map, 5, 3, 4);
