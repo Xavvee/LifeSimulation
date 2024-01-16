@@ -1,6 +1,7 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Map.MapFactory;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -18,7 +20,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
+import static agh.ics.oop.model.Map.MapFactory.listFactory;
 import static agh.ics.oop.presenter.StartConfigurations.newListOfSampleConfigurations;
 
 
@@ -26,12 +30,6 @@ public class SimulationPresenter {
 
     int CELL_WIDTH = 50;
     int CELL_HEIGHT = 50;
-    private WorldMap map;
-
-    @FXML
-    private Label infoLabel;
-    @FXML
-    private Label movementDescriptionLabel;
     @FXML
     private TextField initialAnimal;
     @FXML
@@ -50,11 +48,14 @@ public class SimulationPresenter {
     private TextField minimumNumberOfMutations;
     @FXML
     private TextField maximumNumberOfMutations;
-    private SimulationEngine simulationEngine;
-    private ExecutorService threadPool;
+    @FXML
+    private ComboBox<String> nameOfMapType;
+//    @FXML
+//    private ComboBox<GenomeFactory> nameOfGenomeType;
+
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         initialAnimal.setText("2");
         initialAnimal.setTextFormatter(nonNegativeNumberFormatter());
         animalEnergy.setText("5");
@@ -73,7 +74,8 @@ public class SimulationPresenter {
         minimumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
         maximumNumberOfMutations.setText("8");
         maximumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
-
+        nameOfMapType.getItems().addAll(listFactory.stream().map(MapFactory::getType)
+                .collect((Collectors.toList())));
     }
     private TextFormatter nonNegativeNumberFormatter() {
         return new TextFormatter<>(c -> {
@@ -85,24 +87,15 @@ public class SimulationPresenter {
         );
     }
 
-    public void setThreadPool(ExecutorService threadPool) {
-        this.threadPool = threadPool;
-    }
-
-    public void setSimulationEngine(SimulationEngine simulationEngine) {
-        this.simulationEngine = simulationEngine;
-    }
-
-    public void setWorldMap(WorldMap map){
-        this.map = map;
-    }
-
     private StartConfigurations setConfigurations(){
         StartConfigurations configurations = new StartConfigurations();
         for(TextField textField : List.of(
                 initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
                 genomeLength,maximumNumberOfMutations,minimumNumberOfMutations)) {
             configurations.put(textField.getId(), textField.getText());
+        }
+        for (ComboBox<String> comboBox : List.of(nameOfMapType)) {
+            configurations.put(comboBox.getId(), comboBox.getValue());
         }
         return configurations;
     }

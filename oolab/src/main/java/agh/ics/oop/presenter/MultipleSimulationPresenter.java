@@ -4,7 +4,7 @@ import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.WorldElement;
 import agh.ics.oop.model.Genotype.GenotypeType;
-import agh.ics.oop.model.Map.Globe;
+import agh.ics.oop.model.Map.MapFactory;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
+
+import static agh.ics.oop.model.Map.MapFactory.factoryByName;
 
 public class MultipleSimulationPresenter  implements MapChangeListener {
     private WorldMap map;
@@ -37,22 +39,10 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
 
     public void startMultipleSimulation( StartConfigurations startConfigurations) {
         List<Vector2d> positions = List.of(new Vector2d(0,0), new Vector2d(0,2));
-        Globe map = new Globe(
-                startConfigurations.getNumber("height"),
-                startConfigurations.getNumber("width"),
-                startConfigurations.getNumber("initialGrass"),
-                startConfigurations.getNumber("initialAnimal"),
-                startConfigurations.getNumber("dailyNumberOfGrasses"),
-                startConfigurations.getNumber("animalEnergy"),
-                startConfigurations.getNumber("minimumNumberOfMutations"),
-                startConfigurations.getNumber("maximumNumberOfMutations"),
-                startConfigurations.getNumber("genomeLength"),
-                GenotypeType.RANDOM);
+        WorldMap map = factoryByName.get(startConfigurations.get("nameOfMapType")).makeMap(startConfigurations);
         this.setWorldMap(map);
         map.addObserver(this);
         this.simulation = new Simulation(map, 5, 3, 4);
-        //SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
-        //simulationEngine.runAsync(10);
         drawMap(map);
     }
     public synchronized void continueSimulation() {

@@ -126,5 +126,8 @@ public interface WorldMap extends MoveCalculator {
     void removeGrass(Vector2d position);
 
     int getNumberOfFreeHexes();
+    void addObserver(MapChangeListener listener);
+
+    void removeObserver(MapChangeListener listener);
 
 }

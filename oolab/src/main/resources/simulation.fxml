@@ -59,7 +59,7 @@
                     Maksymalna liczba mutacji
                 </Label>
                 <TextField fx:id="maximumNumberOfMutations" GridPane.columnIndex="1" GridPane.rowIndex="8"></TextField>
-                <ComboBox fx:id="map" GridPane.rowIndex="9" GridPane.columnIndex="1"
+                <ComboBox fx:id="nameOfMapType" GridPane.rowIndex="9" GridPane.columnIndex="1"
                           prefWidth="Infinity"/>
                 <Label text="Rodzaj mapy" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
                 <Button text="Wczytaj konfigurację" GridPane.rowIndex="10" GridPane.columnIndex="0"
