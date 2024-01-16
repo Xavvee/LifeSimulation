@@ -12,6 +12,11 @@ public record Water(Vector2d position) implements WorldElement {
     }
 
     @Override
+    public String getColor() {
+        return "#11b7dd";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

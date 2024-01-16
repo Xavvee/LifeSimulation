@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.ComboBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
@@ -58,8 +59,10 @@
                     Maksymalna liczba mutacji
                 </Label>
                 <TextField fx:id="maximumNumberOfMutations" GridPane.columnIndex="1" GridPane.rowIndex="8"></TextField>
-
-                <Button text="Wczytaj konfigurację" GridPane.rowIndex="9" GridPane.columnIndex="0"
+                <ComboBox fx:id="map" GridPane.rowIndex="9" GridPane.columnIndex="1"
+                          prefWidth="Infinity"/>
+                <Label text="Rodzaj mapy" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                <Button text="Wczytaj konfigurację" GridPane.rowIndex="10" GridPane.columnIndex="0"
                         GridPane.columnSpan="2" prefWidth="Infinity" onAction="#loadConfiguration"/>
             </children>
             <columnConstraints>

@@ -17,6 +17,6 @@ public interface WorldElement {
     String toString();
 
 
-
+    String getColor();
 
 }

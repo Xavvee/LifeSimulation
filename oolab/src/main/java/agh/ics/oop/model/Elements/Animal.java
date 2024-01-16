@@ -73,6 +73,11 @@ public class Animal implements WorldElement {
         };
     }
 
+    @Override
+    public String getColor() {
+        return "#fd0101";
+    }
+
     public boolean isAt(Vector2d position){
         return this.position.equals(position);
     }

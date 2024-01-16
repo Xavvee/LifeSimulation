@@ -2,6 +2,7 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Elements.WorldElement;
 import agh.ics.oop.model.Genotype.GenotypeType;
 import agh.ics.oop.model.Map.Globe;
 import agh.ics.oop.model.Map.WorldMap;
@@ -12,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 
@@ -78,8 +81,14 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
             for (int j = 0; j <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); j++) {
                 Vector2d curMapPos = new Vector2d(worldMap.getCurrentBounds().lowerLeft().getX() + i, worldMap.getCurrentBounds().upperRight().getY() - j );
                 if (worldMap.objectAt(curMapPos) != null) {
-                    String object = worldMap.objectAt(curMapPos).toString();
-                    mapGrid.add(new Label(object), i + 1, j + 1);
+                    WorldElement object = worldMap.objectAt(curMapPos);
+                    Label label = new Label(object.toString());
+                    label.setTextFill(Color.DARKBLUE);
+                    label.setStyle("-fx-background-color: " + object.getColor() + ";");
+                    label.setPrefHeight(Double.POSITIVE_INFINITY);
+                    label.setPrefWidth(Double.POSITIVE_INFINITY);
+                    label.setTextAlignment(TextAlignment.CENTER);
+                    mapGrid.add(label, i + 1, j + 1);
                     GridPane.setHalignment(mapGrid.getChildren().get(mapGrid.getChildren().size() - 1), HPos.CENTER);
                 }
             }

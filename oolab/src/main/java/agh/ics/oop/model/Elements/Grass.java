@@ -12,6 +12,11 @@ public record Grass(Vector2d position) implements WorldElement {
     }
 
     @Override
+    public String getColor() {
+        return "#138009";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
