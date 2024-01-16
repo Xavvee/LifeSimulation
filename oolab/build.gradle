@@ -17,7 +17,7 @@ javafx {
 }
 
 application {
-  getMainClass().set('agh.ics.oop.World')
+  getMainClass().set('agh.ics.oop.WorldGUI')
 }
 
 dependencies {
@@ -34,3 +34,6 @@ java {
 test {
     useJUnitPlatform()
 }
+
+compileJava {options.encoding = "UTF-8"}
+compileTestJava {options.encoding = "UTF-8"}
