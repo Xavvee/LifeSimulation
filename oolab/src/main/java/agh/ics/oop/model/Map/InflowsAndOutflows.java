@@ -98,16 +98,17 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     }
 
     public void addWater(Vector2d position){
-        this.waters.put(position, new Water(position));
-        this.removeElement(position);
         if(!isOccupied(position)){
             subtractFreeHex(position);
+            this.removeElement(position);
         }
+        this.waters.put(position, new Water(position));
+        this.addElement(position);
     }
 
     public void removeWater(Vector2d position){
         this.waters.remove(position);
-        this.addElement(position);
+        this.removeElement(position);
         addFreeHex(position);
     }
 

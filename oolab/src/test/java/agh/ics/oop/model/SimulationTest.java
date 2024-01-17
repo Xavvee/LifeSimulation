@@ -55,16 +55,17 @@ public class SimulationTest {
     @Test
     public void manageWatersTest(){
         //given
-        AbstractWorldMap map = new InflowsAndOutflows(15,25,10,0,10,40,2,4,10, new RandomGenotypeFactory());
+        AbstractWorldMap map = new InflowsAndOutflows(10,10,10,0,10,40,2,4,10, new RandomGenotypeFactory());
         Simulation simulation = new Simulation(map, 0, 25, 20, new RandomGenotypeFactory());
         //when
-        assertEquals(map.getWaters().size(),60);
+        assertEquals(map.getWaters().size(),16);
         System.out.println(map);
         for( int i = 1 ; i < 10 ; i++){
             simulation.simulateOneDay();
             System.out.println(map);
-            System.out.println(map.getAnimals().size());
-            System.out.println(map.getWaters().size());
+            System.out.println(map.getNumberOfFreeHexes());
+//            System.out.println(map.getAnimals().size());
+//            System.out.println(map.getWaters().size());
         }
         //then
     }

@@ -93,14 +93,16 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
     public void addFreeHex(Vector2d position){
-        this.freeHexes.add(position);
-        this.hexesEligibleForGrassGrowth.add(position);
-        if( checkWhereBelongs(position) == 1){
-            freeHexesInEquator.add(position);
-        } else if (checkWhereBelongs(position) == 2) {
-            freeHexesAboveEquator.add(position);
-        } else if (checkWhereBelongs(position) == 0) {
-            freeHexesBelowEquator.add(position);
+        if(!freeHexes.contains(position)) {
+            this.freeHexes.add(position);
+            this.hexesEligibleForGrassGrowth.add(position);
+            if (checkWhereBelongs(position) == 1) {
+                freeHexesInEquator.add(position);
+            } else if (checkWhereBelongs(position) == 2) {
+                freeHexesAboveEquator.add(position);
+            } else if (checkWhereBelongs(position) == 0) {
+                freeHexesBelowEquator.add(position);
+            }
         }
     }
 

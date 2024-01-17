@@ -227,7 +227,7 @@ public class Simulation {
         Vector2d lowerRightWaterCorner = new Vector2d(upperRightWaterCorner.getX(), lowerLeftWaterCorner.getY());
         switch (drawnNumber){
             case 0:
-                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getY() + 1 <= map.getHeight()) {
+                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getY() + 1 < map.getHeight()) {
                     for( int i = upperLeftWaterCorner.getX(); i < upperRightWaterCorner.getX() + 1; i++){
                         for( int j = upperLeftWaterCorner.getY() + 1; j < upperLeftWaterCorner.getY() + 2; j++){
                             Vector2d position = new Vector2d(i, j);
@@ -235,14 +235,14 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() + 1));
+                    deleteEntitiesOnWater();
                 } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getY() - 1 > 0) {
                     calculateWater(upperRightWaterCorner, upperLeftWaterCorner, upperLeftWaterCorner.getY());
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX(), upperRightWaterCorner.getY() - 1));
                 }
-                deleteEntitiesOnWater();
                 break;
             case 1:
-                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getX() + 1 <= map.getWidth()){
+                if(shrinkOrEnlarge == 0 && upperRightWaterCorner.getX() + 1 < map.getWidth()){
                     for( int i = lowerRightWaterCorner.getX() + 1; i < lowerRightWaterCorner.getX() + 2; i++){
                         for( int j = lowerRightWaterCorner.getY(); j < upperLeftWaterCorner.getY() + 1; j++){
                             Vector2d position = new Vector2d(i, j);
@@ -250,11 +250,11 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() + 1, upperRightWaterCorner.getY()));
+                    deleteEntitiesOnWater();
                 } else if (shrinkOrEnlarge == 1 && upperRightWaterCorner.getX() - 1 > 0) {
                     calculateWater(lowerRightWaterCorner, lowerRightWaterCorner, upperLeftWaterCorner.getY());
                     ((InflowsAndOutflows) map).setWaterUpperRightCorner(new Vector2d(upperRightWaterCorner.getX() - 1, upperRightWaterCorner.getY()));
                 }
-                deleteEntitiesOnWater();
                 break;
             case 2:
                 if(shrinkOrEnlarge == 0 && lowerLeftWaterCorner.getY() - 1 > 0){
@@ -265,6 +265,7 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() - 1));
+                    deleteEntitiesOnWater();
                 } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getY() + 1 < upperLeftWaterCorner.getY()){
                     for( int i = lowerLeftWaterCorner.getX(); i < lowerRightWaterCorner.getX() + 1; i++){
                         for( int j = lowerLeftWaterCorner.getY(); j < lowerLeftWaterCorner.getY() + 1; j++){
@@ -274,7 +275,6 @@ public class Simulation {
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX(), lowerLeftWaterCorner.getY() + 1));
                 }
-                deleteEntitiesOnWater();
                 break;
             case 3:
                 if(shrinkOrEnlarge == 0 && lowerLeftWaterCorner.getX() - 1 > 0){
@@ -285,11 +285,12 @@ public class Simulation {
                         }
                     }
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() - 1, lowerLeftWaterCorner.getY()));
+                    deleteEntitiesOnWater();
                 } else if (shrinkOrEnlarge == 1 && lowerLeftWaterCorner.getX() + 1 < lowerRightWaterCorner.getX()) {
                     calculateWater(lowerLeftWaterCorner, lowerLeftWaterCorner, upperLeftWaterCorner.getY());
                     ((InflowsAndOutflows) map).setWaterLowerLeftCorner(new Vector2d(lowerLeftWaterCorner.getX() + 1, lowerLeftWaterCorner.getY()));
                 }
-                deleteEntitiesOnWater();
+
                 break;
         }
 
