@@ -42,7 +42,7 @@ public class Animal implements WorldElement {
     public Animal(Vector2d position, Animal firstParent, Animal secondParent, int energyNeededForReproduction, int genomeLength, int minimumNumberOfMutations, int maximumNumberOfMutations, GenotypeFactory genotypeFactory, MapType mapType){
         this.position = position;
         this.energy = 2*energyNeededForReproduction;
-        this.genotype = genotypeFactory.makeGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations);
+        this.genotype = genotypeFactory.makeGenotype(genomeLength, minimumNumberOfMutations, maximumNumberOfMutations, firstParent, secondParent);
         Random random = new Random();
         this.startingIndex = random.nextInt(genomeLength);
         this.direction = genotype.getGenotype().get(startingIndex);

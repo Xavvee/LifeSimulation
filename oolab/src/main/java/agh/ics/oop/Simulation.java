@@ -157,6 +157,7 @@ public class Simulation {
                 secondParent.addChild();
                 animals.add(child);
                 map.addElement(child.getPosition());
+                map.addAnimal(child);
             }
         }
     }

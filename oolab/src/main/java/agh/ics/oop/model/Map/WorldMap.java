@@ -139,5 +139,7 @@ public interface WorldMap extends MoveCalculator {
     void addFreeHex(Vector2d position);
     void subtractFreeHex(Vector2d position);
 
+    void addAnimal(Animal animal);
+
 
 }

@@ -347,6 +347,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         return this.id;
     }
 
+    public void addAnimal(Animal animal){
+        this.animals.put(animal.getPosition(), animal);
+    }
     public void addObserver(MapChangeListener listener){
         this.observers.add(listener);
     }
