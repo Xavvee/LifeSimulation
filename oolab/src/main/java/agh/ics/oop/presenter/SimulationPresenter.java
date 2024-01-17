@@ -43,6 +43,10 @@ public class SimulationPresenter {
     @FXML
     private TextField maximumNumberOfMutations;
     @FXML
+    private TextField energyNeededForReproduction;
+    @FXML
+    private TextField energyDecreasedAfterReproduction;
+    @FXML
     private ComboBox<String> nameOfMapType;
     @FXML
     private ComboBox<String> nameOfGenotypeType;
@@ -68,6 +72,10 @@ public class SimulationPresenter {
         minimumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
         maximumNumberOfMutations.setText("8");
         maximumNumberOfMutations.setTextFormatter(nonNegativeNumberFormatter());
+        energyNeededForReproduction.setText("6");
+        energyNeededForReproduction.setTextFormatter(nonNegativeNumberFormatter());
+        energyDecreasedAfterReproduction.setText("3");
+        energyDecreasedAfterReproduction.setTextFormatter(nonNegativeNumberFormatter());
         nameOfMapType.getItems().addAll(listFactoryMap.stream().map(MapFactory::getType)
                 .collect((Collectors.toList())));
         nameOfMapType.getSelectionModel().selectFirst();
@@ -87,7 +95,7 @@ public class SimulationPresenter {
     private List<TextField> listOfTextFields(){
         return List.of(
                 initialAnimal, initialGrass, animalEnergy, dailyNumberOfGrasses,height,width,
-                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations);
+                genomeLength,maximumNumberOfMutations,minimumNumberOfMutations,energyNeededForReproduction,energyDecreasedAfterReproduction);
     }
     private StartConfigurations setConfigurations(){
         StartConfigurations configurations = new StartConfigurations();

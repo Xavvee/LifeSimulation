@@ -26,6 +26,8 @@ public class StartConfigurations extends HashMap<String, String> {
         configurations.put("genomeLength","10");
         configurations.put("minimumNumberOfMutations","2");
         configurations.put("maximumNumberOfMutations","8");
+        configurations.put("energyDecreasedAfterReproduction","5");
+        configurations.put("energyNeededForReproduction", "20");
         configurations.put("nameOfMapType", "Kula ziemska");
         configurations.put("nameOfGenotypeType", "Pełna losowość");
         return configurations;
@@ -42,6 +44,8 @@ public class StartConfigurations extends HashMap<String, String> {
         configurations.put("genomeLength","10");
         configurations.put("minimumNumberOfMutations","4");
         configurations.put("maximumNumberOfMutations","8");
+        configurations.put("energyDecreasedAfterReproduction","14");
+        configurations.put("energyNeededForReproduction", "30");
         configurations.put("nameOfMapType", "Przypływy i odpływy");
         configurations.put("nameOfGenotypeType", "Lekka korekta");
         return configurations;

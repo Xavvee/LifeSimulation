@@ -41,7 +41,8 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         WorldMap map = factoryByNameMap.get(startConfigurations.get("nameOfMapType")).makeMap(startConfigurations, genotypeFactory);
         this.setWorldMap(map);
         map.addObserver(this);
-        this.simulation = new Simulation(map, 5, 3, 4, genotypeFactory);
+        this.simulation = new Simulation(map, 5, startConfigurations.getNumber("energyNeededForReproduction"),
+                startConfigurations.getNumber("energyDecreasedAfterReproduction"), genotypeFactory);
         drawMap(map);
         this.statPresenter = statPresenter;
         statPresenter.showStat(this.simulation);
