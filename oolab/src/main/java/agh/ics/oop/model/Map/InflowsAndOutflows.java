@@ -112,11 +112,9 @@ public class InflowsAndOutflows extends AbstractWorldMap{
     }
 
 
-    public WorldElement objectAtPositionGrassOrWater(Vector2d position){
-        if(super.objectAtPositionGrassOrWater(position) == null){
-            return waters.get(position);
-        }
-        return null;
+    @Override
+    public boolean isWaterAt(Vector2d position){
+        return waters.get(position) != null;
     }
 
 }

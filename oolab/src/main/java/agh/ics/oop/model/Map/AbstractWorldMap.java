@@ -41,6 +41,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected ArrayList<Vector2d> freeHexesInEquator;
     protected ArrayList<Vector2d> freeHexesAboveEquator;
     protected ArrayList<Vector2d> freeHexesBelowEquator;
+    protected ArrayList<Vector2d> hexesEligibleForGrassGrowth;
 
     public AbstractWorldMap(int height, int width, int numberOfGrasses, int numberOfAnimals, int dailyNumberOfGrasses, int startingEnergy, int minimumNumberOfMutations, int maximumNumberOfMutations, int genomeLength, MapType mapType, GenotypeFactory genotypeFactory){
         this.mapType = mapType;
@@ -60,6 +61,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.freeHexesBelowEquator = new ArrayList<>();
         this.freeHexesInEquator = new ArrayList<>();
         calculateFreeHexes();
+        this.hexesEligibleForGrassGrowth = new ArrayList<>(freeHexes);
         this.addObserver(new ConsoleMapDisplay());
         this.id = UUID.randomUUID();
         this.dailyNumberOfGrasses = dailyNumberOfGrasses;
@@ -81,6 +83,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
     public void subtractFreeHex(Vector2d position){
         this.freeHexes.remove(position);
+        this.hexesEligibleForGrassGrowth.remove(position);
         if( checkWhereBelongs(position) == 1){
             freeHexesInEquator.remove(position);
         } else if (checkWhereBelongs(position) == 2) {
@@ -91,6 +94,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
     public void addFreeHex(Vector2d position){
         this.freeHexes.add(position);
+        this.hexesEligibleForGrassGrowth.add(position);
         if( checkWhereBelongs(position) == 1){
             freeHexesInEquator.add(position);
         } else if (checkWhereBelongs(position) == 2) {
@@ -123,13 +127,21 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public List<Grass> spawnGrass(){
         List<Grass> newGrasses = new ArrayList<>();
+        List<Animal> animalList = getListOfAnimals();
+        List<Grass> grassList = getListOfGrasses();
+        for( Animal animal : animalList){
+            Vector2d position = animal.getPosition();
+            if(!freeHexes.contains(position) && !grassList.contains(new Grass(position))){
+                hexesEligibleForGrassGrowth.add(position);
+            }
+        }
         for(int i = 0; i < dailyNumberOfGrasses; i++){
-            ///// freeHexes nie są empty - powinny być
-            if(!freeHexes.isEmpty()){
+            if(!hexesEligibleForGrassGrowth.isEmpty()){
                 while (true){
                     Grass grass = generateGrass();
                     if(grass != null){
                         newGrasses.add(grass);
+                        hexesEligibleForGrassGrowth.remove(grass.position());
                         break;
                     }
                 }
@@ -160,20 +172,32 @@ public abstract class AbstractWorldMap implements WorldMap {
         Random rand = new Random();
         int index;
         Vector2d randomPosition = null;
-        // in the equator
+        List<Vector2d> grassGrowthHexesInEquator = new ArrayList<>();
+        List<Vector2d> grassGrowthHexesAboveEquator = new ArrayList<>();
+        List<Vector2d> grassGrowthHexesBelowEquator = new ArrayList<>();
+        for( Vector2d position : hexesEligibleForGrassGrowth){
+            int res = checkWhereBelongs(position);
+            if(res == 0){
+                grassGrowthHexesBelowEquator.add(position);
+            } else if (res == 1) {
+                grassGrowthHexesInEquator.add(position);
+            } else {
+                grassGrowthHexesAboveEquator.add(position);
+            }
+        }
         while( randomPosition == null){
-            if (rand.nextDouble() < 0.8 && !freeHexesInEquator.isEmpty()) {
-                index = rand.nextInt(freeHexesInEquator.size());
-                randomPosition = freeHexesInEquator.get(index);
+            if (rand.nextDouble() < 0.8 && !grassGrowthHexesInEquator.isEmpty()) {
+                index = rand.nextInt(grassGrowthHexesInEquator.size());
+                randomPosition = grassGrowthHexesInEquator.get(index);
             } else {
                 // below the equator
-                if(rand.nextDouble() < 0.5 && !freeHexesBelowEquator.isEmpty()){
-                    index = rand.nextInt(freeHexesBelowEquator.size());
-                    randomPosition = freeHexesBelowEquator.get(index);
-                } else if (!freeHexesAboveEquator.isEmpty()) {
+                if(rand.nextDouble() < 0.5 && !grassGrowthHexesBelowEquator.isEmpty()){
+                    index = rand.nextInt(grassGrowthHexesBelowEquator.size());
+                    randomPosition = grassGrowthHexesBelowEquator.get(index);
+                } else if (!grassGrowthHexesAboveEquator.isEmpty()) {
                     // above the equator
-                    index = rand.nextInt(freeHexesAboveEquator.size());
-                    randomPosition = freeHexesAboveEquator.get(index);
+                    index = rand.nextInt(grassGrowthHexesAboveEquator.size());
+                    randomPosition = grassGrowthHexesAboveEquator.get(index);
                 }
             }
         }
@@ -235,7 +259,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             animal.move(this);
             Vector2d newPosition = animal.position();
             if (canMoveTo(newPosition)) {
-                if(objectAtPositionGrassOrWater(oldPosition) == null){
+                if(!isWaterAt(oldPosition) && !isGrassAt(oldPosition)){
                     addFreeHex(oldPosition);
                 }
                 animals.remove(oldPosition);
@@ -248,11 +272,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
     }
-
-    public WorldElement objectAtPositionGrassOrWater(Vector2d position){
-        return grasses.get(position);
-    }
-
+    
     @Override
     public void addElement(Vector2d element){
         sortedX.add(element);
@@ -402,5 +422,18 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public int getFreeHexesInEquator() {
         return freeHexesInEquator.size();
+    }
+
+    public boolean isAnimalAt(Vector2d position){
+        return animals.get(position) != null;
+    }
+
+    public boolean isGrassAt(Vector2d position){
+        return grasses.get(position) != null;
+    }
+
+
+    public boolean isWaterAt(Vector2d position){
+        return false;
     }
 }

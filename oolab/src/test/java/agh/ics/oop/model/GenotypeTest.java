@@ -1,9 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.Elements.Animal;
-import agh.ics.oop.model.Genotype.AbstractGenotype;
-import agh.ics.oop.model.Genotype.MinorCorrectionGenotype;
-import agh.ics.oop.model.Genotype.RandomGenotype;
+import agh.ics.oop.model.Genotype.*;
 import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
 

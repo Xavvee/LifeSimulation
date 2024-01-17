@@ -131,6 +131,13 @@ public interface WorldMap extends MoveCalculator {
     int getFreeHexesBelowEquator();
     int getFreeHexesInEquator();
 
-    WorldElement objectAtPositionGrassOrWater(Vector2d position);
+    boolean isWaterAt(Vector2d position);
+
+    boolean isGrassAt(Vector2d position);
+    boolean isAnimalAt(Vector2d position);
+
+    void addFreeHex(Vector2d position);
+    void subtractFreeHex(Vector2d position);
+
 
 }

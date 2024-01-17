@@ -85,6 +85,9 @@ public class Simulation {
                 iterator.remove();
                 map.removeElement(animal.getPosition());
                 map.removeAnimal(animal.getPosition());
+                if(!map.isGrassAt(animal.getPosition()) && !map.isWaterAt(animal.getPosition())){
+                    map.addFreeHex(animal.position());
+                }
             } else if (map instanceof InflowsAndOutflows) {
                 Map<Vector2d, Water> waterMap = ((InflowsAndOutflows) map).getWaters();
                 Set<Vector2d> waterHexes = waterMap.keySet();
@@ -92,6 +95,9 @@ public class Simulation {
                     iterator.remove();
                     map.removeElement(animal.getPosition());
                     map.removeAnimal(animal.getPosition());
+                    if(!map.isGrassAt(animal.getPosition()) && !map.isWaterAt(animal.getPosition())){
+                        map.addFreeHex(animal.position());
+                    }
                 }
             }
         }
