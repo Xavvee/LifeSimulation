@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="agh.ics.oop.presenter.StatPresenter"
+          prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="0">
+            Liczba wszystkich zwierzaków
+        </Label>
+        <Text fx:id="numberOfAnimals" GridPane.columnIndex="1" GridPane.rowIndex="0"></Text>
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="1">
+            Liczba wszystkich roślin
+        </Label>
+        <Text fx:id="numberOfGrasses" GridPane.columnIndex="1" GridPane.rowIndex="1"></Text>
+         <Label GridPane.columnIndex="0" GridPane.rowIndex="2">
+             Liczba wolnych pól
+         </Label>
+        <Text fx:id="numberOfFreePlaces" GridPane.columnIndex="1" GridPane.rowIndex="2"></Text>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
+    </columnConstraints>
+</GridPane>

@@ -111,17 +111,25 @@ public class SimulationPresenter {
     public void onSimulationStartClicked() {
         MultipleSimulationPresenter multipleSimulationPresenter;
         Stage simulationStage = new Stage();
+        Stage statStage = new Stage();
         try {
             FXMLLoader loaderMulti = new FXMLLoader();
+            FXMLLoader loaderStats = new FXMLLoader();
             loaderMulti.setLocation(getClass().getClassLoader().getResource("multiplesimulation.fxml"));
+            loaderStats.setLocation(getClass().getClassLoader().getResource("statisticshow.fxml"));
             BorderPane viewRoot = loaderMulti.load();
+            GridPane viewStat = loaderStats.load();
             multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
-            multipleSimulationPresenter.startMultipleSimulation(setConfigurations()); // Rozpocznij symulację w nowym oknie
+            StatPresenter statPresenter = loaderStats.getController();
+            multipleSimulationPresenter.startMultipleSimulation(setConfigurations(),statPresenter); // Rozpocznij symulację w nowym oknie
             Scene scene = new Scene(viewRoot);
+            Scene sceneStat = new Scene(viewStat);
             simulationStage.setScene(scene);
+            statStage.setScene(sceneStat);
             simulationStage.setTitle("Simulation");
+            statStage.setTitle("Stats");
             simulationStage.show();
-
+            statStage.show();
             } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

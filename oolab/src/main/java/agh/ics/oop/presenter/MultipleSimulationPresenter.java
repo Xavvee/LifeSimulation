@@ -32,19 +32,22 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     private GridPane mapGrid;
     private Simulation simulation;
     private long running = 0;
+    private StatPresenter statPresenter;
 
     public void setWorldMap(WorldMap map){
         this.map = map;
     }
 
 
-    public void startMultipleSimulation( StartConfigurations startConfigurations) {
+    public void startMultipleSimulation( StartConfigurations startConfigurations, StatPresenter statPresenter) {
         GenotypeFactory genotypeFactory = factoryByNameGenotype.get(startConfigurations.get("nameOfGenotypeType"));
         WorldMap map = factoryByNameMap.get(startConfigurations.get("nameOfMapType")).makeMap(startConfigurations, genotypeFactory);
         this.setWorldMap(map);
         map.addObserver(this);
         this.simulation = new Simulation(map, 5, 3, 4, genotypeFactory);
         drawMap(map);
+        this.statPresenter = statPresenter;
+        statPresenter.showStat(this.simulation);
     }
     public synchronized void continueSimulation() {
         running++;
@@ -119,6 +122,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         Platform.runLater(()->{
             synchronized (worldMap) {
                 drawMap(worldMap);
+                statPresenter.showStat(this.simulation);
                 this.movementDescriptionLabel.setText(message);
             }
         });
