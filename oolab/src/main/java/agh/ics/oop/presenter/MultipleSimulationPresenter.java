@@ -3,7 +3,6 @@ package agh.ics.oop.presenter;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.Elements.WorldElement;
-import agh.ics.oop.model.Genotype.Genotype;
 import agh.ics.oop.model.Genotype.GenotypeFactory;
 import agh.ics.oop.model.Map.WorldMap;
 import javafx.application.Platform;
@@ -16,8 +15,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-import java.util.List;
-
 import static agh.ics.oop.model.Genotype.GenotypeFactory.factoryByNameGenotype;
 import static agh.ics.oop.model.Map.MapFactory.factoryByNameMap;
 
@@ -27,7 +24,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
     int CELL_HEIGHT = 50;
 
     @FXML
-    private Label movementDescriptionLabel;
+    private Label currentDay;
     @FXML
     private GridPane mapGrid;
     private Simulation simulation;
@@ -103,6 +100,10 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
                 if (worldMap.objectAt(curMapPos) != null) {
                     WorldElement object = worldMap.objectAt(curMapPos);
                     Label label = new Label(object.toString());
+                    label.setOnMouseClicked(event -> {
+                        statPresenter.setCurrentChosenElement(object);
+
+                    });
                     label.setTextFill(Color.DARKBLUE);
                     label.setStyle("-fx-background-color: " + object.getColor() + ";");
                     label.setPrefHeight(Double.POSITIVE_INFINITY);
@@ -123,7 +124,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
             synchronized (worldMap) {
                 drawMap(worldMap);
                 statPresenter.showStat(this.simulation);
-                this.movementDescriptionLabel.setText(message);
+                this.currentDay.setText(message);
             }
         });
     }

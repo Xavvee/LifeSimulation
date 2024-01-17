@@ -15,7 +15,7 @@
     </center>
     <bottom>
         <GridPane alignment="CENTER">
-            <Label fx:id="movementDescriptionLabel" text="Movement description will appear here"
+            <Label fx:id="currentDay" text="Movement description will appear here"
                    textAlignment="CENTER" GridPane.rowIndex="0"/>
             <Button text="Dalej!" GridPane.columnIndex="0" GridPane.rowIndex="1" onAction="#continueSimulation"/>
             <Button text="Stop!" GridPane.columnIndex="1" GridPane.rowIndex="1" onAction="#stopSimulation"/>

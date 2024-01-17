@@ -118,7 +118,7 @@ public class SimulationPresenter {
             loaderMulti.setLocation(getClass().getClassLoader().getResource("multiplesimulation.fxml"));
             loaderStats.setLocation(getClass().getClassLoader().getResource("statisticshow.fxml"));
             BorderPane viewRoot = loaderMulti.load();
-            GridPane viewStat = loaderStats.load();
+            VBox viewStat = loaderStats.load();
             multipleSimulationPresenter = loaderMulti.getController(); // Pobierz kontroler z załadowanego widoku
             StatPresenter statPresenter = loaderStats.getController();
             multipleSimulationPresenter.startMultipleSimulation(setConfigurations(),statPresenter); // Rozpocznij symulację w nowym oknie

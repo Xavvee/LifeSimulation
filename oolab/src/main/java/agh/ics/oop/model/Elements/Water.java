@@ -2,6 +2,7 @@ package agh.ics.oop.model.Elements;
 
 import agh.ics.oop.model.Vector2d;
 
+import java.util.Map;
 import java.util.Objects;
 
 public record Water(Vector2d position) implements WorldElement {
@@ -14,6 +15,11 @@ public record Water(Vector2d position) implements WorldElement {
     @Override
     public String getColor() {
         return "#11b7dd";
+    }
+
+    @Override
+    public Map<String, String> getStat() {
+        return Map.of("typ obiektu", "woda");
     }
 
     @Override

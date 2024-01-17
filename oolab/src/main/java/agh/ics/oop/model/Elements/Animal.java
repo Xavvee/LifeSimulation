@@ -7,6 +7,7 @@ import agh.ics.oop.model.Map.MoveCalculator;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.Vector2d;
 
+import java.util.Map;
 import java.util.Random;
 
 public class Animal implements WorldElement {
@@ -68,6 +69,14 @@ public class Animal implements WorldElement {
     @Override
     public String getColor() {
         return "#fd0101";
+    }
+
+    @Override
+    public Map<String, String> getStat() {
+        return Map.of("typ obiektu", "zwierzę",
+                "wiek",String.valueOf(this.age),
+                "energia", String.valueOf(this.energy),
+                "liczba dzieci", String.valueOf(this.childrenCount));
     }
 
     public boolean isAt(Vector2d position){
