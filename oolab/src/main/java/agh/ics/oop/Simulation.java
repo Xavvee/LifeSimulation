@@ -49,7 +49,7 @@ public class Simulation {
             deleteDeadAnimals();
             // 2. Skręt i przemieszczanie zwierząt
             moveAnimals();
-            // 3. Konsumpcja roślin, które weszły zwierzaki
+            // 3. Konsumpcja roślin, na które weszły zwierzaki
             consume();
             // 4. Rozmnażanie się najedzonych zwierzaków na tym samym polu.
             reproduce();

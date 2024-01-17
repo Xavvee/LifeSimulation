@@ -271,7 +271,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 if(!isWaterAt(oldPosition) && !isGrassAt(oldPosition)){
                     addFreeHex(oldPosition);
                 }
-                animals.remove(oldPosition);
+                animals.remove(oldPosition, animal);
                 removeElement(oldPosition);
                 if(!isOccupied(newPosition)){
                     subtractFreeHex(newPosition);
