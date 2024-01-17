@@ -221,7 +221,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(canMoveTo(animal.position())){
             animals.put(animal.position(), animal);
             addElement(animal.position());
-            mapChanged(animal + " placed at: " + animal.position());
             return true;
         } else {
             throw new PositionAlreadyOccupied(animal.position());
@@ -247,7 +246,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.put(newPosition, animal);
                 addElement(newPosition);
             }
-            mapChanged(animal + " " + oldPosition + " -> " + newPosition);
         }
     }
 
@@ -329,7 +327,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
 
-    protected void mapChanged(String message){
+    public void signalObservers(String message){
         for( MapChangeListener observer : observers){
             observer.mapChanged(this, message);
         }

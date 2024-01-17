@@ -124,7 +124,7 @@ public interface WorldMap extends MoveCalculator {
 
     int getNumberOfFreeHexes();
     void addObserver(MapChangeListener listener);
-
+    void signalObservers(String string);
     void removeObserver(MapChangeListener listener);
 
     int getFreeHexesAboveEquator();

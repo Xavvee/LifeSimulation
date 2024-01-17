@@ -58,6 +58,7 @@ public class Simulation {
             // 6. Inne rzeczy, które zawsze zachodzą.
             subtractEnergyAddAge();
             incrementDayCount();
+            map.signalObservers("Liczba dni symulacji: " + daysCount);
         }
     }
 
