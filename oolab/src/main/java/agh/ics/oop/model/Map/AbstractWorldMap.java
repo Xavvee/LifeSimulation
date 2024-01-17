@@ -135,6 +135,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 hexesEligibleForGrassGrowth.add(position);
             }
         }
+        if(animals.isEmpty()){
+            setHexesEligibleForGrassGrowth();
+        }
         for(int i = 0; i < dailyNumberOfGrasses; i++){
             if(!hexesEligibleForGrassGrowth.isEmpty()){
                 while (true){
@@ -147,9 +150,13 @@ public abstract class AbstractWorldMap implements WorldMap {
                 }
             } else break;
         }
+        setHexesEligibleForGrassGrowth();
         return newGrasses;
     }
 
+    private void setHexesEligibleForGrassGrowth(){
+        this.hexesEligibleForGrassGrowth = new ArrayList<>(freeHexes);
+    }
     @Override
     public boolean generateAnimal(){
         Random rand = new Random();
@@ -272,7 +279,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
     }
-    
+
     @Override
     public void addElement(Vector2d element){
         sortedX.add(element);
