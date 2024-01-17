@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="agh.ics.oop.presenter.SampleConfigurationChoicePresenter"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <ComboBox fx:id="choice" prefWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0" promptText="Wybieraj" GridPane.columnSpan="2"/>
+        <Button text="Załaduj" prefWidth="Infinity" onAction="#onLoadClick" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button text="Anuluj" prefWidth="Infinity" onAction="#onCancelClick" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" percentWidth="50" prefWidth="80" />
+    </columnConstraints>
+</GridPane>

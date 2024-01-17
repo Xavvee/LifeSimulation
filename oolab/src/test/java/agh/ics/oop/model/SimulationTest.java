@@ -1,60 +1,108 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.Simulation;
-import agh.ics.oop.model.Map.RectangularMap;
-import agh.ics.oop.model.Map.WorldMap;
+import agh.ics.oop.model.Genotype.MinorCorrectionGenotypeFactory;
+import agh.ics.oop.model.Genotype.RandomGenotypeFactory;
+import agh.ics.oop.model.Map.AbstractWorldMap;
+import agh.ics.oop.model.Map.Globe;
+import agh.ics.oop.model.Map.InflowsAndOutflows;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static agh.ics.oop.OptionsParser.parse;
-import static agh.ics.oop.model.MoveDirection.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SimulationTest {
+
     @Test
-    public void testSimulationThreeAnimals(){
+    public void simulateOneDayTest(){
         //given
-        String[] args = {"f","l","r","f","f","f","r","f","f","f","f","f","f","l","l","l","f","l"};
-        MoveDirection[] moveArray = {FORWARD,LEFT,RIGHT,FORWARD,FORWARD,FORWARD,RIGHT,FORWARD,FORWARD,FORWARD,FORWARD,FORWARD,FORWARD,LEFT,LEFT,LEFT,FORWARD,LEFT};
-        List<MoveDirection> result = Arrays.asList(moveArray);
-
-        List<MoveDirection> directions = parse(Arrays.stream(args).toList());
-        List<Vector2d> positions = List.of(new Vector2d(2,2), new Vector2d(3,4), new Vector2d(0,0));
-        WorldMap map = new RectangularMap(4,4);
-        Simulation simulation = new Simulation(positions, directions,map);
+        AbstractWorldMap map = new Globe(15,25,30,8,4,30,2,4,10, new RandomGenotypeFactory());
+        Simulation simulation = new Simulation(map, 20, 10, 8, new MinorCorrectionGenotypeFactory());
         //when
-        simulation.run();
-        List<Animal> animals = simulation.getAnimals();
-        List<MoveDirection> correctDirections = simulation.getMoveDirections();
-
+        int numberOfGrasses = simulation.getMap().getListOfGrasses().size();
+        int numberOfAnimals = simulation.getMap().getListOfAnimals().size();
+        System.out.println(numberOfGrasses);
+        System.out.println(numberOfAnimals);
+        simulation.simulateOneDay();
+        numberOfGrasses = simulation.getMap().getListOfGrasses().size();
+        numberOfAnimals = simulation.getMap().getListOfAnimals().size();
+        System.out.println(numberOfGrasses);
+        System.out.println(numberOfAnimals);
         //then
-        assertEquals(result, correctDirections);
-        assertTrue(animals.get(0).isAt(new Vector2d(2,4)));
-        assertTrue(animals.get(1).isAt(new Vector2d(3,3)));
-        assertTrue(animals.get(2).isAt(new Vector2d(3,0)));
-        assertEquals(animals.get(0).getDirection(),MapDirection.NORTH);
-        assertEquals(animals.get(1).getDirection(),MapDirection.SOUTH);
-        assertEquals(animals.get(2).getDirection(),MapDirection.WEST);
+    }
+
+
+    @Test
+    public void starvationTest(){
+        //given
+        AbstractWorldMap map = new Globe(15,25,0,8,0,20,2,4,10, new RandomGenotypeFactory());
+        Simulation simulation = new Simulation(map, 0, 25, 20, new RandomGenotypeFactory());
+        //when
+        int numberOfGrasses = simulation.getMap().getListOfGrasses().size();
+        int numberOfAnimals = simulation.getMap().getListOfAnimals().size();
+        System.out.println(numberOfGrasses);
+        System.out.println(numberOfAnimals);
+        simulation.simulateXDays(21);
+        numberOfGrasses = simulation.getMap().getListOfGrasses().size();
+        numberOfAnimals = simulation.getMap().getListOfAnimals().size();
+        System.out.println(numberOfGrasses);
+        System.out.println(numberOfAnimals);
+        System.out.println(map);
+        //then
+        assertEquals(numberOfAnimals, 0);
+        assertEquals(numberOfGrasses, 0);
+    }
+    @Test
+    public void manageWatersTest(){
+        //given
+        AbstractWorldMap map = new InflowsAndOutflows(10,10,10,0,10,40,2,4,10, new RandomGenotypeFactory());
+        Simulation simulation = new Simulation(map, 0, 25, 20, new RandomGenotypeFactory());
+        //when
+        assertEquals(map.getWaters().size(),16);
+        System.out.println(map);
+        for( int i = 1 ; i < 10 ; i++){
+            simulation.simulateOneDay();
+            System.out.println(map);
+            System.out.println(map.getNumberOfFreeHexes());
+//            System.out.println(map.getAnimals().size());
+//            System.out.println(map.getWaters().size());
+        }
+        //then
     }
 
     @Test
-    public void testSimulationTwoAnimals(){
+    public void reproductionTest(){
         //given
-        MoveDirection[] moveArray = {FORWARD,RIGHT,LEFT,FORWARD,FORWARD,FORWARD,RIGHT,FORWARD,FORWARD,FORWARD,FORWARD,LEFT,FORWARD,LEFT,LEFT,LEFT,FORWARD};
-        List<MoveDirection> directions = Arrays.asList(moveArray);
-        List<Vector2d> positions = List.of(new Vector2d(4,1), new Vector2d(0,3));
-        WorldMap map = new RectangularMap(4,4);
-        Simulation simulation = new Simulation(positions, directions, map);
+
         //when
-        simulation.run();
-        List<Animal> animals = simulation.getAnimals();
+
         //then
-        assertTrue(animals.get(0).isAt(new Vector2d(2,4)));
-        assertTrue(animals.get(1).isAt(new Vector2d(4,3)));
-        assertEquals(animals.get(0).getDirection(),MapDirection.WEST);
-        assertEquals(animals.get(1).getDirection(),MapDirection.SOUTH);
     }
+
+    @Test
+    public void grassGrowingTest(){
+        //given
+        AbstractWorldMap map = new Globe(15,25,10,0,25,20,2,4,10, new RandomGenotypeFactory());
+        Simulation simulation = new Simulation(map, 0, 25, 20, new RandomGenotypeFactory());
+        //when
+        assertEquals(10,map.getGrasses().size());
+        simulation.simulateXDays(2);
+        assertEquals(60,map.getGrasses().size());
+        //then
+        simulation.simulateXDays(20);
+        assertEquals(15*25, map.getGrasses().size());
+    }
+    @Test
+    public void consumptionTest(){
+        //given
+        AbstractWorldMap map = new Globe(5,5,24,1,1,20,2,4,10, new RandomGenotypeFactory());
+        Simulation simulation = new Simulation(map, 10, 25, 20, new MinorCorrectionGenotypeFactory());
+        //when
+        simulation.simulateXDays(500);
+        //then
+        assertTrue( map.getListOfAnimals().get(0).getEnergy() > 20);
+    }
+
+
+
 }

@@ -1,4 +1,8 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.Elements;
+
+import agh.ics.oop.model.Vector2d;
+
+import java.util.Map;
 
 public interface WorldElement {
 
@@ -7,7 +11,7 @@ public interface WorldElement {
      *
      * Returns the position of wanted animal or grass.
      */
-    Vector2d getPosition();
+    Vector2d position();
 
     /**
      * Converts standard String representation into a wanted one.
@@ -15,6 +19,8 @@ public interface WorldElement {
     String toString();
 
 
+    String getColor();
 
+    Map<String, String> getStat();
 
 }

@@ -2,7 +2,11 @@ package agh.ics.oop.model.Map;
 
 import agh.ics.oop.PositionAlreadyOccupied;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Elements.Grass;
+import agh.ics.oop.model.Elements.WorldElement;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,7 +16,7 @@ import java.util.UUID;
  *
  * @author apohllo, idzik
  */
-public interface WorldMap extends MoveValidator {
+public interface WorldMap extends MoveCalculator {
 
     /**
      * Place a animal on the map.
@@ -62,4 +66,80 @@ public interface WorldMap extends MoveValidator {
      * @return Identificator of map
      */
     UUID getId();
+
+    /**
+     * Function that generates starting grass.
+     * @return grass if it was correctly generated
+     */
+    Grass generateGrass();
+
+    /**
+     * Function that generates starting animals.
+     * @return true if animal was spawned
+     */
+    boolean generateAnimal();
+
+    /**
+     * Function that spawns grass every day.
+     * @return List of grass correctly spawned
+     */
+    List<Grass> spawnGrass();
+
+    /**
+     * Function that returns lower and upper bounds of the equator.
+     * @return Vector2d object where first coordinate is lower value of y - coordinate, second coordinate is the upper value of y - coordinate.
+     */
+    Vector2d getEquatorBounds();
+
+    /**
+     * Function that helps control the animals.
+     * @return List of animals on map.
+     */
+    List<Animal> getListOfAnimals();
+
+
+    /**
+     * Function that helps control the grasses.
+     * @return List of grasses on map.
+     */
+    List<Grass> getListOfGrasses();
+
+    void addElement(Vector2d element);
+
+    void removeElement(Vector2d element);
+
+    int getGenomeLength();
+
+    int getMaximumNumberOfMutations();
+
+    int getMinimumNumberOfMutations();
+
+    MapType getMapType();
+
+    int getWidth();
+    int getHeight();
+
+    void removeAnimal(Vector2d position);
+    void removeGrass(Vector2d position);
+
+    int getNumberOfFreeHexes();
+    void addObserver(MapChangeListener listener);
+    void signalObservers(String string);
+    void removeObserver(MapChangeListener listener);
+
+    int getFreeHexesAboveEquator();
+    int getFreeHexesBelowEquator();
+    int getFreeHexesInEquator();
+
+    boolean isWaterAt(Vector2d position);
+
+    boolean isGrassAt(Vector2d position);
+    boolean isAnimalAt(Vector2d position);
+
+    void addFreeHex(Vector2d position);
+    void subtractFreeHex(Vector2d position);
+
+    void addAnimal(Animal animal);
+
+
 }

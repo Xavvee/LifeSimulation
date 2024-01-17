@@ -1,6 +1,6 @@
 package agh.ics.oop.model.Genotype;
 
-import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Elements.Animal;
 import agh.ics.oop.model.MapDirection;
 
 import java.util.List;
@@ -23,4 +23,11 @@ public interface Genotype {
      * @return genotype of given animal
      */
     List<MapDirection> getGenotype();
+
+
+    int getGenomeLength();
+
+
+    int getMaximumNumberOfMutations();
+    int getMinimumNumberOfMutations();
 }

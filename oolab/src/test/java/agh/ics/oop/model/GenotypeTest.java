@@ -1,8 +1,8 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.Genotype.AbstractGenotype;
-import agh.ics.oop.model.Genotype.MinorCorrectionGenotype;
-import agh.ics.oop.model.Genotype.RandomGenotype;
+import agh.ics.oop.model.Elements.Animal;
+import agh.ics.oop.model.Genotype.*;
+import agh.ics.oop.model.Map.MapType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,11 +14,11 @@ public class GenotypeTest {
     @Test
     public void testGenotypeGeneration(){
         // given
-        AbstractGenotype randomGenotype = new RandomGenotype();
+        AbstractGenotype randomGenotype = new RandomGenotype(8,1,1);
         // when
         List<MapDirection> genotype = randomGenotype.generateGenotype();
         // then
-        assertEquals(randomGenotype.NUMBER_OF_GENES, genotype.size());
+        assertEquals(randomGenotype.getGenomeLength(), genotype.size());
         for (MapDirection direction : genotype) {
             assertTrue(direction.ordinal() < 8);
         }
@@ -28,10 +28,10 @@ public class GenotypeTest {
     @Test
     public void testMinorCorrectionGenotype(){
         // given
-        Animal firstParent = new Animal();
-        Animal secondParent = new Animal();
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new MinorCorrectionGenotypeFactory(), MapType.GLOBE);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new MinorCorrectionGenotypeFactory(), MapType.GLOBE);
         firstParent.setEnergy(150);
-        AbstractGenotype abstractGenotype = new MinorCorrectionGenotype();
+        AbstractGenotype abstractGenotype = new MinorCorrectionGenotype(8,1,1);
         // when
         List<MapDirection> childGenotype = abstractGenotype.mutate(firstParent, secondParent);
         // then
@@ -44,10 +44,10 @@ public class GenotypeTest {
     @Test
     public void testRandomGenotype(){
         // given
-        Animal firstParent = new Animal();
-        Animal secondParent = new Animal();
+        Animal firstParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new RandomGenotypeFactory(), MapType.GLOBE);
+        Animal secondParent = new Animal(new Vector2d(0,0), 50, 8, 1, 1, new RandomGenotypeFactory(), MapType.GLOBE);
         firstParent.setEnergy(150);
-        AbstractGenotype abstractGenotype = new RandomGenotype();
+        AbstractGenotype abstractGenotype = new RandomGenotype(8,1,1);
         // when
         List<MapDirection> childGenotype = abstractGenotype.mutate(firstParent, secondParent);
         // then
