@@ -85,7 +85,7 @@ public class MultipleSimulationPresenter  implements MapChangeListener {
         }
 
         for (int k = 0; k <= worldMap.getCurrentBounds().upperRight().getY() - worldMap.getCurrentBounds().lowerLeft().getY(); k++) {
-            Label label = new Label("" + (worldMap.getCurrentBounds().upperRight().getY() - k - 1));
+            Label label = new Label("" + (worldMap.getCurrentBounds().upperRight().getY() - k ));
             mapGrid.add(label, 0, k + 1);
             GridPane.setHalignment(label, HPos.CENTER);
             mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
